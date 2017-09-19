@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title> PRE-DEM </title>
+</head>
+<body>
+<!--<% if (htmlWebpackPlugin.options.webpackServerURL) { %>-->
+<!--<script src="<%= htmlWebpackPlugin.options.webpackServerURL %>"></script>-->
+<!--<% } %>-->
+<script src="http://code.jquery.com/jquery-1.4.1.min.js"></script>
+<script type="text/javascript">
+    window.InitWebSdk({tag: "hahhhahha", token: "00000004"});
+    function funcNotFoundError() {
+        try {
+            window.a.b !== 2
+            } catch(ex) {
+            captureException(ex)
+            }
+        }
+
+    function throwError() {
+        throw new Error("这是一个错误，你抛出了异常！")
+
+    }
+
+    function windowError() {
+        window.onerror("test me")
+    }
+
+    function testOverfolw() {
+        isEven(100000)
+    }
+
+
+    function isEven (num) {
+        if (num === 0) {
+            return true;
+        }
+
+        if (num === 1) {
+            return false;
+        }
+
+        return isEven(Math.abs(num) - 2);
+    }
+
+    const code400  = [400, 401, 403, 404]
+    function sendAjax1() {
+        for (var index in code400) {
+            $.ajax({
+                url: "http://httpbin.org/status/" + code400[index],
+                type: 'GET',
+                success: function(){
+                    console.log("success")
+                },
+                error: function(){
+                    console.log("error")
+                }
+            })
+        }
+    }
+    const code500  = [500, 501, 503, 504]
+    function sendAjax2() {
+        for (var index in code500) {
+            $.ajax({
+                url: "http://httpbin.org/status/" + code500[index],
+                type: 'GET',
+                success: function(){
+                    console.log("success")
+                },
+                error: function(){
+                    console.log("error")
+                }
+            })
+        }
+    }
+
+    const code200  = [200, 201, 203, 204]
+    function sendAjax3() {
+        for (var index in code200) {
+            $.ajax({
+                url: "http://httpbin.org/status/" + code200[index],
+                type: 'GET',
+                success: function(){
+                    console.log("success")
+                },
+                error: function(){
+                    console.log("error")
+                }
+            })
+        }
+    }
+
+    const urls  = ["https://httpbin.org/get?show_env=1", "https://httpbin.org/get"];
+
+    function sendAjaxAndResponseData() {
+        for (var index in urls) {
+            $.ajax({
+                url: "http://jkbkolos.bq.cloudappl.com/v1/00000004/error",
+                type: 'post',
+                data: {test: "333333"},
+                success: function(){
+                    console.log("success")
+                },
+                error: function(){
+                    console.log("error")
+                }
+            })
+        }
+
+    }
+
+</script>
+<h4>Web SDK 测试</h4>
+<div>
+    <button onclick="funcNotFoundError()" style="height: 35px">方法不存在 Error</button>
+    <button onclick="throwError()" style="height: 35px"> throw Error 错误</button>
+    <button onclick="windowError()" style="height: 35px">window.onError 错误</button>
+    <button onclick="testOverfolw()" style="height: 35px">堆栈溢出</button>
+</div>
+<div style="height: 30px"></div>
+<div>
+    <button onclick="sendAjax1()" style="height: 35px">发送 4xx code 请求</button>
+    <button onclick="sendAjax2()" style="height: 35px">发送 5xx code 请求</button>
+    <button onclick="sendAjax3()" style="height: 35px">发送 2xx code 请求</button>
+    <button onclick="sendAjaxAndResponseData()" style="height: 35px">发送请求</button>
+</div>
+</body>
+</html>

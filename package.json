@@ -1,0 +1,41 @@
+{
+  "name": "raven",
+  "version": "3.13.1",
+  "license": "MIT",
+  "homepage": "https://github.com/getsentry/raven-js",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/getsentry/raven-js.git"
+  },
+  "main": "dist/raven.js",
+  "scripts": {
+    "clean": "rimraf build",
+    "check": "tslint -c ./tslint.json './src/**/*.ts*'",
+    "dev": "NODE_ENV=development && node --max_old_space_size=8000 node_modules/webpack-dev-server/bin/webpack-dev-server.js --config webpack.config.js --inline --progress --colors  --content-base --profile --display-modules build",
+    "build": "npm run clean && webpack --config webpack.config.js --profile --display-modules --progress --colors"
+  },
+  "devDependencies": {
+    "tracekit": "^0.4.5",
+    "@types/node": "^8.0.24",
+    "awesome-typescript-loader": "^3.2.3",
+    "source-map-loader": "^0.2.1",
+    "typescript": "^2.4.2",
+    "ava": "^0.20.0",
+    "webpack": "^3.5.5",
+    "webpack-hot-middleware": "^2.12.1",
+    "html-webpack-plugin": "^2.24.1",
+    "webpack-dev-server": "^1.16.2",
+    "rimraf": "^2.5.3"
+  },
+  "keywords": [
+    "exceptions",
+    "debugging",
+    "logging",
+    "errors",
+    "raven"
+  ],
+  "types": "types/raven.d.ts",
+  "dependencies": {
+    "platform": "^1.3.4"
+  }
+}
