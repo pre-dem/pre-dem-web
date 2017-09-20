@@ -1,0 +1,10 @@
+export declare function initPerformance(AppId: string, message: any, tag: string): any;
+export declare function initNetworkData(AppId: string, message: any, tag: string): any;
+export declare function initErrorData(AppId: string, message: any, tag: string): any;
+export declare function getDeviceModel(): string;
+export declare function postDataUrl(category: string, appId: string): string;
+export declare function getErrorRequesFunc(url: string, result: any): any;
+export declare function getPerformanceRequesFunc(url: string, result: any): any;
+export declare function getNetworkRequesFunc(url: string, result: any): any;
+export declare function getRequestFun(url: string, type: string, result: any): any;
+export declare function changeWebData(datas: any, appId: string, tag: string): any;

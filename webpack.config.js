@@ -5,9 +5,7 @@ const HtmlWebpackPlugin = require('html-webpack-plugin')
 
 module.exports = {
   entry: {
-      "predem-web-sdk": './src/index.ts',
-      // source: './src/source.ts',
-    // transfer: './src/transfer.ts'
+      "pre-dem-browser": './src/index.ts',
   },
   output: {
     filename: '[name].js',
