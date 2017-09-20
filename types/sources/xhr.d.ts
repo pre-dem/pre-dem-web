@@ -1,4 +1,4 @@
-import { Raven } from '../raven';
+import { Dem } from '../dem';
 import Source, { ISourceMessage } from '../source';
 export interface IXHRMessage extends ISourceMessage {
     payload: {
@@ -12,5 +12,5 @@ export interface IXHRMessage extends ISourceMessage {
         contentLength?: number;
     };
 }
-declare const _default: (raven: Raven) => Source<IXHRMessage>;
+declare const _default: (dem: Dem) => Source<IXHRMessage>;
 export default _default;

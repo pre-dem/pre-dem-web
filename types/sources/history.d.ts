@@ -1,4 +1,4 @@
-import { Raven } from '../raven';
+import { Dem } from '../dem';
 import Source, { ISourceMessage } from '../source';
 export interface IHistoryMessage extends ISourceMessage {
     payload: {
@@ -16,5 +16,5 @@ export interface IHistoryMessage extends ISourceMessage {
         userAgent?: string;
     };
 }
-declare const _default: (raven: Raven) => Source<IHistoryMessage>;
+declare const _default: (dem: Dem) => Source<IHistoryMessage>;
 export default _default;

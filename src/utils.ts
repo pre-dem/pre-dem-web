@@ -1,12 +1,5 @@
 import { hasJSON } from './detection'
 
-/**
- * Polyfill a method
- * @param obj object e.g. `document`
- * @param name method name present on object e.g. `addEventListener`
- * @param replacement replacement function
- * @param track {optional} record instrumentation to an array
- */
 export function fill(obj, name, replacement, track?) {
   var orig = obj[name]
   obj[name] = replacement(orig)
@@ -52,13 +45,6 @@ export function serializeDOMElement(dom: HTMLElement) {
 const MAX_TRAVERSE_HEIGHT = 5
 const MAX_OUTPUT_LEN = 80
 
-/**
- * Given a child DOM element, returns a query-selector statement describing that
- * and its ancestors
- * e.g. [HTMLElement] => body > div > input#foo.btn[name=baz]
- * @param elem
- * @returns {string}
- */
 export function htmlTreeAsString(elem) {
   /* eslint no-extra-parens:0*/
   const out = []
@@ -71,10 +57,7 @@ export function htmlTreeAsString(elem) {
   while (elem && height++ < MAX_TRAVERSE_HEIGHT) {
 
     nextStr = htmlElementAsString(elem)
-    // bail out if
-    // - nextStr is the 'html' element
-    // - the length of the string that would be created exceeds MAX_OUTPUT_LEN
-    //   (ignore this limit if we are on the first iteration)
+
     if (nextStr === 'html' || height > 1 && len + (out.length * sepLength) + nextStr.length >= MAX_OUTPUT_LEN) {
       break
     }
@@ -88,12 +71,6 @@ export function htmlTreeAsString(elem) {
   return out.reverse().join(separator)
 }
 
-/**
-* Returns a simple, query-selector representation of a DOM element
-* e.g. [HTMLElement] => input#foo.btn[name=baz]
-* @param HTMLElement
-* @returns {string}
-*/
 export function htmlElementAsString(elem) {
   const out = []
   let className
@@ -131,13 +108,6 @@ export function htmlElementAsString(elem) {
 
 const objectPrototype = Object.prototype
 
-/**
- * hasKey, a better form of hasOwnProperty
- * Example: hasKey(MainHostObject, property) === true/false
- *
- * @param {Object} host object to check property
- * @param {string} key to check
- */
 export function hasKey(object, key) {
   return objectPrototype.hasOwnProperty.call(object, key);
 }
@@ -235,4 +205,18 @@ export function convertDateToDateStr(oldDate: Date, hasHour: boolean, separator:
     dateStr += (oldDate.getSeconds());
   }
   return dateStr;
+}
+
+export function getDominFromUrl(url: string): any {
+  const urlArray = url.split("//");
+  if (urlArray.length === 2) {
+    const array = urlArray[1].replace("/", " ").split(" ");
+    if (array.length === 1) {
+      return {domain: array[0], path: ""}
+    }
+    if (array.length == 2) {
+      return {domain: array[0], path: array[1]}
+    }
+  }
+  return {domain: "", path: ""}
 }

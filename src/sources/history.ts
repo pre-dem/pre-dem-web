@@ -1,4 +1,4 @@
-import { Raven } from '../raven'
+import { Dem } from '../dem'
 
 import Source, { ISourceMessage } from '../source'
 import { fill } from '../utils'
@@ -21,16 +21,12 @@ export interface IHistoryMessage extends ISourceMessage {
   }
 }
 
-export default (raven: Raven) => {
+export default (dem: Dem) => {
   if (!_window) return
 
   const _location = _window.location
   let _lastHref = _location && _location.href
 
-  // record navigation (URL) changes
-  // NOTE: in Chrome App environment, touching history.pushState, *even inside
-  //       a try/catch block*, will cause Chrome to output an error to console.error
-  // borrowed from: https://github.com/angular/angular.js/pull/13945/files
   const chrome = _window.chrome
   const isChromePackagedApp = chrome && chrome.app && chrome.app.runtime
   const hasPushState = !isChromePackagedApp && _window.history && history.pushState
@@ -83,8 +79,7 @@ export default (raven: Raven) => {
     }
 
     fill(history, 'pushState', (origPushState) => {
-      // note history.pushState.length is 0; intentionally not declaring
-      // params to preserve 0 arity
+
       return (...args) => {
         const url = args.length > 2 ? args[2] : undefined
 
@@ -106,6 +101,6 @@ export default (raven: Raven) => {
 
         return origPushState.apply(history, args)
       }
-    }, raven.__wrappedBuiltins)
+    }, dem.__wrappedBuiltins)
   })
 }

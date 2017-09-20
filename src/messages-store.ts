@@ -1,6 +1,6 @@
 import { CollectionStore } from './store'
 import { ISourceMessage } from './source'
-import { Raven } from './raven'
+import { Dem } from './dem'
 
 import logger from './logger'
 
@@ -19,14 +19,14 @@ export class MessagesStore {
 
   counter = 0
 
-  parent: Raven
+  parent: Dem
   store = new CollectionStore<IMessage>('messages')
   messageArray = []
   performanceArray = []
   messageThreshold = 2
   maxTime = 3 * 60 * 60 * 1000
 
-  constructor(parent: Raven) {
+  constructor(parent: Dem) {
     this.parent = parent
   }
 
