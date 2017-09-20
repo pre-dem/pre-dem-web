@@ -1,5 +1,5 @@
 {
-  "name": "dem",
+  "name": "pre-dem-web",
   "version": "3.13.1",
   "license": "MIT",
   "main": "dist/pre-dem-web.js",

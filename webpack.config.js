@@ -4,7 +4,7 @@ const webpack = require('webpack')
 
 module.exports = {
   entry: {
-      "pre-dem-web": './src/index.ts',
+      "pre-dem-browser": './src/index.ts',
   },
   output: {
     filename: '[name].js',
