@@ -1,2 +1,2 @@
-import main from './raven/main'
+import main from './main'
 module.exports = main

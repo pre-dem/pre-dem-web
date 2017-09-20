@@ -1,15 +1,8 @@
-/**
- * Created by sunfei on 2017/9/8.
- */
-
 import { _window } from './detection'
 
 const VERSION = "1.0.0";
 const WEB_PLATFORM = "w";
-// const URL_HEADER = "http://hriygkee.bq.cloudappl.com";
 const URL_HEADER ="http://jkbkolos.bq.cloudappl.com";
-// const URL_HEADER = "";
-
 
 export function initPerformance(AppId: string, message: any, tag: string): any {
     const timing = message.payload.timing;

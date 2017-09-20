@@ -3,9 +3,12 @@ npm install
 npm run build
 
 #使用
-dist 文件夹中 predem-web-sdk.js 文件引入到 HTML 页面中
+dist 文件夹中 pre-dem-browser.js 文件引入到 HTML 页面中
 
-<script src="predem-web-sdk.js" type="text/javascript"/>
+<script src="pre-dem-browser.js" type="text/javascript"/>
+<script>
+        window.InitWebSdk({tag: ${Tag}, token: ${Token}});
+</script>
 
 #上报数据
 
