@@ -1,6 +1,6 @@
 import { CollectionStore } from './store';
 import { ISourceMessage } from './source';
-import { Raven } from './raven';
+import { Dem } from './dem';
 export interface IMessage {
     id: number;
     data: ISourceMessage;
@@ -8,12 +8,12 @@ export interface IMessage {
 }
 export declare class MessagesStore {
     counter: number;
-    parent: Raven;
+    parent: Dem;
     store: CollectionStore<IMessage>;
     messageArray: any[];
     performanceArray: any[];
     messageThreshold: number;
     maxTime: number;
-    constructor(parent: Raven);
+    constructor(parent: Dem);
     add(data: ISourceMessage): void;
 }

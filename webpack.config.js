@@ -1,18 +1,14 @@
 'use strict'
 
 const webpack = require('webpack')
-const HtmlWebpackPlugin = require('html-webpack-plugin')
 
 module.exports = {
   entry: {
-      "predem-web-sdk": './src/index.ts',
-      // source: './src/source.ts',
-    // transfer: './src/transfer.ts'
+      "pre-dem-browser": './src/index.ts',
   },
   output: {
     filename: '[name].js',
     path: __dirname + '/dist',
-    library: 'raven',
     libraryTarget: 'umd'
   },
 
@@ -40,22 +36,5 @@ module.exports = {
         comments: false
       }
     }),
-      new HtmlWebpackPlugin({
-          webpackServerURL: 'http://localhost:8080/webpack-dev-server.js',
-          template: './src/index.html',
-          inject: 'body',
-      }),
-      new webpack.HotModuleReplacementPlugin(),
-      new webpack.NoErrorsPlugin()
-
   ],
-    devServer: {
-        port:8000,
-        historyApiFallback: true,
-        proxy: {
-            '/v1/*': {
-                target: 'http://localhost:8080'
-            }
-        },
-    }
 }

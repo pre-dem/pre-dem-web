@@ -1,13 +1,8 @@
 {
-  "name": "raven",
+  "name": "pre-dem-web",
   "version": "3.13.1",
   "license": "MIT",
-  "homepage": "https://github.com/getsentry/raven-js",
-  "repository": {
-    "type": "git",
-    "url": "git://github.com/getsentry/raven-js.git"
-  },
-  "main": "dist/raven.js",
+  "main": "dist/pre-dem-web.js",
   "scripts": {
     "clean": "rimraf build",
     "check": "tslint -c ./tslint.json './src/**/*.ts*'",
@@ -22,9 +17,6 @@
     "typescript": "^2.4.2",
     "ava": "^0.20.0",
     "webpack": "^3.5.5",
-    "webpack-hot-middleware": "^2.12.1",
-    "html-webpack-plugin": "^2.24.1",
-    "webpack-dev-server": "^1.16.2",
     "rimraf": "^2.5.3"
   },
   "keywords": [
@@ -32,9 +24,9 @@
     "debugging",
     "logging",
     "errors",
-    "raven"
+    "dem"
   ],
-  "types": "types/raven.d.ts",
+  "types": "types/dem.d.ts",
   "dependencies": {
     "platform": "^1.3.4"
   }

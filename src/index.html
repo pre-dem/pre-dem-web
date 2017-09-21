@@ -5,12 +5,16 @@
     <title> PRE-DEM </title>
 </head>
 <body>
-<!--<% if (htmlWebpackPlugin.options.webpackServerURL) { %>-->
-<!--<script src="<%= htmlWebpackPlugin.options.webpackServerURL %>"></script>-->
-<!--<% } %>-->
+<script src="./../dist/pre-dem-web.js"></script>
 <script src="http://code.jquery.com/jquery-1.4.1.min.js"></script>
 <script type="text/javascript">
-    window.InitWebSdk({tag: "hahhhahha", token: "00000004"});
+
+    predem.initWebSdk("00000004", "http://jkbkolos.bq.cloudappl.com");
+    predem.setErrorToken("errorToken");
+    predem.setNetworkToken("networkToken");
+    predem.setPerformanceToken("performanceToken");
+    predem.setTag("test tag");
+
     function funcNotFoundError() {
         try {
             window.a.b !== 2

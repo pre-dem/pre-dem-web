@@ -1,4 +1,4 @@
-import { Raven } from '../raven'
+import { Dem } from '../dem'
 
 import Source, { ISourceMessage } from '../source'
 import { isString, isFunction, fill } from '../utils'
@@ -23,11 +23,11 @@ function genXHRMessage(action: string, method: string, url: string, status_code:
   }
 }
 
-export default (raven: Raven) => {
+export default (dem: Dem) => {
 
   function wrapProp(prop, xhr) {
     if (prop in xhr && isFunction(xhr[prop])) {
-      fill(xhr, prop, (orig) => raven.wrap(orig)) // intentionally don't track filled methods on XHR instances
+      fill(xhr, prop, (orig) => dem.wrap(orig)) // intentionally don't track filled methods on XHR instances
     }
   }
 
@@ -40,11 +40,11 @@ export default (raven: Raven) => {
 
       fill(xhrproto, 'open', (originFunc) => {
         return function(method, url) { // preserve arity
-          this.__raven_xhr = genXHRMessage('open', method, url)
+          this.__dem_xhr = genXHRMessage('open', method, url)
 
           return originFunc.apply(this, arguments)
         }
-      }, raven.__wrappedBuiltins)
+      }, dem.__wrappedBuiltins)
 
       fill(xhrproto, 'send', (originFunc) => {
         return function(data) { // preserve arity
@@ -52,14 +52,14 @@ export default (raven: Raven) => {
           const startAt = Date.now()
           const timeChecker = setTimeout(() => action({
             category: 'network',
-            payload: xhr.__raven_xhr
+            payload: xhr.__dem_xhr
           }), 30 * 1000 /* 30 sec */)
 
           function onreadystatechangeHandler() {
-            if (xhr.__raven_xhr && (xhr.readyState === 2)) {
-                xhr.__raven_xhr.responseTimestamp = Date.now()
+            if (xhr.__dem_xhr && (xhr.readyState === 2)) {
+                xhr.__dem_xhr.responseTimestamp = Date.now()
             }
-            if (xhr.__raven_xhr && (xhr.readyState === 1 || xhr.readyState === 4)) {
+            if (xhr.__dem_xhr && (xhr.readyState === 1 || xhr.readyState === 4)) {
               if (timeChecker) {
                 clearTimeout(timeChecker)
               }
@@ -67,14 +67,14 @@ export default (raven: Raven) => {
               try {
                 // touching statusCode in some platforms throws
                 // an exception
-                xhr.__raven_xhr.status_code = xhr.status
-                xhr.__raven_xhr.duration = Date.now() - startAt
-                xhr.__raven_xhr.responseText = xhr.responseText
-                xhr.__raven_xhr.contentLength = xhr.getResponseHeader('Content-Length');
+                xhr.__dem_xhr.status_code = xhr.status
+                xhr.__dem_xhr.duration = Date.now() - startAt
+                xhr.__dem_xhr.responseText = xhr.responseText
+                xhr.__dem_xhr.contentLength = xhr.getResponseHeader('Content-Length');
               } catch (e) { /* do nothing */ }
               action({
                 category: 'network',
-                payload: xhr.__raven_xhr
+                payload: xhr.__dem_xhr
               })
             }
           }
@@ -85,14 +85,14 @@ export default (raven: Raven) => {
           }
 
           if ('onreadystatechange' in xhr && isFunction(xhr.onreadystatechange)) {
-            fill(xhr, 'onreadystatechange', (orig) => raven.wrap(orig, undefined, onreadystatechangeHandler))
+            fill(xhr, 'onreadystatechange', (orig) => dem.wrap(orig, undefined, onreadystatechangeHandler))
           } else {
             xhr.onreadystatechange = onreadystatechangeHandler
           }
 
           return originFunc.apply(this, arguments)
         }
-      }, raven.__wrappedBuiltins)
+      }, dem.__wrappedBuiltins)
     }
 
     // Fetch API
@@ -142,7 +142,7 @@ export default (raven: Raven) => {
             return resp
           })
         }
-      }, raven.__wrappedBuiltins)
+      }, dem.__wrappedBuiltins)
     }
   })
 }

@@ -1,6 +1,6 @@
 declare const global: any
 declare const require: any
-declare let raven_option: IRavenOption
+declare let dem_option: DemOption
 
 import * as TraceKit from 'tracekit'
 
@@ -36,7 +36,7 @@ import {
 
 export type URLPattern = RegExp | string
 
-export interface IRavenOption {
+export interface DemOption {
   release?: string
   environment?: string
   tags?: any
@@ -62,7 +62,7 @@ export interface IRavenOption {
   debug?: boolean
 }
 
-const DEFAULT_RAVEN_OPTION: IRavenOption = {
+const DEFAULT_DEM_OPTION: DemOption = {
   environment: 'production',
   autoInstall: true,
   instrument: {
@@ -79,11 +79,11 @@ const DEFAULT_RAVEN_OPTION: IRavenOption = {
 
 export type ValueCallback<T> = (value?: T, callback?: ValueCallback<T>) => T
 
-export class Raven {
+export class Dem {
 
-  VERSION: '3.13.1'
+  VERSION: '1.0.0'
 
-  option: IRavenOption
+  option: DemOption
 
   callbacks: { [key: string]: ValueCallback<any> } = {}
 
@@ -108,12 +108,8 @@ export class Raven {
     return logger
   }
 
-  /**
-   * Raven Constructor
-   * @param option Raven Option
-   */
-  constructor(option: IRavenOption = {}) {
-    this.option = merge(clone(DEFAULT_RAVEN_OPTION), option)
+  constructor(option: DemOption = {}) {
+    this.option = merge(clone(DEFAULT_DEM_OPTION), option)
 
     if (this.option.debug) {
       this.debug = true
@@ -149,17 +145,12 @@ export class Raven {
     }
   }
 
-  /**
-   * getter debug
-   * @return {boolean}
-   */
+
   get debug(): boolean {
     return this.configStore.get('debug') || false
   }
 
-  /**
-   * setter debug
-   */
+
   set debug(value) {
     if (value === true) {
       logger.info(`[CONFIG] set debug = ${value}`)
@@ -168,10 +159,7 @@ export class Raven {
     this.configStore.set('debug', value)
   }
 
-  /**
-   * Install raven's instruments
-   * @return {Raven}
-   */
+
   install() {
     // Instrument TryCatch
     if (this.option.instrument && this.option.instrument['tryCatch']) {
@@ -186,10 +174,7 @@ export class Raven {
     return this
   }
 
-  /**
-   * Dispose raven
-   * @return {Raven}
-   */
+
   uninstall() {
     // Restore wrapped builtins
     this._restoreBuiltIns()
@@ -200,15 +185,6 @@ export class Raven {
     return this
   }
 
-  /**
-   * Add new source into raven
-   * 
-   * @param {Source} source Data source
-   * @return {Raven}
-   * 
-   * @example
-   * raven.addSource(source)
-   */
   addSource(source: Source<any>) {
     if (!source) return
 
@@ -223,15 +199,6 @@ export class Raven {
     return this
   }
 
-  /**
-   * add a data transfer
-   * 
-   * @param {Transfer} transfer Custom data transfer
-   * @return {Raven}
-   * 
-   * @example
-   * raven.addTransfer(transfer)
-   */
   addTransfer(transfer: Transfer) {
     transfer.config(this.configStore.toJS())
 
@@ -244,30 +211,8 @@ export class Raven {
     return this
   }
 
-  /**
-   * Set single config value of raven
-   * 
-   * @param {string} key Key of the config
-   * @param {string} value Value
-   * @return {Raven}
-   * 
-   * @example
-   * raven.config('foo', 'bar')
-   */
   config(key: string, value: string)
 
-  /**
-   * Set batch of config values
-   * 
-   * @param {Object} object Config
-   * @return {Raven}
-   * 
-   * @example
-   * raven.config({
-   *   'foo': 1,
-   *   'bar': 2
-   * })
-   */
   config(object: any)
 
   config(keyOrObject: any, value?: string) {
@@ -291,23 +236,6 @@ export class Raven {
     return this
   }
 
-  /**
-   * Manually capture an exception and send it over to Sentry
-   *
-   * @param {error} ex An exception to be logged
-   * @param {object} options A specific set of options for this error [optional]
-   * @return {Raven}
-   * 
-   * @example
-   * try {
-   *   // stuff...
-   * } catch(ex) {
-   *   raven.captureException(ex)
-   * }
-   * 
-   * @example
-   * stuff().catch((ex) => raven.captureException(ex))
-   */
   captureException(ex: Error, options: any = {}) {
     // If not an Error is passed through, recall as a message instead
     if (!isError(ex)) {
@@ -316,12 +244,6 @@ export class Raven {
         stacktrace: true // if we fall back to captureMessage, default to attempting a new trace
       }, options))
     }
-
-    // TraceKit.report will re-raise any exception passed to it,
-    // which means you have to wrap it in try/catch. Instead, we
-    // can wrap it here and only re-raise if TraceKit.report
-    // raises an exception different from the one we asked to
-    // report on.
     try {
       TraceKit.report(ex)
     } catch(ex1) {
@@ -337,18 +259,7 @@ export class Raven {
     return this
   }
 
-  /**
-   * Set a user to be sent along with the payload.
-   * 
-   * @param {object} user An object representing user data [optional]
-   * @return {Raven}
-   * 
-   * @example
-   * raven.setUserContext({
-   *   uid: 123456,
-   *   email: 'foobar@example.com'
-   * })
-   */
+
   setUserContext(user) {
     this.contextStore.set('user', user)
 
@@ -363,15 +274,6 @@ export class Raven {
     return this
   }
 
-  /**
-   * Merge tags to be sent along with the payload.
-   *
-   * @param {object} tags An object representing tags
-   * @return {Raven}
-   * 
-   * @example
-   * raven.setTagsContext('tags', [ 'beta' ])
-   */
   setTagsContext(tags) {
     this.contextStore.set('tags', tags)
     
@@ -386,12 +288,7 @@ export class Raven {
     return this
   }
 
-  /**
-   * Merge extra attributes to be sent along with the payload.
-   *
-   * @param {object} extra An object representing extra data [optional]
-   * @return {Raven}
-   */
+
   setExtraContext(extra) {
     this.contextStore.set('extra', extra)
 
@@ -406,14 +303,6 @@ export class Raven {
     return this
   }
 
-  /**
-   * Clear all of the context.
-   *
-   * @return {Raven}
-   * 
-   * @example
-   * raven.clearContext()
-   */
   clearContext() {
     this.contextStore.clear()
     
@@ -424,25 +313,10 @@ export class Raven {
     return this
   }
 
-  /**
-   * Get a copy of the current context. This cannot be mutated.
-   *
-   * @return {object} copy of context
-   */
   getContext() {
     return this.contextStore.toJS()
   }
 
-  /**
-   * Set environment of application
-   *
-   * @param {string} environment Typically something like 'production'.
-   * @return {Raven}
-   * 
-   * @example
-   * raven.setEnvironment('development')
-   * raven.setEnvironment('production')
-   */
   setEnvironment(env: string) {
     this.contextStore.set('environment', env)
     
@@ -453,15 +327,6 @@ export class Raven {
     return this
   }
 
-  /**
-   * Set release version of application
-   *
-   * @param {string} release Typically something like a git SHA to identify version
-   * @return {Raven}
-   * 
-   * @example
-   * raven.setRelease('public-v0.1.0')
-   */
   setRelease(release: string) {
     this.contextStore.set('release', release)
     
@@ -472,15 +337,6 @@ export class Raven {
     return this
   }
 
-  /**
-   * Get the callback of the special point
-   * 
-   * @param {string} key Key of callback
-   * @return {ValueCallback}
-   * 
-   * @example
-   * raven.getCallback('breadcrumb')
-   */
   getCallback(key: string) {
     if (isNil(this.callbacks[key])) {
       return () => false
@@ -489,17 +345,6 @@ export class Raven {
     return this.callbacks[key]
   }
 
-  /**
-   * Set callback of special point
-   * 
-   * @param {string} key Key of the point
-   * @param {ValueCallback} callback Callback
-   * 
-   * @example
-   * raven.setCallback('breadcrumb', (message) => {
-   *   console.log(message)
-   * })
-   */
   setCallback(key: string, callback?: ValueCallback<any>) {
     if (isUndefined(callback)) {
       this.callbacks[key] = null
@@ -516,71 +361,41 @@ export class Raven {
     }
   }
 
-  /**
-   * Set the breadcrumb callback option
-   *
-   * @param {ValueCallback} callback The callback to run which some breadcrumb
-   *                            message create
-   * @return {Raven}
-   */
   setBreadcrumbCallback(callback: ValueCallback<any>) {
     const original = this.getCallback('breadcrumb')
     this.setCallback('breadcrumb', composeCallback(original, callback))
   }
 
-  /**
-   * Set the dataCallback option
-   *
-   * @param {ValueCallback} callback The callback to run which some exception
-   *                            message create
-   * @return {Raven}
-   */
   setExceptionCallback(callback: ValueCallback<any>) {
     const original = this.getCallback('exception')
     this.setCallback('exception', composeCallback(original, callback))
   }
 
-  /**
-   * Wrap code within a context and returns back a new function to be executed
-   *
-   * @param {object} options A specific set of options for this context [optional]
-   * @param {function} func The function to be wrapped in a new context
-   * @param {function} func A function to call before the try/catch wrapper [optional, private]
-   * @return {function} The newly wrapped functions with a context
-   */
   wrap(options, func?, _before?) {
-    // 1 argument has been passed, and it's not a function
-    // so just return it
+
     if (isUndefined(func) && !isFunction(options)) {
       return options
     }
 
-    // option is optional
     if (isFunction(options)) {
       func = options
       options = undefined
     }
 
-    // At this point, we've passed along 2 arguments, and the second one
-    // is not a function either, so we'll just return the second argument.
     if (!isFunction(func)) {
       return func
     }
 
-    // We don't wanna wrap it twice!
     try {
-      if (func.__raven__) {
+      if (func.__dem__) {
         return func
       }
 
-      // If this has already been wrapped in the past, return that
-      if (func.__raven_wrapper__)  {
-        return func.__raven_wrapper__
+      if (func.__dem_wrapper__)  {
+        return func.__dem_wrapper__
       }
     } catch (e) {
-      // Just accessing custom props in some Selenium environments
-      // can cause a "Permission denied" exception (see raven-js#495).
-      // Bail on wrapping and return the function as-is (defers to window.onerror).
+
       return func
     }
 
@@ -594,15 +409,9 @@ export class Raven {
           _before.apply(this, arguments)
       }
 
-      // Recursively wrap all of a function's arguments that are
-      // functions themselves.
       while(i--) args[i] = deep ? self.wrap(options, arguments[i]) : arguments[i]
 
       try {
-        // Attempt to invoke user-land function
-        // NOTE: If you are a Sentry user, and you are seeing this stack frame, it
-        //       means Raven caught an error invoking your application code. This is
-        //       expected behavior and NOT indicative of a bug with Raven.js.
         return func.apply(this, args)
       } catch(e) {
         self._ignoreNextOnError()
@@ -618,8 +427,8 @@ export class Raven {
     }
     wrapped.prototype = func.prototype
 
-    func.__raven_wrapper__ = wrapped
-    wrapped['__raven__'] = true
+    func.__dem_wrapper__ = wrapped
+    wrapped['__dem__'] = true
     wrapped['__inner__'] = func
 
     if (this.debug) {
@@ -630,14 +439,6 @@ export class Raven {
     return wrapped
   }
 
-  /**
-   * Wrap code within a context so Raven can capture errors
-   * reliably across domains that is executed immediately.
-   *
-   * @param {function} func The callback to be immediately executed within the context
-   * @param {array} args An array of arguments to be called with the callback [optional]
-   * @param {object} options A specific set of options for this context [optional]
-   */
   context(func, args: any[])
   context(func, options: any)
   context(func, args: any[], options: any)
@@ -702,9 +503,9 @@ export class Raven {
   }
 }
 
-const raven = new Raven(_window.raven_option || {})
+const dem = new Dem(_window.dem_option || {})
 
-export default raven
+export default dem
 
 
 function composeCallback(original: ValueCallback<any>, callback: ValueCallback<any>): ValueCallback<any> {

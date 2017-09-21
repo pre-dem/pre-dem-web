@@ -26,7 +26,7 @@ levels.forEach((level) => logger[level] = (message, ...args) => {
 
   return originalLevels[level].call(
     console,
-    `%c[RAVEN-DEBUG] %c[${level.toUpperCase()}] %c${message}`,
+    `%c[DEM-DEBUG] %c[${level.toUpperCase()}] %c${message}`,
     `color: ${levelColors.qiniu}`,
     `color: ${levelColors[level]}`,
     `color: ${levelColors.normal}`
