@@ -7,8 +7,8 @@ import webData from './web-data'
 
     function PredemWebSdk() {
 
-        this.initWebSdk = function (appId: string, domain: string) {
-            predem.initWebSdk(appId, domain)
+        this.initWebSdk = function (obj) {
+            predem.initWebSdk(obj.appId, obj.domain)
         };
 
         this.setErrorToken = function (token: string) {
