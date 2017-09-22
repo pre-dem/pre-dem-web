@@ -7,8 +7,8 @@ import webData from './web-data'
 
     function PredemWebSdk() {
 
-        this.initWebSdk = function (obj) {
-            predem.initWebSdk(obj.appId, obj.domain)
+        this.init = function (obj) {
+            predem.init(obj.appId, obj.domain)
         };
 
         this.setErrorToken = function (token: string) {
@@ -37,7 +37,7 @@ import webData from './web-data'
 
 class Predem {
 
-    initWebSdk(appId: string, domain: string): void {
+    init(appId: string, domain: string): void {
         webData.init(appId, domain);
     }
 
