@@ -6,23 +6,6 @@ import webData from './web-data'
 (function (win){
 
     function PredemWebSdk() {
-
-        this.init = function (obj) {
-            predem.init(obj.appId, obj.domain)
-        };
-
-        this.setErrorToken = function (token: string) {
-            predem.setErrorToken(token);
-        };
-
-        this.setNetworkToken = function (token: string) {
-            predem.setNetworkToken(token);
-        };
-
-        this.setPerformanceToken = function (token: string) {
-            predem.setPerformanceToken(token);
-        };
-
         this.setTag = function (tag: string) {
             predem.setTag(tag);
             predem.initTransfer();
@@ -36,6 +19,14 @@ import webData from './web-data'
 
 
 class Predem {
+
+    constructor() {
+        this.init("{{.AppId}}", "{{.Domain}}");
+        this.setErrorToken("{{.ErrorToken}}");
+        this.setPerformanceToken("{{.PerformanceToken}}");
+        this.setNetworkToken("{{.NetworkToken}}")
+        this.setTag("{{.Tag}}")
+    }
 
     init(appId: string, domain: string): void {
         webData.init(appId, domain);
