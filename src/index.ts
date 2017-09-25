@@ -3,21 +3,6 @@ import dem from "./dem"
 import Transfer from "./transfer"
 import webData from './web-data'
 
-(function (win){
-
-    function PredemWebSdk() {
-        this.setTag = function (tag: string) {
-            predem.setTag(tag);
-            predem.initTransfer();
-        };
-    }
-
-    win["predem"] = new PredemWebSdk();
-
-
-})(window);
-
-
 class Predem {
 
     constructor() {
@@ -26,6 +11,7 @@ class Predem {
         this.setPerformanceToken("{{.PerformanceToken}}");
         this.setNetworkToken("{{.NetworkToken}}")
         this.setTag("{{.Tag}}")
+        this.initTransfer()
     }
 
     init(appId: string, domain: string): void {
