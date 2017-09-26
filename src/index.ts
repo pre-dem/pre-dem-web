@@ -4,7 +4,6 @@ import Transfer from "./transfer"
 import webData from './web-data'
 
 class Predem {
-
     constructor() {
         this.init("{{.AppId}}", "{{.Domain}}");
         this.setErrorToken("{{.ErrorToken}}");
