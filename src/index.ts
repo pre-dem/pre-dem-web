@@ -7,13 +7,12 @@ import webData from './web-data'
 
     function PredemWebSdk() {
 
-            this.setTag = function (tag: string) {
-                predem.setTag(tag);
-            };
-        }
+        this.setTag = function (tag: string) {
+            predem.setTag(tag);
+        };
+    }
 
-        win["predem"] = new PredemWebSdk();
-
+    win["predem"] = new PredemWebSdk();
 
     })(window);
 
