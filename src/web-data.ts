@@ -17,7 +17,12 @@ class WebData {
     networkToken: string;
 
     constructor() {
-
+        this.appId = "";
+        this.domain = "";
+        this.tag = "";
+        this.errorToken = "";
+        this.performanceToken = "";
+        this.networkToken = "";
     }
 
     init(appId: string, domain: string): void {
