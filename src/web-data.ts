@@ -5,24 +5,19 @@
 import { _window } from './detection'
 import { getDominFromUrl } from './utils'
 
-const VERSION = "1.0.0";
+const packageJson = require('../package.json')
+const VERSION = packageJson.version;
 const WEB_PLATFORM = "w";
 
 class WebData {
     appId: string;
     domain: string;
     tag: string;
-    errorToken: string;
-    performanceToken: string;
-    networkToken: string;
 
     constructor() {
         this.appId = "";
         this.domain = "";
         this.tag = "";
-        this.errorToken = "";
-        this.performanceToken = "";
-        this.networkToken = "";
     }
 
     init(appId: string, domain: string): void {
@@ -32,25 +27,6 @@ class WebData {
 
     setTag(tag: string): void {
         this.tag = tag;
-    }
-
-
-    setToken(errorToken: string, performanceToken: string, networkToken: string): void {
-        this.errorToken = errorToken;
-        this.performanceToken = performanceToken;
-        this.networkToken = networkToken;
-    }
-
-    setErrorToken(token: string): void {
-        this.errorToken = token;
-    }
-
-    setPerformanceToken(token: string): void {
-        this.performanceToken = token;
-    }
-
-    setNetworkToken(token: string): void {
-        this.networkToken = token;
     }
 
     push(datas: any): any {
@@ -201,7 +177,6 @@ class WebData {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization': this.errorToken,
             },
             body: JSON.stringify(result),
         })
@@ -212,7 +187,6 @@ class WebData {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization': this.performanceToken,
             },
             body: JSON.stringify(result),
         })
@@ -225,7 +199,6 @@ class WebData {
             method: 'POST',
             headers: {
                 'Content-Type': 'text/plain',
-                'Authorization': this.networkToken,
             },
             body: result,
         })

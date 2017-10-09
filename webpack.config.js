@@ -1,13 +1,14 @@
 'use strict'
-
 const webpack = require('webpack')
+const packageJson = require('./package.json')
+const version = packageJson.version
 
 module.exports = {
   entry: {
-      "pre-dem-web": './src/index.ts',
+      "pre_dem_web" : './src/index.ts',
   },
   output: {
-    filename: '[name].js',
+    filename: '[name]_v'+ version +'.js',
     path: __dirname + '/dist',
     libraryTarget: 'umd'
   },

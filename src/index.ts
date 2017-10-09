@@ -10,6 +10,10 @@ import webData from './web-data'
         this.setTag = function (tag: string) {
             predem.setTag(tag);
         };
+
+        this.init = function (obj) {
+            predem.init(obj.appKey, obj.domain)
+        }
     }
 
     win["predem"] = new PredemWebSdk();
@@ -18,29 +22,11 @@ import webData from './web-data'
 
 
 class Predem {
-    constructor() {
-        this.init("{{.AppId}}", "{{.Domain}}");
-        this.setErrorToken("{{.ErrorToken}}");
-        this.setPerformanceToken("{{.PerformanceToken}}");
-        this.setNetworkToken("{{.NetworkToken}}");
-        this.setTag("{{.Tag}}");
-        this.initTransfer()
-    }
 
-    init(appId: string, domain: string): void {
+    init(appKey: string, domain: string): void {
+        const appId = appKey.substring(0, 8);
         webData.init(appId, domain);
-    }
-
-    setErrorToken(token: string): void {
-        webData.setErrorToken(token);
-    }
-
-    setNetworkToken(token: string): void {
-        webData.setNetworkToken(token);
-    }
-
-    setPerformanceToken(token: string): void {
-        webData.setPerformanceToken(token);
+        this.initTransfer();
     }
 
     setTag(tag: string): void {
