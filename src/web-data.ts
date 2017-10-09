@@ -30,7 +30,6 @@ class WebData {
     }
 
     push(datas: any): any {
-        let result: any;
         let type = datas.category;
         if (datas instanceof Array) {
             type = 'network'
@@ -55,7 +54,7 @@ class WebData {
 
         }
 
-}
+    }
 
     postDataUrl(domain: string, category: string, appId: string): string {
         switch (category) {

@@ -3,34 +3,22 @@ import dem from "./dem"
 import Transfer from "./transfer"
 import webData from './web-data'
 
-(function (win){
-
-    function PredemWebSdk() {
-
-        this.setTag = function (tag: string) {
-            predem.setTag(tag);
-        };
-
-        this.init = function (obj) {
-            predem.init(obj.appKey, obj.domain)
-        }
-    }
-
-    win["predem"] = new PredemWebSdk();
-
-    })(window);
-
-
 class Predem {
 
-    init(appKey: string, domain: string): void {
+    constructor() {
+        const appKey = document.currentScript.getAttribute("data-app-key");
+        if (appKey.length <= 8) {
+            console.error("appKey error");
+        }
+        const domain = document.currentScript.getAttribute("data-domain");
+        if (domain.length <= 0) {
+            console.error("domain can not be null");
+        }
+        const tag = document.currentScript.getAttribute("data-tag");
         const appId = appKey.substring(0, 8);
         webData.init(appId, domain);
-        this.initTransfer();
-    }
-
-    setTag(tag: string): void {
         webData.setTag(tag);
+        this.initTransfer();
     }
 
     initTransfer() {
