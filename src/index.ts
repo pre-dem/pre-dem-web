@@ -9,10 +9,12 @@ class Predem {
         const appKey = document.currentScript.getAttribute("data-app-key");
         if (appKey.length <= 8) {
             console.error("appKey error");
+            return
         }
         const domain = document.currentScript.getAttribute("data-domain");
         if (domain.length <= 0) {
             console.error("domain can not be null");
+            return
         }
         const tag = document.currentScript.getAttribute("data-tag");
         const appId = appKey.substring(0, 8);
