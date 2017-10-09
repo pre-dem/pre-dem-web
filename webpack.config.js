@@ -5,7 +5,7 @@ const version = packageJson.version
 
 module.exports = {
   entry: {
-      "pre-dem-web" : './src/index.ts',
+      "pre-dem-web": './src/index.ts',
   },
   output: {
     filename: '[name]-v'+ version +'.js',
