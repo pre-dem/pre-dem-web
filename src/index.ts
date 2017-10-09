@@ -18,15 +18,15 @@ import webData from './web-data'
 })(window);
 
 
-const appKeyLength = 24
-const appIdLength = 8
+const APP_KEY_LENGTH = 24
+const APP_ID_LENGTH = 8
 
 
 class Predem {
 
     constructor() {
         const appKey = document.currentScript.getAttribute("data-app-key");
-        if (appKey.length <= appKeyLength) {
+        if (appKey.length <= APP_KEY_LENGTH) {
             console.error("appKey error");
             return
         }
@@ -36,7 +36,7 @@ class Predem {
             return
         }
         const tag = document.currentScript.getAttribute("data-tag");
-        const appId = appKey.substring(0, appIdLength);
+        const appId = appKey.substring(0, APP_ID_LENGTH);
         webData.init(appId, domain);
         webData.setTag(tag);
         this.initTransfer();
