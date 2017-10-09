@@ -18,7 +18,7 @@ import webData from './web-data'
 })(window);
 
 
-const appKeyLength = 48
+const appKeyLength = 24
 const appIdLength = 8
 
 
