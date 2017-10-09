@@ -5,10 +5,10 @@ const version = packageJson.version
 
 module.exports = {
   entry: {
-      "pre_dem_web" : './src/index.ts',
+      "pre-dem-web" : './src/index.ts',
   },
   output: {
-    filename: '[name]_v'+ version +'.js',
+    filename: '[name]-v'+ version +'.js',
     path: __dirname + '/dist',
     libraryTarget: 'umd'
   },
