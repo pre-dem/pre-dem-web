@@ -7,25 +7,8 @@ import webData from './web-data'
 
     function PredemWebSdk() {
 
-        this.init = function (obj) {
-            predem.init(obj.appId, obj.domain)
-        };
-
-        this.setErrorToken = function (token: string) {
-            predem.setErrorToken(token);
-        };
-
-        this.setNetworkToken = function (token: string) {
-            predem.setNetworkToken(token);
-        };
-
-        this.setPerformanceToken = function (token: string) {
-            predem.setPerformanceToken(token);
-        };
-
         this.setTag = function (tag: string) {
             predem.setTag(tag);
-            predem.initTransfer();
         };
     }
 
@@ -35,22 +18,28 @@ import webData from './web-data'
 })(window);
 
 
+const APP_KEY_LENGTH = 24
+const APP_ID_LENGTH = 8
+
+
 class Predem {
 
-    init(appId: string, domain: string): void {
+    constructor() {
+        const appKey = document.currentScript.getAttribute("data-app-key");
+        if (appKey.length <= APP_KEY_LENGTH) {
+            console.error("appKey error");
+            return
+        }
+        const domain = document.currentScript.getAttribute("data-domain");
+        if (domain.length <= 0) {
+            console.error("domain can not be null");
+            return
+        }
+        const tag = document.currentScript.getAttribute("data-tag");
+        const appId = appKey.substring(0, APP_ID_LENGTH);
         webData.init(appId, domain);
-    }
-
-    setErrorToken(token: string): void {
-        webData.setErrorToken(token);
-    }
-
-    setNetworkToken(token: string): void {
-        webData.setNetworkToken(token);
-    }
-
-    setPerformanceToken(token: string): void {
-        webData.setPerformanceToken(token);
+        webData.setTag(tag);
+        this.initTransfer();
     }
 
     setTag(tag: string): void {
