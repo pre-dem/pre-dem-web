@@ -26,12 +26,12 @@ class Predem {
 
     constructor() {
         const appKey = document.currentScript.getAttribute("data-app-key");
-        if (appKey.length <= APP_KEY_LENGTH) {
+        if (appKey.length < APP_KEY_LENGTH) {
             console.error("appKey error");
             return
         }
         const domain = document.currentScript.getAttribute("data-domain");
-        if (domain.length <= 0) {
+        if (domain.length == 0) {
             console.error("domain can not be null");
             return
         }
