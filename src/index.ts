@@ -26,7 +26,7 @@ class Predem {
 
     constructor() {
         const appKey = document.currentScript.getAttribute("data-app-key");
-        if (appKey.length < APP_KEY_LENGTH) {
+        if (appKey.length != APP_KEY_LENGTH) {
             console.error("appKey error");
             return
         }
