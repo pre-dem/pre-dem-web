@@ -29,6 +29,19 @@ class WebData {
         this.tag = tag;
     }
 
+    sendEventData(name: string, data): any {
+        const url = this.postDataUrl(this.domain, "event", this.appId);
+        const eventDate = this.initCustomEvent(this.appId, this.tag, name, data);
+        _window._origin_fetch(url, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(eventDate),
+        })
+
+    }
+
     push(datas: any): any {
         let type = datas.category;
         if (datas instanceof Array) {
@@ -64,10 +77,36 @@ class WebData {
             case 'performance': {
                 return domain + '/v1/' + appId +'/web/performance/' + WEB_PLATFORM;
             }
-            case 'network':
+            case 'network': {
                 return domain + '/v1/' + appId +'/http-stats/' + WEB_PLATFORM;
+            }
+            case 'event': {
+                return domain + '/v1/' + appId +'/events';
+            }
         }
         return "";
+    }
+
+    initCustomEvent(AppId: string, tag: string, name: string, content: string): any {
+        return {
+            app_id: AppId,
+            app_bundle_id: "",
+            app_name: "",
+            app_version: "",
+            device_model: this.getDeviceModel(),
+            manufacturer: "",
+            device_id: "",
+            os_platform: "web",
+            os_version: "",
+            os_build: "",
+            sdk_version: VERSION,
+            sdk_id: "",
+            tag: tag,
+            type: "custom",
+            name: name,
+            content: content,
+        }
+
     }
 
     initPerformance(AppId: string, message: any, tag: string): any {
@@ -88,7 +127,7 @@ class WebData {
             province:       "",
             city:           "",
             isp:            "",
-    };
+        };
 
         return  Object.assign(
             performance,
