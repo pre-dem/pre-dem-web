@@ -6,8 +6,11 @@
 </head>
 <body>
 <script src="http://code.jquery.com/jquery-1.4.1.min.js"></script>
-<script type="text/javascript" src="./../dist/pre-dem-web-v1.0.2.js" data-app-key="A-MeuurLyUWYcQjgRADuFvdy" data-domain="http://localhost:9998" data-tag="testTag">
-</script>
+<script type="text/javascript"
+        src="${WebSdkUrl}"
+        data-app-key="${AppKey}"
+        data-domain="${Domain}"
+        data-tag="${Tag}"/>
 <script type="text/javascript">
 
 	function sendCustomEventData() {
@@ -130,8 +133,9 @@
     <button onclick="sendAjax3()" style="height: 35px">发送 2xx code 请求</button>
     <button onclick="sendAjaxAndResponseData()" style="height: 35px">发送请求</button>
 </div>
+<div style="height: 30px"></div>
 <div>
-	<button onclick="sendCustomEventData()">自定义打点</button>
+	<button onclick="sendCustomEventData()" style="height: 35px">自定义打点</button>
 </div>
 </body>
 </html>
