@@ -13,11 +13,39 @@ class WebData {
     appId: string;
     domain: string;
     tag: string;
+    osVersion: string;
+    osBuild: string;
+    uuid: string;
 
     constructor() {
         this.appId = "";
         this.domain = "";
         this.tag = "";
+        this.osVersion = "";
+        this.osBuild = "";
+
+        let predemUuid = window.localStorage["predemUuid"];
+        if (predemUuid !== undefined && predemUuid.length > 0) {
+            this.uuid = predemUuid;
+        } else {
+            predemUuid = this.generateUUID();
+            window.localStorage["predemUuid"] = predemUuid;
+            this.uuid = predemUuid;
+
+        }
+
+        const explorerInfo: any = this.getExplorerInfo();
+        let version = "";
+        if (explorerInfo !== {}) {
+            version = explorerInfo.version;
+            const versionArray = version.split(".");
+            if (versionArray.length === 1) {
+                this.osVersion = versionArray[0];
+            } else if (versionArray.length >= 2) {
+                this.osVersion = versionArray[0];
+                this.osBuild = versionArray[1];
+            }
+        }
     }
 
     init(appId: string, domain: string): void {
@@ -88,17 +116,18 @@ class WebData {
     }
 
     initCustomEvent(AppId: string, tag: string, name: string, content: string): any {
+
         return {
             app_id: AppId,
-            app_bundle_id: "",
+            app_bundle_id: location.host,
             app_name: "",
             app_version: "",
             device_model: this.getDeviceModel(),
             manufacturer: "",
-            device_id: "",
+            device_id: this.uuid,
             os_platform: "web",
-            os_version: "",
-            os_build: "",
+            os_version: this.osVersion,
+            os_build: this.osBuild,
             sdk_version: VERSION,
             sdk_id: "",
             tag: tag,
@@ -142,16 +171,16 @@ class WebData {
         const dataLength = message.payload.contentLength ? message.payload.contentLength : 0;
         const responseTimeStamp =  message.payload.ResponseTimeStamp ? message.payload.ResponseTimeStamp : 0;
         const network  = {
-            AppBundleId:        "",
+            AppBundleId:        location.host,
             AppName:            "",
             AppVersion:         "",
             DeviceModel:        this.getDeviceModel(),
             OsPlatform:         "web",
-            OsVersion:          "",
-            OsBuild:            "",
+            OsVersion:          this.osVersion,
+            OsBuild:            this.osBuild,
             SdkVersion:         VERSION,
             SdkId:              "",
-            DeviceId:           "",
+            DeviceId:           this.uuid,
             Tag:                tag,
             Manufacturer:       "",
             Domain:             getDominFromUrl(message.payload.url).domain,
@@ -185,16 +214,16 @@ class WebData {
         const crash_log_key = JSON.stringify(message.payload.stack);
         return {
             app_id:         AppId,
-            app_bundle_id:  "",
+            app_bundle_id:  location.host,
             app_name:       "",
             app_version:    "",
             device_model:   this.getDeviceModel(),
             os_platform:    "web",
-            os_version:     "",
-            os_build:       "",
+            os_version:     this.osVersion,
+            os_build:       this.osBuild,
             sdk_version:    VERSION,
             sdk_id:         "",
-            device_id:      "",
+            device_id:      this.uuid,
             tag:            tag,
             report_uuid:    "",
             crash_log_key:  crash_log_key,
@@ -252,7 +281,39 @@ class WebData {
         }
     }
 
+    getExplorerInfo() {
+        const explorer = window.navigator.userAgent.toLowerCase();
+        if (explorer.indexOf("msie") >= 0) {  //ie
+            const ver = explorer.match(/msie ([\d.]+)/)[1];
+            return { type: "IE", version: ver };
+        } else if (explorer.indexOf("firefox") >= 0) { //firefox
+            const ver = explorer.match(/firefox\/([\d.]+)/)[1];
+            return { type: "Firefox", version: ver };
+        } else if (explorer.indexOf("chrome") >= 0) { //Chrome
+            const ver = explorer.match(/chrome\/([\d.]+)/)[1];
+            return { type: "Chrome", version: ver };
+        } else if (explorer.indexOf("opera") >= 0) { //Opera
+            const ver = explorer.match(/opera.([\d.]+)/)[1];
+            return { type: "Opera", version: ver };
+        } else if (explorer.indexOf("Safari") >= 0) { //Safari
+            const ver = explorer.match(/version\/([\d.]+)/)[1];
+            return { type: "Safari", version: ver };
+        }
+        return {};
+    }
+
+    generateUUID() {
+        let d = new Date().getTime();
+        const uuid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+            const r = (d + Math.random()*16)%16 | 0;
+            d = Math.floor(d/16);
+            return (c=='x' ? r : (r&0x3|0x8)).toString(16);
+        });
+        return uuid;
+    };
 }
+
+
 
 
 const webData = new WebData();

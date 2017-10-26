@@ -22,8 +22,8 @@ import webData from './web-data'
 })(window);
 
 
-const APP_KEY_LENGTH = 24
-const APP_ID_LENGTH = 8
+const APP_KEY_LENGTH = 24;
+const APP_ID_LENGTH = 8;
 
 
 class Predem {
