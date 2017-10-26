@@ -2,16 +2,22 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title> PRE-DEM </title>
+    <title> PRE-DEM-WEB </title>
 </head>
 <body>
-<script type="text/javascript" 
-        src="${WebSdkUrl}" 
+<script src="http://code.jquery.com/jquery-1.4.1.min.js"></script>
+<script type="text/javascript"
+        src="${WebSdkUrl}"
         data-app-key="${AppKey}"
         data-domain="${Domain}"
-        data-tag="${Tag}">
-</script>
+        data-tag="${Tag}"/>
 <script type="text/javascript">
+
+	function sendCustomEventData() {
+	    const testData = {key: "testkey"}
+		predem.sendCustomEventData("test name", testData)
+	}
+
     function funcNotFoundError() {
         try {
             window.a.b !== 2
@@ -126,6 +132,10 @@
     <button onclick="sendAjax2()" style="height: 35px">发送 5xx code 请求</button>
     <button onclick="sendAjax3()" style="height: 35px">发送 2xx code 请求</button>
     <button onclick="sendAjaxAndResponseData()" style="height: 35px">发送请求</button>
+</div>
+<div style="height: 30px"></div>
+<div>
+	<button onclick="sendCustomEventData()" style="height: 35px">自定义打点</button>
 </div>
 </body>
 </html>

@@ -10,6 +10,10 @@ import webData from './web-data'
         this.setTag = function (tag: string) {
             predem.setTag(tag);
         };
+
+        this.sendCustomEventData = function(eventName: string, eventData: string) {
+            predem.sendCustomEventData(eventName, eventData);
+        }
     }
 
     win["predem"] = new PredemWebSdk();
@@ -18,8 +22,8 @@ import webData from './web-data'
 })(window);
 
 
-const APP_KEY_LENGTH = 24
-const APP_ID_LENGTH = 8
+const APP_KEY_LENGTH = 24;
+const APP_ID_LENGTH = 8;
 
 
 class Predem {
@@ -44,6 +48,10 @@ class Predem {
 
     setTag(tag: string): void {
         webData.setTag(tag);
+    }
+
+    sendCustomEventData(eventName: string, eventData: any): void {
+        webData.sendEventData(eventName, JSON.stringify(eventData));
     }
 
     initTransfer() {
