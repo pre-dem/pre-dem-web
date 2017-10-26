@@ -59,13 +59,13 @@ class WebData {
 
     sendEventData(name: string, data): any {
         const url = this.postDataUrl(this.domain, "event", this.appId);
-        const eventDate = this.initCustomEvent(this.appId, this.tag, name, data);
+        const eventData = this.initCustomEvent(this.appId, this.tag, name, data);
         _window._origin_fetch(url, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify(eventDate),
+            body: JSON.stringify(eventData),
         })
 
     }
@@ -124,12 +124,12 @@ class WebData {
             app_version: "",
             device_model: this.getDeviceModel(),
             manufacturer: "",
-            device_id: this.uuid,
+            device_id: "",
             os_platform: "web",
             os_version: this.osVersion,
             os_build: this.osBuild,
             sdk_version: VERSION,
-            sdk_id: "",
+            sdk_id: this.uuid,
             tag: tag,
             type: "custom",
             name: name,
@@ -179,8 +179,8 @@ class WebData {
             OsVersion:          this.osVersion,
             OsBuild:            this.osBuild,
             SdkVersion:         VERSION,
-            SdkId:              "",
-            DeviceId:           this.uuid,
+            SdkId:              this.uuid,
+            DeviceId:           "",
             Tag:                tag,
             Manufacturer:       "",
             Domain:             getDominFromUrl(message.payload.url).domain,
@@ -222,8 +222,8 @@ class WebData {
             os_version:     this.osVersion,
             os_build:       this.osBuild,
             sdk_version:    VERSION,
-            sdk_id:         "",
-            device_id:      this.uuid,
+            sdk_id:         this.uuid,
+            device_id:      "",
             tag:            tag,
             report_uuid:    "",
             crash_log_key:  crash_log_key,
