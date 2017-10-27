@@ -23,4 +23,4 @@ export declare function isArray(raw: any): number;
 export declare function clone(raw: any): any;
 export declare function timestampToUTCStr(timestamp: number): any;
 export declare function convertDateToDateStr(oldDate: Date, hasHour: boolean, separator: string): string;
-export declare function getDominFromUrl(url: string): any;
+export declare function getDominFromUrl(urlStr: string): any;

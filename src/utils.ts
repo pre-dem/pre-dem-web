@@ -207,16 +207,7 @@ export function convertDateToDateStr(oldDate: Date, hasHour: boolean, separator:
   return dateStr;
 }
 
-export function getDominFromUrl(url: string): any {
-  const urlArray = url.split("//");
-  if (urlArray.length === 2) {
-    const array = urlArray[1].replace("/", " ").split(" ");
-    if (array.length === 1) {
-      return {domain: array[0], path: ""}
-    }
-    if (array.length == 2) {
-      return {domain: array[0], path: array[1]}
-    }
-  }
-  return {domain: "", path: ""}
+export function getDominFromUrl(urlStr: string): any {
+  const url = new URL(urlStr);
+  return {domain: url.host, path: url.pathname}
 }

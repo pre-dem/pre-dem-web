@@ -145,8 +145,8 @@ class WebData {
         const performance = {
             app_id:         AppId,
             tag:            tag,
-            domain:         getDominFromUrl(window.location.href).domain,
-            path:           getDominFromUrl(window.location.href).path,
+            domain:         window.location.host,
+            path:           window.location.pathname,
             ua:             this.getDeviceModel(),
             platform:       "web",
             navigationType: navigation.type,
