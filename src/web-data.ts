@@ -119,7 +119,7 @@ class WebData {
 
         return {
             app_id: AppId,
-            app_bundle_id: location.host,
+            app_bundle_id: window.location.host,
             app_name: "",
             app_version: "",
             device_model: this.getDeviceModel(),
@@ -166,7 +166,7 @@ class WebData {
         const dataLength = message.payload.contentLength ? message.payload.contentLength : 0;
         const responseTimeStamp =  message.payload.ResponseTimeStamp ? message.payload.ResponseTimeStamp : 0;
         const network  = {
-            AppBundleId:        location.host,
+            AppBundleId:        window.location.host,
             AppName:            "",
             AppVersion:         "",
             DeviceModel:        this.getDeviceModel(),
@@ -209,7 +209,7 @@ class WebData {
         const crash_log_key = JSON.stringify(message.payload.stack);
         return {
             app_id:         AppId,
-            app_bundle_id:  location.host,
+            app_bundle_id:  window.location.host,
             app_name:       "",
             app_version:    "",
             device_model:   this.getDeviceModel(),
