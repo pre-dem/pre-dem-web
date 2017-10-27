@@ -208,6 +208,9 @@ export function convertDateToDateStr(oldDate: Date, hasHour: boolean, separator:
 }
 
 export function getDominFromUrl(urlStr: string): any {
+  if (!urlStr || urlStr.length === 0) {
+    return {domain: "", path: ""}
+  }
   const url = new URL(urlStr);
   return {domain: url.host, path: url.pathname}
 }
