@@ -151,11 +151,6 @@ class WebData {
             platform:       "web",
             navigationType: navigation.type,
             redirectCount:  navigation.navigation,
-            client_ip:      "",
-            country:        "",
-            province:       "",
-            city:           "",
-            isp:            "",
         };
 
         return  Object.assign(
