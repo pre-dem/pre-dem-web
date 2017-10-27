@@ -38,12 +38,14 @@ class WebData {
         let version = "";
         if (explorerInfo !== {}) {
             version = explorerInfo.version;
-            const versionArray = version.split(".");
-            if (versionArray.length === 1) {
-                this.osVersion = versionArray[0];
-            } else if (versionArray.length >= 2) {
-                this.osVersion = versionArray[0];
-                this.osBuild = versionArray[1];
+            if (version) {
+                const versionArray = version.split(".");
+                if (versionArray.length === 1) {
+                    this.osVersion = versionArray[0];
+                } else if (versionArray.length >= 2) {
+                    this.osVersion = versionArray[0];
+                    this.osBuild = versionArray[1];
+                }
             }
         }
     }
@@ -290,7 +292,7 @@ class WebData {
         } else if (explorer.indexOf("opera") >= 0) { //Opera
             const ver = explorer.match(/opera.([\d.]+)/)[1];
             return { type: "Opera", version: ver };
-        } else if (explorer.indexOf("Safari") >= 0) { //Safari
+        } else if (explorer.indexOf("safari") >= 0) { //Safari
             const ver = explorer.match(/version\/([\d.]+)/)[1];
             return { type: "Safari", version: ver };
         }
