@@ -62,7 +62,7 @@ class WebData {
     sendEventData(name: string, data): any {
         const url = this.postDataUrl(this.domain, "event", this.appId);
         const eventData = this.initCustomEvent(this.appId, this.tag, name, data);
-        _window._origin_fetch(url, {
+        return _window._origin_fetch(url, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

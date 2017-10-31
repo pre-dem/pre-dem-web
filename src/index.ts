@@ -12,7 +12,7 @@ import webData from './web-data'
         };
 
         this.sendCustomEventData = function(eventName: string, eventData: string) {
-            predem.sendCustomEventData(eventName, eventData);
+            return predem.sendCustomEventData(eventName, eventData);
         }
     }
 
@@ -50,8 +50,8 @@ class Predem {
         webData.setTag(tag);
     }
 
-    sendCustomEventData(eventName: string, eventData: any): void {
-        webData.sendEventData(eventName, JSON.stringify(eventData));
+    sendCustomEventData(eventName: string, eventData: any): any {
+        return webData.sendEventData(eventName, JSON.stringify(eventData));
     }
 
     initTransfer() {
