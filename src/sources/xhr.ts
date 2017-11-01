@@ -70,7 +70,8 @@ export default (dem: Dem) => {
                 xhr.__dem_xhr.status_code = xhr.status
                 xhr.__dem_xhr.duration = Date.now() - startAt
                 xhr.__dem_xhr.responseText = xhr.responseText
-                xhr.__dem_xhr.contentLength = xhr.getResponseHeader('Content-Length');
+                const contentLength = xhr.responseText ? xhr.responseText.length : 0;
+                xhr.__dem_xhr.contentLength = contentLength;
               } catch (e) { /* do nothing */ }
               action({
                 category: 'network',
