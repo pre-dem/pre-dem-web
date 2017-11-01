@@ -13,6 +13,11 @@ import webData from './web-data'
 
         this.sendCustomEventData = function(eventName: string, eventData: string) {
             return predem.sendCustomEventData(eventName, eventData);
+        };
+
+        this.captureException = function (error: any) {
+            return predem.captureException(error)
+
         }
     }
 
@@ -48,6 +53,10 @@ class Predem {
 
     setTag(tag: string): void {
         webData.setTag(tag);
+    }
+
+    captureException(err: Error): void {
+        dem.captureException(err);
     }
 
     sendCustomEventData(eventName: string, eventData: any): any {

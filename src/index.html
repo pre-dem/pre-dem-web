@@ -6,11 +6,16 @@
 </head>
 <body>
 <script src="http://code.jquery.com/jquery-1.4.1.min.js"></script>
-<script type="text/javascript"
-        src="${WebSdkUrl}"
-        data-app-key="${AppKey}"
-        data-domain="${Domain}"
-        data-tag="${Tag}"/>
+<!--<script type="text/javascript"-->
+        <!--src="${WebSdkUrl}"-->
+        <!--data-app-key="${AppKey}"-->
+        <!--data-domain="${Domain}"-->
+        <!--data-tag="${Tag}"/>-->
+
+<script type="text/javascript" src="./../dist/pre-dem-web-v1.0.7.js"
+        data-app-key="A-u9avpbpgJwuwdnjOlSWqnH"
+        data-domain="http://localhost:9998"></script>
+
 <script type="text/javascript">
 
 	function sendCustomEventData() {
@@ -20,9 +25,9 @@
 
     function funcNotFoundError() {
         try {
-            window.a.b !== 2
+                window.a.b !== 2
             } catch(ex) {
-            captureException(ex)
+                captureException(ex)
             }
         }
 
@@ -30,9 +35,13 @@
         throw new Error("这是一个错误，你抛出了异常！")
 
     }
+    function tryCatchError() {
+	    try {
+            window.a.b !== 2
+        } catch (e) {
+	        predem.captureException(e);
+        }
 
-    function windowError() {
-        window.onerror("test me")
     }
 
     function testOverfolw() {
@@ -123,7 +132,7 @@
 <div>
     <button onclick="funcNotFoundError()" style="height: 35px">方法不存在 Error</button>
     <button onclick="throwError()" style="height: 35px"> throw Error 错误</button>
-    <button onclick="windowError()" style="height: 35px">window.onError 错误</button>
+    <button onclick="tryCatchError()" style="height: 35px">捕获错误</button>
     <button onclick="testOverfolw()" style="height: 35px">堆栈溢出</button>
 </div>
 <div style="height: 30px"></div>
