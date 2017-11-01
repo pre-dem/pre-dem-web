@@ -21,9 +21,9 @@
 
     function funcNotFoundError() {
         try {
-            window.a.b !== 2
+                window.a.b !== 2
             } catch(ex) {
-            captureException(ex)
+                captureException(ex)
             }
         }
 
@@ -31,7 +31,7 @@
         throw new Error("这是一个错误，你抛出了异常！")
 
     }
-    function trycatchError() {
+    function tryCatchError() {
 	    try {
             window.a.b !== 2
         } catch (e) {
@@ -128,7 +128,7 @@
 <div>
     <button onclick="funcNotFoundError()" style="height: 35px">方法不存在 Error</button>
     <button onclick="throwError()" style="height: 35px"> throw Error 错误</button>
-    <button onclick="trycatchError()" style="height: 35px">捕获错误</button>
+    <button onclick="tryCatchError()" style="height: 35px">捕获错误</button>
     <button onclick="testOverfolw()" style="height: 35px">堆栈溢出</button>
 </div>
 <div style="height: 30px"></div>
