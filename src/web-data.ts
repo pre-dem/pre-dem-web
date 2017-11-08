@@ -28,9 +28,7 @@ class WebData {
         let predemUuid = "";
 
         if (localStorage === undefined) {
-            console.log("not support localStorage");
             predemUuid = getCookier(predemUuid);
-            console.log("getCookier predemUuid:", predemUuid);
         } else {
             predemUuid = window.localStorage["predemUuid"];
         }
