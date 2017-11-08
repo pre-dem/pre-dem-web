@@ -273,7 +273,6 @@ class WebData {
 }
 
     getNetworkRequesFunc(url: string, result: any): any {
-        console.log("--------- network")
         return _window._origin_fetch(url, {
             method: 'POST',
             headers: {

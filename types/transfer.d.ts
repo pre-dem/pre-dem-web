@@ -6,7 +6,7 @@ export default class Transfer {
     name: string;
     transfer?: TransferFunc;
     configStore: Store;
-    queue: any[];
+    queue: TransferFunc[];
     running: boolean;
     constructor(name: string, transferFunc?: TransferFunc);
     config(key: string, value: string): any;

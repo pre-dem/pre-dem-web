@@ -33,7 +33,7 @@ export class MessagesStore {
     const message: IMessage = {
       id: ++this.counter,
       data,
-      sent: true
+      sent: false
     }
     if (message.data.category !== 'network') {
       this.store.push(message);
