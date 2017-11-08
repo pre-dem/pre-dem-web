@@ -10,7 +10,7 @@ export default class Transfer {
   transfer?: TransferFunc
   configStore: Store
 
-  queue: TransferFunc[] = []
+  queue: any[] = []
   running = false
 
   constructor(name: string, transferFunc: TransferFunc = duplex) {
@@ -40,15 +40,21 @@ export default class Transfer {
 
   send(message: IMessage) {
     const { data, sent } = message
-    this.queue.push(() => new Promise((resolve, reject) => {
-      this.transfer.call(this, this.extendMessage(data))
-          .then(() => {
-            message.sent = true
-          })
-          .then(resolve)
-          .catch(reject)
+    try {
+      this.queue.push(() => new Promise((resolve, reject) => {
+        this.transfer.call(this, this.extendMessage(data))
+            .then(() => {
+              message.sent = true
+            })
+            .then(resolve)
+            .catch(reject)
 
-    }))
+      }))
+    } catch(e){
+
+    }
+
+
 
     if (!this.running) {
       this.run()
@@ -130,12 +136,11 @@ export default class Transfer {
 
   run() {
     const current = this.queue.splice(0, 1)[0] // .shift()
-
     if (current) {
       this.running = true
 
       current()
-        .then(() => this.run())
+          .then(() => this.run())
     } else {
       this.running = false
     }

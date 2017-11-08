@@ -11,7 +11,6 @@ export declare class MessagesStore {
     parent: Dem;
     store: CollectionStore<IMessage>;
     messageArray: any[];
-    performanceArray: any[];
     messageThreshold: number;
     maxTime: number;
     constructor(parent: Dem);

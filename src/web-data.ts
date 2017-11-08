@@ -3,7 +3,8 @@
  */
 
 import { _window } from './detection'
-import { getDominFromUrl } from './utils'
+import { getDominFromUrl, getCookier, setCookier, getExplorerInfo} from './utils'
+
 
 const packageJson = require('../package.json')
 const VERSION = packageJson.version;
@@ -24,17 +25,30 @@ class WebData {
         this.osVersion = "";
         this.osBuild = "";
 
-        let predemUuid = window.localStorage["predemUuid"];
-        if (predemUuid !== undefined && predemUuid.length > 0) {
+        let predemUuid = "";
+
+        if (localStorage === undefined) {
+            console.log("not support localStorage");
+            predemUuid = getCookier(predemUuid);
+            console.log("getCookier predemUuid:", predemUuid);
+        } else {
+            predemUuid = window.localStorage["predemUuid"];
+        }
+
+        if (predemUuid !== undefined  && predemUuid !== null && predemUuid.length > 0) {
             this.uuid = predemUuid;
         } else {
             predemUuid = this.generateUUID();
-            window.localStorage["predemUuid"] = predemUuid;
+            if (localStorage === undefined) {
+                setCookier("predemUuid", predemUuid);
+            } else {
+                window.localStorage["predemUuid"] = predemUuid;
+            }
             this.uuid = predemUuid;
-
         }
 
-        const explorerInfo: any = this.getExplorerInfo();
+
+        const explorerInfo: any = getExplorerInfo();
         let version = "";
         if (explorerInfo !== {}) {
             version = explorerInfo.version;
@@ -73,6 +87,7 @@ class WebData {
     }
 
     push(datas: any): any {
+
         let type = datas.category;
         if (datas instanceof Array) {
             type = 'network'
@@ -94,7 +109,6 @@ class WebData {
                 result = this.initPerformance(this.appId, datas, this.tag);
             }
             return this.getRequestFun(url, type, result)
-
         }
 
     }
@@ -259,6 +273,7 @@ class WebData {
 }
 
     getNetworkRequesFunc(url: string, result: any): any {
+        console.log("--------- network")
         return _window._origin_fetch(url, {
             method: 'POST',
             headers: {
@@ -278,27 +293,6 @@ class WebData {
         }
     }
 
-    getExplorerInfo() {
-        const explorer = window.navigator.userAgent.toLowerCase();
-        if (explorer.indexOf("msie") >= 0) {  //ie
-            const ver = explorer.match(/msie ([\d.]+)/)[1];
-            return { type: "IE", version: ver };
-        } else if (explorer.indexOf("firefox") >= 0) { //firefox
-            const ver = explorer.match(/firefox\/([\d.]+)/)[1];
-            return { type: "Firefox", version: ver };
-        } else if (explorer.indexOf("chrome") >= 0) { //Chrome
-            const ver = explorer.match(/chrome\/([\d.]+)/)[1];
-            return { type: "Chrome", version: ver };
-        } else if (explorer.indexOf("opera") >= 0) { //Opera
-            const ver = explorer.match(/opera.([\d.]+)/)[1];
-            return { type: "Opera", version: ver };
-        } else if (explorer.indexOf("safari") >= 0) { //Safari
-            const ver = explorer.match(/version\/([\d.]+)/)[1];
-            return { type: "Safari", version: ver };
-        }
-        return {};
-    }
-
     generateUUID() {
         let d = new Date().getTime();
         const uuid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
@@ -308,6 +302,7 @@ class WebData {
         });
         return uuid;
     };
+
 }
 
 

@@ -7,7 +7,7 @@
     "sourceMap": true,
     "strictNullChecks": false,
     "baseUrl": "./",
-    "lib": ["es2015", "dom"],
+    "lib": ["es2015", "dom", "es2015.promise"],
     "declaration": true,
     "declarationDir": "./types",
     "typeRoots": [
