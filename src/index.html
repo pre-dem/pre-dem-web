@@ -7,24 +7,22 @@
 <body>
 <script src="http://code.jquery.com/jquery-1.4.1.min.js"></script>
 <script type="text/javascript"
-        src="./../dist/pre-dem-web-v1.0.7.js"
-        data-app-key="${AppKey}"
-        data-domain="${Domain}"></script>>
-
+        src="./../dist/pre-dem-web-v1.0.8.js"
+        data-app-key="${AppKey}"></script>
 <script type="text/javascript">
-
-	function sendCustomEventData() {
-	    const testData = {key: "testkey"}
-		predem.sendCustomEventData("test name", testData)
-	}
 
     function funcNotFoundError() {
         try {
-                window.a.b !== 2
-            } catch(ex) {
-                captureException(ex)
-            }
+            window.a.b !== 2
+        } catch(ex) {
+            captureException(ex)
         }
+    }
+
+    function sendCustomEventData() {
+	    var testData = {"key": "testkey"};
+		predem.sendCustomEventData("test name", testData)
+	}
 
     function throwError() {
         throw new Error("这是一个错误，你抛出了异常！")
@@ -36,14 +34,11 @@
         } catch (e) {
 	        predem.captureException(e);
         }
-
     }
 
     function testOverfolw() {
         isEven(100000)
     }
-
-
     function isEven (num) {
         if (num === 0) {
             return true;
@@ -56,7 +51,7 @@
         return isEven(Math.abs(num) - 2);
     }
 
-    const code400  = [400, 401, 403, 404]
+    var code400  = [400, 401, 403, 404]
     function sendAjax1() {
         for (var index in code400) {
             $.ajax({
@@ -71,7 +66,7 @@
             })
         }
     }
-    const code500  = [500, 501, 503, 504]
+    var code500  = [500, 501, 503, 504]
     function sendAjax2() {
         for (var index in code500) {
             $.ajax({
@@ -87,7 +82,7 @@
         }
     }
 
-    const code200  = [200, 201, 203, 204]
+    var code200  = [200, 201, 203, 204]
     function sendAjax3() {
         for (var index in code200) {
             $.ajax({
@@ -103,7 +98,7 @@
         }
     }
 
-    const urls  = ["https://httpbin.org/get?show_env=1", "https://httpbin.org/get"];
+    var urls  = ["https://httpbin.org/get?show_env=1", "https://httpbin.org/get"];
 
     function sendAjaxAndResponseData() {
         for (var index in urls) {
