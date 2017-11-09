@@ -26,5 +26,5 @@ export declare function convertDateToDateStr(oldDate: Date, hasHour: boolean, se
 export declare function getDominFromUrl(urlStr: string): any;
 export declare function getCookier(name: string): any;
 export declare function setCookier(name: string, value: string): void;
-export declare function getExplorerInfo(): any;
+export declare function getBrowserInfo(): any;
 export declare function getCurrentScript(): any;

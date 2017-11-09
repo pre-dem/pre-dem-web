@@ -3,7 +3,7 @@
  */
 
 import { _window } from './detection'
-import { getDominFromUrl, getCookier, setCookier, getExplorerInfo} from './utils'
+import { getDominFromUrl, getCookier, setCookier, getBrowserInfo} from './utils'
 
 
 const packageJson = require('../package.json')
@@ -44,10 +44,10 @@ class WebData {
             }
             this.uuid = predemUuid;
         }
-        const explorerInfo: any = getExplorerInfo();
+        const BrowserInfo: any = getBrowserInfo();
         let version = "";
-        if (explorerInfo !== {}) {
-            version = explorerInfo.version;
+        if (BrowserInfo !== {}) {
+            version = BrowserInfo.version;
             if (version) {
                 const versionArray = version.split(".");
                 if (versionArray.length === 1) {

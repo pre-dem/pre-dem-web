@@ -216,7 +216,7 @@ export function getDominFromUrl(urlStr: string): any {
     return {domain: "", path: ""}
   }
 
-  const browserType = getExplorerInfo().type;
+  const browserType = getBrowserInfo().type;
   if (browserType === "IE") {
     let domain = "";
     let path = "";
@@ -256,23 +256,23 @@ export function setCookier (name: string, value: string): void {
   document.cookie = name + "=" + value + ";";
 }
 
-export function getExplorerInfo():  any {
-  const explorer = window.navigator.userAgent.toLowerCase();
-  if (explorer.indexOf("firefox") >= 0) { //firefox
-    const ver = explorer.match(/firefox\/([\d.]+)/)[1];
+export function getBrowserInfo():  any {
+  const ua = window.navigator.userAgent.toLowerCase();
+  if (ua.indexOf("firefox") >= 0) { //firefox
+    const ver = ua.match(/firefox\/([\d.]+)/)[1];
     return { type: "Firefox", version: ver };
-  } else if (explorer.indexOf("chrome") >= 0) { //Chrome
-    const ver = explorer.match(/chrome\/([\d.]+)/)[1];
+  } else if (ua.indexOf("chrome") >= 0) { //Chrome
+    const ver = ua.match(/chrome\/([\d.]+)/)[1];
     return { type: "Chrome", version: ver };
-  } else if (explorer.indexOf("opera") >= 0) { //Opera
-    const ver = explorer.match(/opera.([\d.]+)/)[1];
+  } else if (ua.indexOf("opera") >= 0) { //Opera
+    const ver = ua.match(/opera.([\d.]+)/)[1];
     return { type: "Opera", version: ver };
-  } else if (explorer.indexOf("safari") >= 0) { //Safari
-    const ver = explorer.match(/version\/([\d.]+)/)[1];
+  } else if (ua.indexOf("safari") >= 0) { //Safari
+    const ver = ua.match(/version\/([\d.]+)/)[1];
     return { type: "Safari", version: ver };
   } else if(!!window["ActiveXObject"] || "ActiveXObject" in window) {
      const rMsie = /(msie\s|trident.*rv:)([\w.]+)/;
-     const match = rMsie.exec(explorer);
+     const match = rMsie.exec(ua);
      return { type: "IE", version: match[2]};
   }
 
