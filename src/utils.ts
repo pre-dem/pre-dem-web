@@ -216,8 +216,8 @@ export function getDominFromUrl(urlStr: string): any {
     return {domain: "", path: ""}
   }
 
-  const chromeType = getExplorerInfo().type;
-  if (chromeType === "IE") {
+  const browserType = getExplorerInfo().type;
+  if (browserType === "IE") {
     let domain = "";
     let path = "";
     if (urlStr.indexOf("?") !== -1) {
