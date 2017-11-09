@@ -44,8 +44,6 @@ class WebData {
             }
             this.uuid = predemUuid;
         }
-
-
         const explorerInfo: any = getExplorerInfo();
         let version = "";
         if (explorerInfo !== {}) {
@@ -134,14 +132,6 @@ class WebData {
         return {
             app_id: AppId,
             app_bundle_id: window.location.host,
-            app_name: "",
-            app_version: "",
-            device_model: this.getDeviceModel(),
-            manufacturer: "",
-            device_id: "",
-            os_platform: "web",
-            os_version: this.osVersion,
-            os_build: this.osBuild,
             sdk_version: VERSION,
             sdk_id: this.uuid,
             tag: tag,
@@ -161,8 +151,6 @@ class WebData {
             tag:            tag,
             domain:         window.location.host,
             path:           window.location.pathname,
-            ua:             this.getDeviceModel(),
-            platform:       "web",
             navigationType: navigation.type,
             redirectCount:  navigation.navigation,
         };
@@ -183,10 +171,10 @@ class WebData {
             AppBundleId:        window.location.host,
             AppName:            "",
             AppVersion:         "",
-            DeviceModel:        this.getDeviceModel(),
-            OsPlatform:         "web",
-            OsVersion:          this.osVersion,
-            OsBuild:            this.osBuild,
+            DeviceModel:        "",
+            OsPlatform:         "",
+            OsVersion:          "",
+            OsBuild:            "",
             SdkVersion:         VERSION,
             SdkId:              this.uuid,
             DeviceId:           "",
@@ -224,28 +212,14 @@ class WebData {
         return {
             app_id:         AppId,
             app_bundle_id:  window.location.host,
-            app_name:       "",
-            app_version:    "",
-            device_model:   this.getDeviceModel(),
-            os_platform:    "web",
-            os_version:     this.osVersion,
-            os_build:       this.osBuild,
             sdk_version:    VERSION,
             sdk_id:         this.uuid,
-            device_id:      "",
             tag:            tag,
-            report_uuid:    "",
             crash_log_key:  crash_log_key,
-            manufacturer:   "",
-            start_time:     0,
             crash_time:     message.timestamp,
             mode:           message.payload.mode,
             message:        message.payload.message,
         }
-    }
-
-    getDeviceModel(): string {
-        return navigator.userAgent;
     }
 
     getErrorRequesFunc(url: string, result: any): any {
