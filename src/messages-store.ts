@@ -22,8 +22,7 @@ export class MessagesStore {
   parent: Dem
   store = new CollectionStore<IMessage>('messages')
   messageArray = []
-  performanceArray = []
-  messageThreshold = 2
+  messageThreshold = 10;
   maxTime = 3 * 60 * 60 * 1000
 
   constructor(parent: Dem) {

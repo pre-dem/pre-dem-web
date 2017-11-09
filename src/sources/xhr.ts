@@ -2,7 +2,8 @@ import { Dem } from '../dem'
 
 import Source, { ISourceMessage } from '../source'
 import { isString, isFunction, fill } from '../utils'
-import { _window } from '../detection' 
+import { _window } from '../detection'
+require('isomorphic-fetch');
 
 export interface IXHRMessage extends ISourceMessage {
   payload: {
@@ -121,7 +122,6 @@ export default (dem: Dem) => {
           const fetchData = {
             method, url, status_code: null, duration: 0, responseTimestamp: 0,
           }
-
           const startAt = Date.now()
           const timeChecker = setTimeout(() => action({
             category: 'network',

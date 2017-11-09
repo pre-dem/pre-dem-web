@@ -208,14 +208,96 @@ export function convertDateToDateStr(oldDate: Date, hasHour: boolean, separator:
 }
 
 export function getDominFromUrl(urlStr: string): any {
+
   if (urlStr.indexOf("://") === -1) {
-      urlStr = document.location.protocol + "//" + window.location.host + urlStr;
+    urlStr = document.location.protocol + "//" + window.location.host + urlStr;
   }
   if (!urlStr || urlStr.length === 0) {
     return {domain: "", path: ""}
   }
 
-  const url = new URL(urlStr);
+  const browserType = getBrowserInfo().type;
+  if (browserType === "IE") {
+    let domain = "";
+    let path = "";
+    if (urlStr.indexOf("?") !== -1) {
+      const array = urlStr.split("//");
+      if (array.length === 2) {
+        const hostAndPathArray = array[1].split("/");
+        if (hostAndPathArray.length === 2) {
+            domain = hostAndPathArray[0]
+            path = urlStr.substring(0, urlStr.indexOf("?"));
+            return {domain: domain, path: path}
+        }
+      }
 
+    }
+
+    return {domain: "", path: ""}
+  }
+
+  const url = new URL(urlStr);
   return {domain: url.host, path: url.pathname}
+}
+
+declare function escape(s: string): string;
+declare function unescape(s: string): string;
+
+export function getCookier(name: string): any {
+  const reg = new RegExp("(^| )" + name + "=([^;]*)(;|$)");
+  const arr = document.cookie.match(reg);
+  if (arr) {
+    return unescape(arr[2]);
+  }
+  return null;
+}
+
+export function setCookier (name: string, value: string): void {
+  document.cookie = name + "=" + value + ";";
+}
+
+export function getBrowserInfo():  any {
+  const ua = window.navigator.userAgent.toLowerCase();
+  if (ua.indexOf("firefox") >= 0) { //firefox
+    const ver = ua.match(/firefox\/([\d.]+)/)[1];
+    return { type: "Firefox", version: ver };
+  } else if (ua.indexOf("chrome") >= 0) { //Chrome
+    const ver = ua.match(/chrome\/([\d.]+)/)[1];
+    return { type: "Chrome", version: ver };
+  } else if (ua.indexOf("opera") >= 0) { //Opera
+    const ver = ua.match(/opera.([\d.]+)/)[1];
+    return { type: "Opera", version: ver };
+  } else if (ua.indexOf("safari") >= 0) { //Safari
+    const ver = ua.match(/version\/([\d.]+)/)[1];
+    return { type: "Safari", version: ver };
+  } else if(!!window["ActiveXObject"] || "ActiveXObject" in window) {
+     const rMsie = /(msie\s|trident.*rv:)([\w.]+)/;
+     const match = rMsie.exec(ua);
+     return { type: "IE", version: match[2]};
+  }
+
+  return {type: "", version: ""};
+}
+
+
+
+
+// 获取当前的 script
+export function getCurrentScript() {
+  if (document.currentScript) {
+    return document.currentScript;
+  }
+  let current_script;
+  const reg=".*pre-dem-web-v.*\.js";
+  const scripts = document.getElementsByTagName("script");
+  for(let i = 0, script, l = scripts.length; i < l; i++){
+    script = scripts[i];
+    const src=script.src||"";
+    var mat = src.match(reg);
+    if(mat) {
+      current_script = script;
+      break;
+    }}
+  return current_script;
+
 }

@@ -40,6 +40,7 @@ export default class Transfer {
 
   send(message: IMessage) {
     const { data, sent } = message
+
     this.queue.push(() => new Promise((resolve, reject) => {
       this.transfer.call(this, this.extendMessage(data))
           .then(() => {
@@ -130,12 +131,11 @@ export default class Transfer {
 
   run() {
     const current = this.queue.splice(0, 1)[0] // .shift()
-
     if (current) {
       this.running = true
 
       current()
-        .then(() => this.run())
+          .then(() => this.run())
     } else {
       this.running = false
     }

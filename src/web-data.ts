@@ -3,7 +3,8 @@
  */
 
 import { _window } from './detection'
-import { getDominFromUrl } from './utils'
+import { getDominFromUrl, getCookier, setCookier, getBrowserInfo} from './utils'
+
 
 const packageJson = require('../package.json')
 const VERSION = packageJson.version;
@@ -13,21 +14,49 @@ class WebData {
     appId: string;
     domain: string;
     tag: string;
+    osVersion: string;
+    osBuild: string;
     uuid: string;
 
     constructor() {
         this.appId = "";
         this.domain = "";
         this.tag = "";
+        this.osVersion = "";
+        this.osBuild = "";
 
-        let predemUuid = window.localStorage["predemUuid"];
-        if (predemUuid !== undefined && predemUuid.length > 0) {
+        let predemUuid = "";
+
+        if (localStorage === undefined) {
+            predemUuid = getCookier(predemUuid);
+        } else {
+            predemUuid = window.localStorage["predemUuid"];
+        }
+
+        if (predemUuid !== undefined  && predemUuid !== null && predemUuid.length > 0) {
             this.uuid = predemUuid;
         } else {
             predemUuid = this.generateUUID();
-            window.localStorage["predemUuid"] = predemUuid;
+            if (localStorage === undefined) {
+                setCookier("predemUuid", predemUuid);
+            } else {
+                window.localStorage["predemUuid"] = predemUuid;
+            }
             this.uuid = predemUuid;
-
+        }
+        const BrowserInfo: any = getBrowserInfo();
+        let version = "";
+        if (BrowserInfo !== {}) {
+            version = BrowserInfo.version;
+            if (version) {
+                const versionArray = version.split(".");
+                if (versionArray.length === 1) {
+                    this.osVersion = versionArray[0];
+                } else if (versionArray.length >= 2) {
+                    this.osVersion = versionArray[0];
+                    this.osBuild = versionArray[1];
+                }
+            }
         }
     }
 
@@ -54,6 +83,7 @@ class WebData {
     }
 
     push(datas: any): any {
+
         let type = datas.category;
         if (datas instanceof Array) {
             type = 'network'
@@ -75,7 +105,6 @@ class WebData {
                 result = this.initPerformance(this.appId, datas, this.tag);
             }
             return this.getRequestFun(url, type, result)
-
         }
 
     }
@@ -244,6 +273,7 @@ class WebData {
         });
         return uuid;
     };
+
 }
 
 
