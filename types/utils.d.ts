@@ -28,3 +28,4 @@ export declare function getCookier(name: string): any;
 export declare function setCookier(name: string, value: string): void;
 export declare function getBrowserInfo(): any;
 export declare function getCurrentScript(): any;
+export declare function generateUUID(): string;
