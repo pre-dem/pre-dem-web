@@ -68,7 +68,10 @@ class Predem {
     }
 
     sendCustomEventData(eventName: string, eventData: any): any {
-        return webData.sendEventData(eventName, JSON.stringify(eventData));
+        if (!(eventData instanceof Array) && (eventData instanceof Object)) {
+            return webData.sendEventData(eventName, JSON.stringify(eventData));
+        }
+        console.error("Custom data must key value,For exampe: {name: \"predem\"}");
     }
 
     initTransfer() {

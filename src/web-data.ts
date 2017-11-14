@@ -3,7 +3,7 @@
  */
 
 import { _window } from './detection'
-import { getDominFromUrl, getCookier, setCookier, getBrowserInfo} from './utils'
+import { getDominFromUrl, getCookier, setCookier, getBrowserInfo, generateUUID} from './utils'
 
 
 const packageJson = require('../package.json')
@@ -36,7 +36,7 @@ class WebData {
         if (predemUuid !== undefined  && predemUuid !== null && predemUuid.length > 0) {
             this.uuid = predemUuid;
         } else {
-            predemUuid = this.generateUUID();
+            predemUuid = generateUUID();
             if (localStorage === undefined) {
                 setCookier("predemUuid", predemUuid);
             } else {
@@ -83,29 +83,27 @@ class WebData {
     }
 
     push(datas: any): any {
-
         let type = datas.category;
         if (datas instanceof Array) {
             type = 'network'
         }
         const url = this.postDataUrl(this.domain, type, this.appId);
-        if (datas instanceof Array) { //true 数组 network
-            const array = [];
-            datas.map((data) => {
-                const errorobj = this.initNetworkData(this.appId, data, this.tag);
-                array.push(errorobj)
-            });
-            return this.getRequestFun(url, type, array.join("\n"))
-
+        let result: any;
+        if (type === "performance") {
+            result = this.initPerformance(this.appId, datas, this.tag);
+        } else if (type === "error") {
+            result = this.initErrorData(this.appId, datas, this.tag);
         } else {
-            let result: any;
-            if (datas.category === 'error') {
-                result = this.initErrorData(this.appId, datas, this.tag);
-            } else {
-                result = this.initPerformance(this.appId, datas, this.tag);
+            if (datas instanceof Array) {
+                const array = [];
+                datas.map((data) => {
+                    const errorobj = this.initNetworkData(this.appId, data, this.tag);
+                    array.push(errorobj)
+                });
+                return this.getRequestFun(url, type, array.join("\n"))
             }
-            return this.getRequestFun(url, type, result)
         }
+        return this.getRequestFun(url, type, result)
 
     }
 
@@ -143,24 +141,19 @@ class WebData {
     }
 
     initPerformance(AppId: string, message: any, tag: string): any {
-        const timing = message.payload.timing;
-        const navigation = message.payload.navigation;
-        const timingStr = JSON.stringify(timing);
+        const resourceTiming = message.payload.resourceTiming;
         const performance = {
             app_id:         AppId,
             tag:            tag,
             domain:         window.location.host,
             path:           window.location.pathname,
-            navigationType: navigation.type,
-            redirectCount:  navigation.navigation,
         };
 
         return  Object.assign(
             performance,
-            JSON.parse(timingStr),
-            {triggerTime: message.timestamp},
+            {resourceTiming: JSON.stringify(resourceTiming)},
         )
-    }
+    };
 
     initNetworkData(AppId: string, message: any, tag: string): any {
         const networkErrorCode = message.payload.status_code !== 200 ? message.payload.status_code : 0;
@@ -263,16 +256,6 @@ class WebData {
             return this.getPerformanceRequesFunc(url, result)
         }
     }
-
-    generateUUID() {
-        let d = new Date().getTime();
-        const uuid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
-            const r = (d + Math.random()*16)%16 | 0;
-            d = Math.floor(d/16);
-            return (c=='x' ? r : (r&0x3|0x8)).toString(16);
-        });
-        return uuid;
-    };
 
 }
 
