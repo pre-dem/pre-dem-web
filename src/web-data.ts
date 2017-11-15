@@ -17,6 +17,7 @@ class WebData {
     osVersion: string;
     osBuild: string;
     uuid: string;
+    performanceFilter: any;
 
     constructor() {
         this.appId = "";
@@ -69,6 +70,10 @@ class WebData {
         this.tag = tag;
     }
 
+    setPerformanceFilter(filter: any): void {
+        this.performanceFilter = filter;
+    }
+
     sendEventData(name: string, data): any {
         const url = this.postDataUrl(this.domain, "event", this.appId);
         const eventData = this.initCustomEvent(this.appId, this.tag, name, data);
@@ -79,8 +84,8 @@ class WebData {
             },
             body: JSON.stringify(eventData),
         })
-
     }
+
 
     push(datas: any): any {
         let type = datas.category;
@@ -141,18 +146,41 @@ class WebData {
     }
 
     initPerformance(AppId: string, message: any, tag: string): any {
+        const navigationTiming = message.payload.navigationTiming;
+        let navigationTimingStr = "";
         const resourceTiming = message.payload.resourceTiming;
+        let resourceTimingStr = "";
+
+        if (navigationTiming &&
+            (navigationTiming !== null || navigationTiming !== "undefine")) {
+            navigationTimingStr = JSON.stringify(navigationTiming);
+        }
+
         const performance = {
             app_id:         AppId,
             tag:            tag,
             domain:         window.location.host,
             path:           window.location.pathname,
+            navigationTiming: navigationTimingStr,
         };
+
+
+        if (this.performanceFilter) {
+            const newResourceTiming = this.performanceFilter(resourceTiming);
+            if (newResourceTiming && (newResourceTiming instanceof Array)) {
+                resourceTimingStr = JSON.stringify(newResourceTiming);
+            } else {
+                console.error("Performance Data has some Error!");
+            }
+        } else {
+            resourceTimingStr = JSON.stringify(resourceTiming);
+        }
 
         return  Object.assign(
             performance,
-            {resourceTiming: JSON.stringify(resourceTiming)},
+            {resourceTiming: resourceTimingStr},
         )
+
     };
 
     initNetworkData(AppId: string, message: any, tag: string): any {

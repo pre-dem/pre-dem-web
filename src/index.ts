@@ -2,6 +2,7 @@
 import dem from "./dem"
 import Transfer from "./transfer"
 import webData from './web-data'
+
 import { getCurrentScript } from "./utils"
 require('isomorphic-fetch');
 
@@ -20,7 +21,12 @@ require('isomorphic-fetch');
         this.captureException = function (error: any) {
             return predem.captureException(error)
 
-        }
+        };
+
+        this.setPerformanceFilter = function (filterFunc: any) {
+            return predem.setPerformanceFilter(filterFunc);
+
+        };
     }
 
     win["predem"] = new PredemWebSdk();
@@ -36,7 +42,6 @@ const APP_ID_LENGTH = 8;
 class Predem {
 
     constructor() {
-
         const currentScript = getCurrentScript();
         if (!currentScript) {
             console.error("没有获取pre-dem-web script!");
@@ -61,6 +66,19 @@ class Predem {
 
     setTag(tag: string): void {
         webData.setTag(tag);
+    }
+
+    setPerformanceFilter(filterFunc): void {
+        if (!filterFunc) {
+            console.error("filter 不能为空！");
+            return
+        }
+
+        if (!(filterFunc instanceof Function)) {
+            console.error("filter 必须是 Function！");
+            return
+        }
+        webData.setPerformanceFilter(filterFunc);
     }
 
     captureException(err: Error): void {
