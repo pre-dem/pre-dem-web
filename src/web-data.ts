@@ -4,12 +4,10 @@
 
 import { _window } from './detection'
 import { getDominFromUrl, getCookier, setCookier, generateUUID} from './utils'
-import {stringify} from "querystring";
 
 
 const packageJson = require('../package.json')
 const VERSION = packageJson.version;
-const WEB_PLATFORM = "w";
 
 class WebData {
     appId: string;
