@@ -131,7 +131,7 @@ export class WebData {
 
   initPerformance(message: any, tag: string): any {
     let resourceTiming = message.payload.resourceTiming;
-    const navigationTiming = message.payload.navigationTiming;
+    const timing = message.payload.timing;
     if (this.performanceFilter) {
       const newResourceTiming = this.performanceFilter(resourceTiming);
       if (!(newResourceTiming && (newResourceTiming instanceof Array))) {
@@ -152,7 +152,7 @@ export class WebData {
       path: window.location.pathname,
       content: JSON.stringify({
         resourceTiming: JSON.stringify(resourceTiming),
-        navigationTiming: JSON.stringify(navigationTiming)
+        timing: JSON.stringify(timing)
       })
     };
   };
