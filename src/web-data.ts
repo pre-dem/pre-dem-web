@@ -151,7 +151,7 @@ export class WebData {
       domain: window.location.host,
       path: window.location.pathname,
       content: JSON.stringify({
-        resourceTiming: JSON.stringify(resourceTimings),
+        resourceTimings: JSON.stringify(resourceTimings),
         timing: JSON.stringify(timing)
       })
     };

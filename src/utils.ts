@@ -243,11 +243,6 @@ export function getDominFromUrl(urlStr: string): any {
 declare function escape(s: string): string;
 declare function unescape(s: string): string;
 
-// var reg = new RegExp("(^| )ss=([^;]*)(;|$)");
-// var arr = document.cookie.match(reg);
-// console.log("-----arr", arr)
-
-
 export function getCookier(name: string): any {
   const reg = new RegExp("(^| )" + name + "=([^;]*)(;|$)");
   const arr = document.cookie.match(reg);
