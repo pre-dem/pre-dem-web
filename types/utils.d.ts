@@ -29,3 +29,4 @@ export declare function setCookier(name: string, value: string): void;
 export declare function getBrowserInfo(): any;
 export declare function getCurrentScript(): any;
 export declare function generateUUID(): string;
+export declare function localStorageIsSupported(): boolean;
