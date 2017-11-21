@@ -3,9 +3,11 @@ export declare class WebData {
     domain: string;
     tag: string;
     uuid: string;
+    performanceFilter: any;
     constructor();
     init(appId: string, domain: string): void;
     setTag(tag: string): void;
+    setPerformanceFilter(filter: any): void;
     sendEventData(name: string, data: any): any;
     push(datas: any): any;
     postDataUrl(domain: string, category: string, appId: string): string;

@@ -9,16 +9,19 @@ import {getDominFromUrl, getCookier, setCookier, generateUUID} from './utils'
 const packageJson = require('../package.json')
 const VERSION = packageJson.version;
 
+
 export class WebData {
   appId: string;
   domain: string;
   tag: string;
   uuid: string;
+  performanceFilter: any;
 
   constructor() {
     this.appId = "";
     this.domain = "";
     this.tag = "";
+    this.performanceFilter = null;
 
     let predemUuid = "";
 
@@ -49,6 +52,12 @@ export class WebData {
   setTag(tag: string): void {
     this.tag = tag;
   }
+
+
+  setPerformanceFilter(filter: any): void {
+    this.performanceFilter = filter;
+  }
+
 
   sendEventData(name: string, data): any {
     const url = this.postDataUrl(this.domain, "event", this.appId);
@@ -118,11 +127,20 @@ export class WebData {
       path: window.location.pathname,
       content: content,
     }
-
   }
 
   initPerformance(message: any, tag: string): any {
-    const resourceTiming = message.payload.resourceTiming;
+    let resourceTiming = message.payload.resourceTiming;
+    const timing = message.payload.timing;
+    if (this.performanceFilter) {
+      const newResourceTiming = this.performanceFilter(resourceTiming);
+      if (!(newResourceTiming && (newResourceTiming instanceof Array))) {
+        console.error("Performance Data has some Error!");
+      } else {
+        resourceTiming = newResourceTiming;
+      }
+    }
+
     return {
       time: Date.now(),
       type: "auto_captured",
@@ -133,7 +151,8 @@ export class WebData {
       domain: window.location.host,
       path: window.location.pathname,
       content: JSON.stringify({
-        resourceTiming: JSON.stringify(resourceTiming)
+        resourceTiming: JSON.stringify(resourceTiming),
+        timing: JSON.stringify(timing)
       })
     };
   };
@@ -174,7 +193,7 @@ export class WebData {
     return {
       time: Date.now(),
       type: "auto_captured",
-      name: "monitor",
+      name: "crash",
       sdk_version: VERSION,
       sdk_id: this.uuid,
       tag: tag,
