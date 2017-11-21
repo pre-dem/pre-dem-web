@@ -6,7 +6,7 @@ export default () => {
     window.onload = function () {
 
       let timing = null;
-      let resourceTiming = [];
+      const newResourceTimings = [];
 
       if (!window.performance) {
         return false;
@@ -16,30 +16,29 @@ export default () => {
 
 
       if (window.performance.getEntries) {
-        const timings = window.performance.getEntries();
-        if (timings && timings.length > 0) {
-          const newResourceTiming = [];
-          timings.map((timing: any) => {
-            if (timing.entryType === "resource"
-              && timing.encodedBodySize
-              && timing.duration
-              && timing.encodedBodySize > 0
-              && timing.duration > 0) {
-              newResourceTiming.push(timing);
+        const resourceTimings = window.performance.getEntries();
+        if (resourceTimings && resourceTimings.length > 0) {
+          resourceTimings.map((resourceTiming: any) => {
+            if (resourceTiming.entryType === "resource"
+              && resourceTiming.encodedBodySize
+              && resourceTiming.duration
+              && resourceTiming.encodedBodySize > 0
+              && resourceTiming.duration > 0) {
+              newResourceTimings.push(timing);
             }
 
           });
 
           action({
             category: 'performance',
-            payload: {timing, resourceTiming: newResourceTiming}
+            payload: {timing, resourceTimings: newResourceTimings}
           });
         }
 
       } else {
         action({
           category: 'performance',
-          payload: {timing, resourceTiming: []}
+          payload: {timing, resourceTimings: []}
         });
       }
 

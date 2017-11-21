@@ -3,12 +3,11 @@
  */
 
 import {_window} from './detection'
-import {getDominFromUrl, getCookier, setCookier, generateUUID} from './utils'
+import {getDominFromUrl, getCookier, setCookier, generateUUID, localStorageIsSupported} from './utils'
 
 
 const packageJson = require('../package.json')
 const VERSION = packageJson.version;
-
 
 export class WebData {
   appId: string;
@@ -25,20 +24,21 @@ export class WebData {
 
     let predemUuid = "";
 
-    if (localStorage === undefined) {
-      predemUuid = getCookier(predemUuid);
-    } else {
+    if (localStorageIsSupported()) {
       predemUuid = window.localStorage["predemUuid"];
+    } else {
+      predemUuid = getCookier(predemUuid);
+
     }
 
     if (predemUuid !== undefined && predemUuid !== null && predemUuid.length > 0) {
       this.uuid = predemUuid;
     } else {
       predemUuid = generateUUID();
-      if (localStorage === undefined) {
-        setCookier("predemUuid", predemUuid);
-      } else {
+      if (localStorageIsSupported()) {
         window.localStorage["predemUuid"] = predemUuid;
+      } else {
+        setCookier("predemUuid", predemUuid);
       }
       this.uuid = predemUuid;
     }
@@ -130,14 +130,14 @@ export class WebData {
   }
 
   initPerformance(message: any, tag: string): any {
-    let resourceTiming = message.payload.resourceTiming;
+    let resourceTimings = message.payload.resourceTimings;
     const timing = message.payload.timing;
     if (this.performanceFilter) {
-      const newResourceTiming = this.performanceFilter(resourceTiming);
-      if (!(newResourceTiming && (newResourceTiming instanceof Array))) {
+      const newResourceTimings = this.performanceFilter(resourceTimings);
+      if (!(newResourceTimings && (newResourceTimings instanceof Array))) {
         console.error("Performance Data has some Error!");
       } else {
-        resourceTiming = newResourceTiming;
+        resourceTimings = newResourceTimings;
       }
     }
 
@@ -151,7 +151,7 @@ export class WebData {
       domain: window.location.host,
       path: window.location.pathname,
       content: JSON.stringify({
-        resourceTiming: JSON.stringify(resourceTiming),
+        resourceTiming: JSON.stringify(resourceTimings),
         timing: JSON.stringify(timing)
       })
     };

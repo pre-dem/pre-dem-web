@@ -243,6 +243,11 @@ export function getDominFromUrl(urlStr: string): any {
 declare function escape(s: string): string;
 declare function unescape(s: string): string;
 
+// var reg = new RegExp("(^| )ss=([^;]*)(;|$)");
+// var arr = document.cookie.match(reg);
+// console.log("-----arr", arr)
+
+
 export function getCookier(name: string): any {
   const reg = new RegExp("(^| )" + name + "=([^;]*)(;|$)");
   const arr = document.cookie.match(reg);
@@ -302,7 +307,7 @@ export function getCurrentScript() {
 
 }
 
-export function generateUUID() {
+export function generateUUID(): string {
   let d = new Date().getTime();
   const uuid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
     const r = (d + Math.random()*16)%16 | 0;
@@ -310,4 +315,14 @@ export function generateUUID() {
     return (c=='x' ? r : (r&0x3|0x8)).toString(16);
   });
   return uuid;
+};
+
+export function localStorageIsSupported (): boolean {
+  try {
+    localStorage.setItem('supported', '1');
+    localStorage.removeItem('supported');
+    return true;
+  } catch (error) {
+    return false;
+  }
 };
