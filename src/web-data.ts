@@ -72,7 +72,7 @@ export class WebData {
 
   }
 
-  push(datas: any): any {
+  push(datas: any): void {
     let type = datas.category;
     if (datas instanceof Array) {
       type = 'network'
@@ -89,10 +89,10 @@ export class WebData {
         datas.map((data) => {
           result = result + JSON.stringify(this.initNetworkData(data, this.tag)) + "\n";
         });
-        return this.getRequestFun(url, type, result)
+        this.getRequestFun(url, type, result)
       }
     }
-    return this.getRequestFun(url, type, result)
+    this.getRequestFun(url, type, result)
 
   }
 
@@ -209,7 +209,8 @@ export class WebData {
   }
 
   getErrorRequesFunc(url: string, result: any): any {
-    return _window._origin_fetch(url, {
+    console.log("---------result", result)
+     _window._origin_fetch(url, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -219,7 +220,7 @@ export class WebData {
   }
 
   getPerformanceRequesFunc(url: string, result: any): any {
-    return _window._origin_fetch(url, {
+     _window._origin_fetch(url, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -231,7 +232,7 @@ export class WebData {
   }
 
   getNetworkRequesFunc(url: string, result: any): any {
-    return _window._origin_fetch(url, {
+     _window._origin_fetch(url, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -240,13 +241,13 @@ export class WebData {
     })
   }
 
-  getRequestFun(url: string, type: string, result: any): any {
+  getRequestFun(url: string, type: string, result: any): void {
     if (type === 'error') {
-      return this.getErrorRequesFunc(url, result)
+       this.getErrorRequesFunc(url, result)
     } else if (type === 'network') {
-      return this.getNetworkRequesFunc(url, result)
+       this.getNetworkRequesFunc(url, result)
     } else {
-      return this.getPerformanceRequesFunc(url, result)
+       this.getPerformanceRequesFunc(url, result)
     }
   }
 

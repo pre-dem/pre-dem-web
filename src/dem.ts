@@ -20,9 +20,6 @@ import Transfer from './transfer'
 // Sources
 import Source from './source'
 import XHRSource from './sources/xhr'
-import ConsoleSource from './sources/console'
-import HistorySource from './sources/history'
-import UIEventSource from './sources/ui-event'
 import ExpectionSource from './sources/exception'
 import PerformanceSource from './sources/performance'
 
@@ -477,18 +474,6 @@ export class Dem {
   _setupBreadcrumb() {
     if (this.option.autoBreadcrumbs['xhr'] || this.option.autoBreadcrumbs === true) {
       this.addSource(XHRSource(this))
-    }
-
-    if (this.option.autoBreadcrumbs['history'] || this.option.autoBreadcrumbs === true) {
-      this.addSource(HistorySource(this))
-    }
-
-    if (this.option.autoBreadcrumbs['dom'] || this.option.autoBreadcrumbs === true) {
-      this.addSource(UIEventSource())
-    }
-
-    if (this.option.autoBreadcrumbs['console'] || this.option.autoBreadcrumbs === true) {
-      this.addSource(ConsoleSource())
     }
 
     if (this.option.autoBreadcrumbs['performance'] || this.option.autoBreadcrumbs === true) {
