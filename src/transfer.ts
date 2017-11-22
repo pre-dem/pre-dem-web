@@ -2,7 +2,8 @@ import { Store } from './store'
 import { IMessage } from './messages-store'
 import { ISourceMessage } from './source'
 
-export type TransferFunc = (data?: any) => Promise<any>
+export type Callback = (error?: Error, reason?: any) => void
+export type TransferFunc = (data?: any, callback?: Callback) => void
 
 export default class Transfer {
 
@@ -31,7 +32,6 @@ export default class Transfer {
       for (const key in keyOrObject) {
         if (keyOrObject.hasOwnProperty(key)) {
           const value = keyOrObject[key]
-          
           this.config(key, value)
         }
       }
@@ -40,20 +40,19 @@ export default class Transfer {
 
   send(message: IMessage) {
     const { data, sent } = message
-
-    this.queue.push(() => new Promise((resolve, reject) => {
-      this.transfer.call(this, this.extendMessage(data))
-          .then(() => {
-            message.sent = true
-          })
-          .then(resolve)
-          .catch(reject)
-
-    }))
-
+    this.queue.push((callback: Callback) => {
+      this.transfer.call(this, this.extendMessage(data), (err: Error) => {
+        if (err) {
+          return callback(err)
+        }
+        message.sent = true
+        callback()
+      })
+    })
     if (!this.running) {
       this.run()
     }
+
   }
 
   sendArray(messages: IMessage[]) {
@@ -62,18 +61,19 @@ export default class Transfer {
       dataArray.push(message.data)
     });
 
-    this.queue.push(() => new Promise((resolve, reject) => {
-      this.transfer.call(this, this.extendMessages(dataArray))
-          .then(() => {
-            messages.map((message: IMessage) => {
-              message.sent = true
-            });
-          })
-          .then(resolve)
-          .catch(reject)
+      this.queue.push((callback: Callback) => {
+        this.transfer.call(this, this.extendMessages(dataArray), (err: Error) => {
+          if (err) {
+            return callback(err)
+          }
 
-    }))
+          dataArray.map((message: IMessage) => {
+            message.sent = true
+          });
+          callback()
+        })
 
+      })
     if (!this.running) {
       this.run()
     }
@@ -133,9 +133,7 @@ export default class Transfer {
     const current = this.queue.splice(0, 1)[0] // .shift()
     if (current) {
       this.running = true
-
-      current()
-          .then(() => this.run())
+      current(() => this.run())
     } else {
       this.running = false
     }

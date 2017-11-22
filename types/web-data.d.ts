@@ -9,7 +9,7 @@ export declare class WebData {
     setTag(tag: string): void;
     setPerformanceFilter(filter: any): void;
     sendEventData(name: string, data: any): any;
-    push(datas: any): any;
+    push(datas: any): void;
     postDataUrl(domain: string, category: string, appId: string): string;
     initCustomEvent(tag: string, name: string, content: string): any;
     initPerformance(message: any, tag: string): any;
@@ -18,7 +18,7 @@ export declare class WebData {
     getErrorRequesFunc(url: string, result: any): any;
     getPerformanceRequesFunc(url: string, result: any): any;
     getNetworkRequesFunc(url: string, result: any): any;
-    getRequestFun(url: string, type: string, result: any): any;
+    getRequestFun(url: string, type: string, result: any): void;
 }
 declare const webData: WebData;
 export default webData;
