@@ -123,8 +123,6 @@ export class WebData {
       sdk_version: VERSION,
       sdk_id: this.uuid,
       tag: tag,
-      domain: window.location.host,
-      path: window.location.pathname,
       content: content,
     }
   }
@@ -148,8 +146,6 @@ export class WebData {
       sdk_version: VERSION,
       sdk_id: this.uuid,
       tag: tag,
-      domain: window.location.host,
-      path: window.location.pathname,
       content: JSON.stringify({
         resourceTimings: JSON.stringify(resourceTimings),
         timing: JSON.stringify(timing)
@@ -169,8 +165,6 @@ export class WebData {
       sdk_version: VERSION,
       sdk_id: this.uuid,
       tag: tag,
-      domain: window.location.host,
-      path: window.location.pathname,
       content: JSON.stringify({
         domain: getDominFromUrl(message.payload.url).domain,
         path: getDominFromUrl(message.payload.url).path,
@@ -197,8 +191,6 @@ export class WebData {
       sdk_version: VERSION,
       sdk_id: this.uuid,
       tag: tag,
-      domain: window.location.host,
-      path: window.location.pathname,
       content: JSON.stringify({
         crash_log_key: crash_log_key,
         crash_time: message.timestamp,
