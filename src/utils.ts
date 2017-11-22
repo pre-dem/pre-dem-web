@@ -325,34 +325,3 @@ export function localStorageIsSupported (): boolean {
   }
 };
 
-function createAjax(): any {
-  var xmlhttp = {};
-  var newWindow: any = window;
-
-  if (window["ActiveXObject"]) {
-    xmlhttp = new newWindow.ActiveXObject("Microsoft.XMLHTTP");
-  } else if (XMLHttpRequest) {
-    xmlhttp = new XMLHttpRequest();
-  }
-  return xmlhttp;
-};
-
-export function sendAjax(Method: string, url: string, contentType: string, data: string): void {
-
-  var ajax = createAjax();
-  if (ajax === {}) {
-    return;
-  }
-
-  ajax.open('POST', url, true);
-  if (window["ActiveXObject"]) {
-    contentType += ";charset=utf-8"
-  }
-  ajax.setRequestHeader('Content-type', contentType);
-  ajax.send(data)
-
-
-
-
-
-}

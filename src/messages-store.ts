@@ -39,7 +39,6 @@ export class MessagesStore {
       this.store.push(message);
       this.parent.transfers.forEach((transfer) => transfer.send(message))
     } else {
-      console.log("network message", message)
       this.messageArray.push(message)
       const subTime = new Date().getTime() - this.messageArray[0].timestamp
       if (this.messageArray.length >= this.messageThreshold || subTime > this.maxTime) {

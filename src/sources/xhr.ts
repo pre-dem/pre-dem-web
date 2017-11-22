@@ -73,7 +73,6 @@ export default (dem: Dem) => {
                 const contentLength = xhr.responseText ? xhr.responseText.length : 0;
                 xhr.__dem_xhr.contentLength = contentLength;
               } catch (e) { /* do nothing */ }
-              console.log("----------xhr", xhr)
               action({
                 category: 'network',
                 payload: xhr.__dem_xhr
