@@ -1,4 +1,5 @@
 import Source from '../source'
+import {parse} from 'url'
 
 export default () => {
 
@@ -20,7 +21,11 @@ export default () => {
         if (resourceTimings && resourceTimings.length > 0) {
           resourceTimings.map((resourceTiming: any) => {
             if (resourceTiming.entryType === "resource") {
-              newResourceTimings.push(resourceTiming);
+              var cleanObject = JSON.parse(JSON.stringify(resourceTiming))
+              var u = parse(cleanObject.name)
+              cleanObject.domain = u.host
+              cleanObject.path = u.path
+              newResourceTimings.push(cleanObject);
             }
 
           });
