@@ -19,11 +19,7 @@ export default () => {
         const resourceTimings = window.performance.getEntries();
         if (resourceTimings && resourceTimings.length > 0) {
           resourceTimings.map((resourceTiming: any) => {
-            if (resourceTiming.entryType === "resource"
-              && resourceTiming.encodedBodySize
-              && resourceTiming.duration
-              && resourceTiming.encodedBodySize > 0
-              && resourceTiming.duration > 0) {
+            if (resourceTiming.entryType === "resource") {
               newResourceTimings.push(timing);
             }
 
