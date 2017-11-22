@@ -30,3 +30,4 @@ export declare function getBrowserInfo(): any;
 export declare function getCurrentScript(): any;
 export declare function generateUUID(): string;
 export declare function localStorageIsSupported(): boolean;
+export declare function sendAjax(Method: string, url: string, contentType: string, data: string): void;

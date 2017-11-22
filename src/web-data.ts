@@ -3,10 +3,10 @@
  */
 
 import {_window} from './detection'
-import {getDominFromUrl, getCookier, setCookier, generateUUID, localStorageIsSupported} from './utils'
+import {getDominFromUrl, getCookier, setCookier, generateUUID, localStorageIsSupported, sendAjax} from './utils'
 
 
-const packageJson = require('../package.json')
+const packageJson = require('../package.json');
 const VERSION = packageJson.version;
 
 export class WebData {
@@ -87,12 +87,14 @@ export class WebData {
       if (datas instanceof Array) {
         result = ""
         datas.map((data) => {
-          result = result + JSON.stringify(this.initNetworkData(data, this.tag)) + "\n";
+           if (getDominFromUrl(data.payload.url).Domain !== this.domain) {
+             result = result + JSON.stringify(this.initNetworkData(data, this.tag)) + "\n";
+           }
         });
-        this.getRequestFun(url, type, result)
+        sendAjax('POST', url, 'application/json', result);
       }
     }
-    this.getRequestFun(url, type, result)
+    sendAjax('POST', url, 'application/json', JSON.stringify(result));
 
   }
 
@@ -205,48 +207,6 @@ export class WebData {
         mode: message.payload.mode,
         message: message.payload.message,
       })
-    }
-  }
-
-  getErrorRequesFunc(url: string, result: any): any {
-     _window._origin_fetch(url, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(result),
-    })
-  }
-
-  getPerformanceRequesFunc(url: string, result: any): any {
-     _window._origin_fetch(url, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(result),
-    })
-
-
-  }
-
-  getNetworkRequesFunc(url: string, result: any): any {
-     _window._origin_fetch(url, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: result,
-    })
-  }
-
-  getRequestFun(url: string, type: string, result: any): void {
-    if (type === 'error') {
-       this.getErrorRequesFunc(url, result)
-    } else if (type === 'network') {
-       this.getNetworkRequesFunc(url, result)
-    } else {
-       this.getPerformanceRequesFunc(url, result)
     }
   }
 

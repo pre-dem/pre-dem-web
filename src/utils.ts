@@ -321,3 +321,26 @@ export function localStorageIsSupported (): boolean {
     return false;
   }
 };
+
+function createAjax(): any {
+  var xmlhttp = {};
+  var _window: any = window;
+
+  if (XMLHttpRequest) {
+    xmlhttp = new XMLHttpRequest();
+  } if (window["ActiveXObject"]) {
+    xmlhttp = new _window.ActiveXObject("Microsoft.XMLHTTP");
+  }
+  return xmlhttp;
+};
+
+export function sendAjax(Method: string, url: string, contentType: string, data: string): void {
+  var ajax = createAjax();
+  if (ajax === {}) {
+    return;
+  }
+
+  ajax.open('POST', url, true);
+  ajax.setRequestHeader('Content-type', contentType);
+  ajax.send(data)
+}

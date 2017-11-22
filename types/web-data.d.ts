@@ -15,10 +15,6 @@ export declare class WebData {
     initPerformance(message: any, tag: string): any;
     initNetworkData(message: any, tag: string): any;
     initErrorData(message: any, tag: string): any;
-    getErrorRequesFunc(url: string, result: any): any;
-    getPerformanceRequesFunc(url: string, result: any): any;
-    getNetworkRequesFunc(url: string, result: any): any;
-    getRequestFun(url: string, type: string, result: any): void;
 }
 declare const webData: WebData;
 export default webData;
