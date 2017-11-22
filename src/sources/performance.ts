@@ -1,6 +1,6 @@
 import Source from '../source'
 import {parse} from 'url'
-import {getDominFromUrl} from './../utils'
+import {getDomainFromUrl} from './../utils'
 
 export default () => {
 
@@ -24,8 +24,9 @@ export default () => {
             if (resourceTiming.entryType === "resource") {
 
               var cleanObject = JSON.parse(JSON.stringify(resourceTiming))
-              cleanObject.domain = getDominFromUrl(cleanObject.name).domain
-              cleanObject.path = getDominFromUrl(cleanObject.name).path
+              const domainAndPath = getDomainFromUrl(cleanObject.name);
+              cleanObject.domain = domainAndPath.domain
+              cleanObject.path = domainAndPath.path
               newResourceTimings.push(cleanObject);
             }
 

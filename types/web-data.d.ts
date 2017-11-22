@@ -9,7 +9,8 @@ export declare class WebData {
     setTag(tag: string): void;
     setPerformanceFilter(filter: any): void;
     sendEventData(name: string, data: any): any;
-    push(datas: any): void;
+    push(datas: any): any;
+    getRequestFun(url: string, type: string, result: string): any;
     postDataUrl(domain: string, category: string, appId: string): string;
     initCustomEvent(tag: string, name: string, content: string): any;
     initPerformance(message: any, tag: string): any;

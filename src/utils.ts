@@ -208,14 +208,16 @@ export function convertDateToDateStr(oldDate: Date, hasHour: boolean, separator:
   return dateStr;
 }
 
-export function getDominFromUrl(urlStr: string): any {
+export function getDomainFromUrl(urlStr: string): any {
+
+  if (!urlStr || urlStr.length === 0) {
+    return {domain: "", path: ""}
+  }
 
   if (urlStr.indexOf("://") === -1) {
     urlStr = document.location.protocol + "//" + window.location.host + urlStr;
   }
-  if (!urlStr || urlStr.length === 0) {
-    return {domain: "", path: ""}
-  }
+
 
   const browserType = getBrowserInfo().type;
   if (browserType === "IE") {

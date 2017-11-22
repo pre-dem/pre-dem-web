@@ -3,6 +3,7 @@ import Transfer from "./transfer"
 import webData from './web-data'
 
 import {getCurrentScript} from "./utils"
+require('isomorphic-fetch');
 
 (function (win) {
 
@@ -91,10 +92,8 @@ class Predem {
   }
 
   initTransfer() {
-    const testTransfer = new Transfer(webData.tag, (datas, callback) => {
-      console.log("------datas", datas)
-      webData.push(datas);
-      callback();
+    const testTransfer = new Transfer(webData.tag, (datas) => {
+      return webData.push(datas);
     });
     dem.addTransfer(testTransfer)
   }
