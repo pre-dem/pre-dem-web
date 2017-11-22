@@ -1,7 +1,6 @@
 import {Store} from './store'
 import {IMessage} from './messages-store'
 import {ISourceMessage} from './source'
-require('isomorphic-fetch');
 
 export type TransferFunc = (data?: any) => Promise<any>
 

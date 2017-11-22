@@ -3,6 +3,7 @@ import { Dem } from '../dem'
 import Source, { ISourceMessage } from '../source'
 import { isString, isFunction, fill } from '../utils'
 import { _window } from '../detection'
+require('isomorphic-fetch');
 
 export interface IXHRMessage extends ISourceMessage {
   payload: {
