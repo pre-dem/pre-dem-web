@@ -218,7 +218,10 @@ export function getDomainFromUrl(urlStr: string): any {
     urlStr = document.location.protocol + "//" + window.location.host + urlStr;
   }
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> 2636f2a8cddca215ba42fab45e83d41868af9994
   const browserType = getBrowserInfo().type;
   if (browserType === "IE") {
     let domain = "";
@@ -229,7 +232,11 @@ export function getDomainFromUrl(urlStr: string): any {
         const hostAndPathArray = array[1].split("/");
         if (hostAndPathArray.length === 2) {
             domain = hostAndPathArray[0]
+<<<<<<< HEAD
             path = hostAndPathArray[1]
+=======
+            path = hostAndPathArray[1];
+>>>>>>> 2636f2a8cddca215ba42fab45e83d41868af9994
             return {domain: domain, path: path}
         }
       }
