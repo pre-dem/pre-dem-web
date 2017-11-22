@@ -209,7 +209,6 @@ export class WebData {
   }
 
   getErrorRequesFunc(url: string, result: any): any {
-    console.log("---------result", result)
      _window._origin_fetch(url, {
       method: 'POST',
       headers: {
