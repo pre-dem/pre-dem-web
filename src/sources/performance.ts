@@ -1,5 +1,6 @@
 import Source from '../source'
 import {parse} from 'url'
+import {getDominFromUrl} from './../utils'
 
 export default () => {
 
@@ -21,10 +22,10 @@ export default () => {
         if (resourceTimings && resourceTimings.length > 0) {
           resourceTimings.map((resourceTiming: any) => {
             if (resourceTiming.entryType === "resource") {
+
               var cleanObject = JSON.parse(JSON.stringify(resourceTiming))
-              var u = parse(cleanObject.name)
-              cleanObject.domain = u.host
-              cleanObject.path = u.path
+              cleanObject.domain = getDominFromUrl(cleanObject.name).domain
+              cleanObject.path = getDominFromUrl(cleanObject.name).path
               newResourceTimings.push(cleanObject);
             }
 
@@ -45,7 +46,6 @@ export default () => {
 
 
     };
-
 
   })
 

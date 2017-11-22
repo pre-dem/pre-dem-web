@@ -3,7 +3,6 @@ import { Dem } from '../dem'
 import Source, { ISourceMessage } from '../source'
 import { isString, isFunction, fill } from '../utils'
 import { _window } from '../detection'
-require('isomorphic-fetch');
 
 export interface IXHRMessage extends ISourceMessage {
   payload: {
@@ -74,6 +73,7 @@ export default (dem: Dem) => {
                 const contentLength = xhr.responseText ? xhr.responseText.length : 0;
                 xhr.__dem_xhr.contentLength = contentLength;
               } catch (e) { /* do nothing */ }
+              console.log("----------xhr", xhr)
               action({
                 category: 'network',
                 payload: xhr.__dem_xhr

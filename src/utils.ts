@@ -1,4 +1,5 @@
-import { hasJSON } from './detection'
+import { hasJSON, _window } from './detection'
+import {parse} from 'url'
 
 export function fill(obj, name, replacement, track?) {
   var orig = obj[name]
@@ -226,7 +227,7 @@ export function getDominFromUrl(urlStr: string): any {
         const hostAndPathArray = array[1].split("/");
         if (hostAndPathArray.length === 2) {
             domain = hostAndPathArray[0]
-            path = urlStr.substring(0, urlStr.indexOf("?"));
+            path = hostAndPathArray[1]
             return {domain: domain, path: path}
         }
       }
@@ -236,8 +237,8 @@ export function getDominFromUrl(urlStr: string): any {
     return {domain: "", path: ""}
   }
 
-  const url = new URL(urlStr);
-  return {domain: url.host, path: url.pathname}
+  const url = parse(urlStr);
+  return {domain: url.host, path: url.path}
 }
 
 declare function escape(s: string): string;
@@ -324,23 +325,32 @@ export function localStorageIsSupported (): boolean {
 
 function createAjax(): any {
   var xmlhttp = {};
-  var _window: any = window;
+  var newWindow: any = window;
 
-  if (XMLHttpRequest) {
+  if (window["ActiveXObject"]) {
+    xmlhttp = new newWindow.ActiveXObject("Microsoft.XMLHTTP");
+  } else if (XMLHttpRequest) {
     xmlhttp = new XMLHttpRequest();
-  } if (window["ActiveXObject"]) {
-    xmlhttp = new _window.ActiveXObject("Microsoft.XMLHTTP");
   }
   return xmlhttp;
 };
 
 export function sendAjax(Method: string, url: string, contentType: string, data: string): void {
+
   var ajax = createAjax();
   if (ajax === {}) {
     return;
   }
 
   ajax.open('POST', url, true);
+  if (window["ActiveXObject"]) {
+    contentType += ";charset=utf-8"
+  }
   ajax.setRequestHeader('Content-type', contentType);
   ajax.send(data)
+
+
+
+
+
 }
