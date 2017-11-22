@@ -147,8 +147,8 @@ export class WebData {
       sdk_id: this.uuid,
       tag: tag,
       content: JSON.stringify({
-        resourceTimings: JSON.stringify(resourceTimings),
-        timing: JSON.stringify(timing)
+        resourceTimings: resourceTimings,
+        timing: timing
       })
     };
   };

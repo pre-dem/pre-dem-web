@@ -1,4 +1,5 @@
 import Source from '../source'
+import {getDominFromUrl} from './../utils'
 
 export default () => {
 
@@ -19,12 +20,11 @@ export default () => {
         const resourceTimings = window.performance.getEntries();
         if (resourceTimings && resourceTimings.length > 0) {
           resourceTimings.map((resourceTiming: any) => {
-            if (resourceTiming.entryType === "resource"
-              && resourceTiming.encodedBodySize
-              && resourceTiming.duration
-              && resourceTiming.encodedBodySize > 0
-              && resourceTiming.duration > 0) {
-              newResourceTimings.push(timing);
+            if (resourceTiming.entryType === "resource") {
+              var cleanObject = JSON.parse(JSON.stringify(resourceTiming))
+              cleanObject.domain = getDominFromUrl(cleanObject.name).domain
+              cleanObject.path = getDominFromUrl(cleanObject.name).path
+              newResourceTimings.push(cleanObject);
             }
 
           });
