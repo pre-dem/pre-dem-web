@@ -209,11 +209,12 @@ export function convertDateToDateStr(oldDate: Date, hasHour: boolean, separator:
 
 export function getDominFromUrl(urlStr: string): any {
 
-  if (urlStr.indexOf("://") === -1) {
-    urlStr = document.location.protocol + "//" + window.location.host + urlStr;
-  }
   if (!urlStr || urlStr.length === 0) {
     return {domain: "", path: ""}
+  }
+
+  if (urlStr.indexOf("://") === -1) {
+    urlStr = document.location.protocol + "//" + window.location.host + urlStr;
   }
 
   const browserType = getBrowserInfo().type;
@@ -226,7 +227,7 @@ export function getDominFromUrl(urlStr: string): any {
         const hostAndPathArray = array[1].split("/");
         if (hostAndPathArray.length === 2) {
             domain = hostAndPathArray[0]
-            path = urlStr.substring(0, urlStr.indexOf("?"));
+            path = hostAndPathArray[1];
             return {domain: domain, path: path}
         }
       }
