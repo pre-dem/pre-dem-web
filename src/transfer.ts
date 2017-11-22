@@ -1,9 +1,8 @@
-import { Store } from './store'
-import { IMessage } from './messages-store'
-import { ISourceMessage } from './source'
+import {Store} from './store'
+import {IMessage} from './messages-store'
+import {ISourceMessage} from './source'
 
-export type Callback = (error?: Error, reason?: any) => void
-export type TransferFunc = (data?: any, callback?: Callback) => void
+export type TransferFunc = (data?: any) => Promise<any>
 
 export default class Transfer {
 
@@ -39,16 +38,16 @@ export default class Transfer {
   }
 
   send(message: IMessage) {
-    const { data, sent } = message
-    this.queue.push((callback: Callback) => {
-      this.transfer.call(this, this.extendMessage(data), (err: Error) => {
-        if (err) {
-          return callback(err)
-        }
-        message.sent = true
-        callback()
-      })
-    })
+    const {data, sent} = message
+    this.queue.push(() => new Promise((resolve, reject) => {
+      this.transfer.call(this, this.extendMessage(data))
+        .then(() => {
+          message.sent = true
+        })
+        .then(resolve)
+        .catch(reject)
+
+    }))
     if (!this.running) {
       this.run()
     }
@@ -61,19 +60,17 @@ export default class Transfer {
       dataArray.push(message.data)
     });
 
-      this.queue.push((callback: Callback) => {
-        this.transfer.call(this, this.extendMessages(dataArray), (err: Error) => {
-          if (err) {
-            return callback(err)
-          }
-
-          dataArray.map((message: IMessage) => {
+    this.queue.push(() => new Promise((resolve, reject) => {
+      this.transfer.call(this, this.extendMessages(dataArray))
+        .then(() => {
+          messages.map((message: IMessage) => {
             message.sent = true
-          });
-          callback()
-        })
 
-      })
+          });
+        })
+        .then(resolve)
+        .catch(reject)
+    }))
     if (!this.running) {
       this.run()
     }
@@ -133,7 +130,8 @@ export default class Transfer {
     const current = this.queue.splice(0, 1)[0] // .shift()
     if (current) {
       this.running = true
-      current(() => this.run())
+      current()
+        .then(() => this.run())
     } else {
       this.running = false
     }
@@ -141,4 +139,6 @@ export default class Transfer {
 
 }
 
-function duplex(value) { return value }
+function duplex(value) {
+  return value
+}

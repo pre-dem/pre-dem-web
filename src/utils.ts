@@ -1,4 +1,5 @@
-import { hasJSON } from './detection'
+import { hasJSON, _window } from './detection'
+import {parse} from 'url'
 
 export function fill(obj, name, replacement, track?) {
   var orig = obj[name]
@@ -207,7 +208,7 @@ export function convertDateToDateStr(oldDate: Date, hasHour: boolean, separator:
   return dateStr;
 }
 
-export function getDominFromUrl(urlStr: string): any {
+export function getDomainFromUrl(urlStr: string): any {
 
   if (!urlStr || urlStr.length === 0) {
     return {domain: "", path: ""}
@@ -227,7 +228,7 @@ export function getDominFromUrl(urlStr: string): any {
         const hostAndPathArray = array[1].split("/");
         if (hostAndPathArray.length === 2) {
             domain = hostAndPathArray[0]
-            path = hostAndPathArray[1];
+            path = hostAndPathArray[1]
             return {domain: domain, path: path}
         }
       }
@@ -237,8 +238,8 @@ export function getDominFromUrl(urlStr: string): any {
     return {domain: "", path: ""}
   }
 
-  const url = new URL(urlStr);
-  return {domain: url.host, path: url.pathname}
+  const url = parse(urlStr);
+  return {domain: url.host, path: url.path}
 }
 
 declare function escape(s: string): string;
@@ -322,3 +323,4 @@ export function localStorageIsSupported (): boolean {
     return false;
   }
 };
+

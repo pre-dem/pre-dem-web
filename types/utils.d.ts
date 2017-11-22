@@ -23,7 +23,7 @@ export declare function isArray(raw: any): number;
 export declare function clone(raw: any): any;
 export declare function timestampToUTCStr(timestamp: number): any;
 export declare function convertDateToDateStr(oldDate: Date, hasHour: boolean, separator: string): string;
-export declare function getDominFromUrl(urlStr: string): any;
+export declare function getDomainFromUrl(urlStr: string): any;
 export declare function getCookier(name: string): any;
 export declare function setCookier(name: string, value: string): void;
 export declare function getBrowserInfo(): any;

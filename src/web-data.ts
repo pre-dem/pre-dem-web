@@ -3,10 +3,10 @@
  */
 
 import {_window} from './detection'
-import {getDominFromUrl, getCookier, setCookier, generateUUID, localStorageIsSupported} from './utils'
+import {getDomainFromUrl, getCookier, setCookier, generateUUID, localStorageIsSupported} from './utils'
 
 
-const packageJson = require('../package.json')
+const packageJson = require('../package.json');
 const VERSION = packageJson.version;
 
 export class WebData {
@@ -72,7 +72,7 @@ export class WebData {
 
   }
 
-  push(datas: any): void {
+  push(datas: any): any {
     let type = datas.category;
     if (datas instanceof Array) {
       type = 'network'
@@ -87,13 +87,26 @@ export class WebData {
       if (datas instanceof Array) {
         result = ""
         datas.map((data) => {
-          result = result + JSON.stringify(this.initNetworkData(data, this.tag)) + "\n";
+           if (getDomainFromUrl(data.payload.url).Domain !== this.domain) {
+             result = result + JSON.stringify(this.initNetworkData(data, this.tag)) + "\n";
+           }
         });
-        this.getRequestFun(url, type, result)
+
+        return this.getRequestFun(url, type, result)
       }
     }
-    this.getRequestFun(url, type, result)
+    return this.getRequestFun(url, type, JSON.stringify(result))
 
+  }
+
+  getRequestFun(url: string, type: string, result: string): any {
+    return _window._origin_fetch(url, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: result,
+      });
   }
 
   postDataUrl(domain: string, category: string, appId: string): string {
@@ -158,6 +171,7 @@ export class WebData {
     const networkErrorMsg = message.payload.status_code !== 200 ? message.payload.responseText : "";
     const dataLength = message.payload.contentLength ? message.payload.contentLength : 0;
     const responseTimeStamp = message.payload.ResponseTimeStamp ? message.payload.ResponseTimeStamp : 0;
+    const domainAndPath = getDomainFromUrl(message.payload.url);
     return {
       time: Date.now(),
       type: "auto_captured",
@@ -166,8 +180,8 @@ export class WebData {
       sdk_id: this.uuid,
       tag: tag,
       content: JSON.stringify({
-        domain: getDominFromUrl(message.payload.url).domain,
-        path: getDominFromUrl(message.payload.url).path,
+        domain: domainAndPath.domain,
+        path: domainAndPath.path,
         method: message.payload.method,
         host_ip: "",
         status_code: message.payload.status_code,
@@ -197,48 +211,6 @@ export class WebData {
         mode: message.payload.mode,
         message: message.payload.message,
       })
-    }
-  }
-
-  getErrorRequesFunc(url: string, result: any): any {
-     _window._origin_fetch(url, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(result),
-    })
-  }
-
-  getPerformanceRequesFunc(url: string, result: any): any {
-     _window._origin_fetch(url, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(result),
-    })
-
-
-  }
-
-  getNetworkRequesFunc(url: string, result: any): any {
-     _window._origin_fetch(url, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: result,
-    })
-  }
-
-  getRequestFun(url: string, type: string, result: any): void {
-    if (type === 'error') {
-       this.getErrorRequesFunc(url, result)
-    } else if (type === 'network') {
-       this.getNetworkRequesFunc(url, result)
-    } else {
-       this.getPerformanceRequesFunc(url, result)
     }
   }
 

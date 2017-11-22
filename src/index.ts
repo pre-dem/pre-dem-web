@@ -92,9 +92,8 @@ class Predem {
   }
 
   initTransfer() {
-    const testTransfer = new Transfer(webData.tag, (datas, callback) => {
-      webData.push(datas);
-      callback();
+    const testTransfer = new Transfer(webData.tag, (datas) => {
+      return webData.push(datas);
     });
     dem.addTransfer(testTransfer)
   }
