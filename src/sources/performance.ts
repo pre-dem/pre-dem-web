@@ -20,7 +20,7 @@ export default () => {
         if (resourceTimings && resourceTimings.length > 0) {
           resourceTimings.map((resourceTiming: any) => {
             if (resourceTiming.entryType === "resource") {
-              newResourceTimings.push(timing);
+              newResourceTimings.push(resourceTiming);
             }
 
           });
