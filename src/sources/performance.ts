@@ -1,10 +1,5 @@
 import Source from '../source'
-<<<<<<< HEAD
-import {parse} from 'url'
 import {getDomainFromUrl} from './../utils'
-=======
-import {getDominFromUrl} from './../utils'
->>>>>>> 2636f2a8cddca215ba42fab45e83d41868af9994
 
 export default () => {
 

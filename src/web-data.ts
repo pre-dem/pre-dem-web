@@ -3,7 +3,7 @@
  */
 
 import {_window} from './detection'
-import {getDomainFromUrl, getCookier, setCookier, generateUUID, localStorageIsSupported, sendAjax} from './utils'
+import {getDomainFromUrl, getCookier, setCookier, generateUUID, localStorageIsSupported} from './utils'
 
 
 const packageJson = require('../package.json');
