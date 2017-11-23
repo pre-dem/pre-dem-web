@@ -41,7 +41,7 @@ export default () => {
             payload: {timing, resourceTimings: []}
           });
         }
-      }, 3000);
+      }, 1500);
 
     };
 
