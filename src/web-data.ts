@@ -153,7 +153,7 @@ export class WebData {
     if (this.performanceFilter) {
       const filterResultTimings = this.performanceFilter(newResourceTimings);
       if (!(filterResultTimings && (filterResultTimings instanceof Array))) {
-        console.error("Performance Data has some Error!");
+        console.error("Filter should return array!");
       } else {
         newResourceTimings = filterResultTimings;
       }
