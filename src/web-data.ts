@@ -141,14 +141,21 @@ export class WebData {
   }
 
   initPerformance(message: any, tag: string): any {
-    let resourceTimings = message.payload.resourceTimings;
+    const resourceTimings = message.payload.resourceTimings;
     const timing = message.payload.timing;
+    let newResourceTimings = [];
+    resourceTimings.map((resourceTiming: any) => {
+      if (!(resourceTiming.entryType === "xmlhttprequest" && resourceTiming.name.indexOf(this.domain) !== 0)) {
+        newResourceTimings.push(resourceTiming)
+      }
+    });
+
     if (this.performanceFilter) {
-      const newResourceTimings = this.performanceFilter(resourceTimings);
-      if (!(newResourceTimings && (newResourceTimings instanceof Array))) {
+      const filterResultTimings = this.performanceFilter(newResourceTimings);
+      if (!(filterResultTimings && (filterResultTimings instanceof Array))) {
         console.error("Performance Data has some Error!");
       } else {
-        resourceTimings = newResourceTimings;
+        newResourceTimings = filterResultTimings;
       }
     }
 
@@ -160,7 +167,7 @@ export class WebData {
       sdk_id: this.uuid,
       tag: tag,
       content: JSON.stringify({
-        resourceTimings: resourceTimings,
+        resourceTimings: newResourceTimings,
         timing: timing
       })
     };

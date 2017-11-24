@@ -18,8 +18,9 @@ export default () => {
           const resourceTimings = window.performance.getEntries();
           if (resourceTimings && resourceTimings.length > 0) {
             resourceTimings.map((resourceTiming: any) => {
-              if (resourceTiming.entryType === "resource") {
-
+              if (resourceTiming.entryType === "resource" && resourceTiming.connectStart !== 0
+                && resourceTiming.duration !== 0 && resourceTiming.requestStart !== 0
+                && resourceTiming.domainLookupStart !== 0) {
                 var cleanObject = JSON.parse(JSON.stringify(resourceTiming))
                 const domainAndPath = getDomainFromUrl(cleanObject.name);
                 cleanObject.domain = domainAndPath.domain
@@ -41,7 +42,8 @@ export default () => {
             payload: {timing, resourceTimings: []}
           });
         }
-      }, 1500);
+      }, 1500
+      );
 
     };
 
