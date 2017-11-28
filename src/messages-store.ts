@@ -1,8 +1,9 @@
 import { CollectionStore } from './store'
 import { ISourceMessage } from './source'
 import { Dem } from './dem'
-
 import logger from './logger'
+import webData from "./web-data"
+
 
 export interface IMessage {
   id: number,
@@ -30,11 +31,24 @@ export class MessagesStore {
   }
 
   add(data: ISourceMessage) {
+    // 判断是否 add 数据
+    const appConfig = webData.getSendDataConfig();
+    if (appConfig !== null) {
+      if (data.category === "performance" && !appConfig.webPerf) {
+        return
+      } else if (data.category === "error" && !appConfig.crash) {
+        return
+      } else if (data.category === "network" && !appConfig.ajax) {
+        return
+      }
+    }
+
     const message: IMessage = {
       id: ++this.counter,
       data,
       sent: false
     }
+
     if (message.data.category !== 'network') {
       this.store.push(message);
       this.parent.transfers.forEach((transfer) => transfer.send(message))

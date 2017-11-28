@@ -57,10 +57,26 @@ class Predem {
     }
     const tag = currentScript.getAttribute("data-tag");
     const appId = appKey.substring(0, APP_ID_LENGTH);
-    webData.init(appId, domain);
+
+    const ajaxEnabled = currentScript.getAttribute("data-ajax-enabled");
+    const crashEnabled = currentScript.getAttribute("data-crash-enabled");
+    const webPerfEnabled = currentScript.getAttribute("data-performance-enable");
+
+    this.checkAttributeValue(ajaxEnabled);
+    this.checkAttributeValue(crashEnabled);
+    this.checkAttributeValue(webPerfEnabled);
+
     webData.setTag(tag);
+    webData.init(appId, domain, ajaxEnabled, crashEnabled, webPerfEnabled);
     this.initTransfer();
 
+  }
+
+  checkAttributeValue(attribute: string): void {
+    if (!(attribute === "true" || attribute === "false" || attribute === "" || attribute === null)) {
+      console.error(attribute + " must set true or false or empty");
+      return
+    }
   }
 
   setTag(tag: string): void {
