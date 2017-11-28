@@ -60,7 +60,7 @@ class Predem {
 
     const ajaxEnabled = currentScript.getAttribute("data-ajax-enabled");
     const crashEnabled = currentScript.getAttribute("data-crash-enabled");
-    const webPerfEnabled = currentScript.getAttribute("data-web-performance");
+    const webPerfEnabled = currentScript.getAttribute("data-performance-enable");
 
     this.checkAttributeValue(ajaxEnabled);
     this.checkAttributeValue(crashEnabled);
