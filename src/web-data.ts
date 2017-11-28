@@ -3,7 +3,8 @@
  */
 
 import {_window} from './detection'
-import {getDomainFromUrl, getCookier, setCookier, generateUUID, localStorageIsSupported} from './utils'
+import {getDomainFromUrl, getCookier, setCookier, generateUUID
+  , localStorageIsSupported, convertDateToDateStr } from './utils'
 
 
 const packageJson = require('../package.json');
@@ -13,6 +14,9 @@ export class WebData {
   appId: string;
   domain: string;
   tag: string;
+  ajaxEnabled: boolean;
+  crashEnabled: boolean;
+  webPerfEnabled: boolean;
   uuid: string;
   performanceFilter: any;
 
@@ -20,6 +24,9 @@ export class WebData {
     this.appId = "";
     this.domain = "";
     this.tag = "";
+    this.ajaxEnabled = true;
+    this.crashEnabled = true;
+    this.webPerfEnabled = true;
     this.performanceFilter = null;
 
     let predemUuid = "";
@@ -44,9 +51,13 @@ export class WebData {
     }
   }
 
-  init(appId: string, domain: string): void {
+  init(appId: string, domain: string, ajaxEnabled: string, crashEnabled: string, webPerfEnabled: string): void {
     this.appId = appId;
     this.domain = domain;
+    this.ajaxEnabled = this.changeStringToBoolean(ajaxEnabled);
+    this.crashEnabled = this.changeStringToBoolean(crashEnabled);
+    this.webPerfEnabled = this.changeStringToBoolean(webPerfEnabled);
+
   }
 
   setTag(tag: string): void {
@@ -58,6 +69,113 @@ export class WebData {
     this.performanceFilter = filter;
   }
 
+  getAppConfig(): void {
+    const url = this.postDataUrl(this.domain, "app_config", this.appId);
+    const data = this.initAppConfigData(this.tag);
+    let oldAppConfig = null;
+    if (localStorageIsSupported()) {
+      oldAppConfig = window.localStorage["appConfig"];
+    } else {
+      oldAppConfig = getCookier("appConfig");
+    }
+    if (oldAppConfig === null || oldAppConfig === undefined) {
+      // 获取 config
+      _window._origin_fetch(url, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data),
+      }).then((response: any) => {
+        response.text().then((result) => {
+          this.setAppConfig(JSON.parse(result));
+        })
+      })
+    } else {
+      const oldTimestamp = JSON.parse(oldAppConfig).time;
+      const oldDateStr = convertDateToDateStr(new Date(oldTimestamp), false, "-");
+      const nowDate = new Date();
+      const nowDateStr = convertDateToDateStr(nowDate, false, "-");
+      if (oldDateStr !== nowDateStr) {
+        // 获取 config
+        _window._origin_fetch(url, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(data),
+        }).then((response: any) => {
+          response.text().then((result) => {
+            this.setAppConfig(JSON.parse(result));
+
+          })
+        })
+      }
+
+    }
+
+  }
+
+  setAppConfig(newAppConfig: any): void {
+    const http_monitor_enabled = newAppConfig.http_monitor_enabled === true ? 1 : 0;
+    const crash_report_enabled = newAppConfig.crash_report_enabled === true ? 1 : 0;
+    const web_performance_enabled = newAppConfig.web_performance_enabled === true ? 1 : 0;
+
+    const storageConfig = {
+      ajax: http_monitor_enabled,
+      crash: crash_report_enabled,
+      webPerf: web_performance_enabled,
+      time: new Date().getTime(),
+    };
+
+    if (localStorageIsSupported()) {
+      window.localStorage["appConfig"] = JSON.stringify(storageConfig);
+    } else {
+      setCookier("appConfig", JSON.stringify(storageConfig));
+    }
+  }
+
+  getSendDataConfig(): any {
+    let config = {
+      ajax: this.ajaxEnabled,
+      crash: this.crashEnabled,
+      webPerf: this.webPerfEnabled,
+    };
+
+    let storageConfigStr = "";
+
+    if (localStorageIsSupported()) {
+      storageConfigStr =  window.localStorage["appConfig"];
+    } else {
+      storageConfigStr = getCookier("appConfig");
+    }
+
+    if (storageConfigStr === "" || storageConfigStr === undefined) {
+      return config;
+    }
+    const storageConfig = JSON.parse(storageConfigStr);
+
+    let ajaxEnabled = 1;
+    let crashEnabled = 1;
+    let webPerfEnabled = 1;
+
+    if (!storageConfig.ajax || !this.ajaxEnabled) {
+      ajaxEnabled = 0;
+    }
+    if (!storageConfig.crash || !this.crashEnabled) {
+      crashEnabled = 0;
+    }
+
+    if (!storageConfig.webPerf || !this.webPerfEnabled) {
+      webPerfEnabled = 0;
+    }
+
+    return {
+      ajax: ajaxEnabled,
+      crash: crashEnabled,
+      webPerf: webPerfEnabled,
+    };
+  }
 
   sendEventData(name: string, data): any {
     const url = this.postDataUrl(this.domain, "event", this.appId);
@@ -111,6 +229,9 @@ export class WebData {
 
   postDataUrl(domain: string, category: string, appId: string): string {
     switch (category) {
+      case 'app_config' : {
+        return domain + '/v2/' + appId + '/app-config';
+      }
       case 'error': {
         return domain + '/v2/' + appId + '/crashes';
       }
@@ -219,6 +340,25 @@ export class WebData {
         message: message.payload.message,
       })
     }
+  }
+
+  initAppConfigData(tag: string): any {
+    return {
+      time: Date.now(),
+      type: "auto_captured",
+      name: "app",
+      sdk_version: VERSION,
+      sdk_id: this.uuid,
+      tag: tag,
+    }
+  }
+
+  changeStringToBoolean(enabled: string): boolean {
+    if (enabled === "" || enabled === "true" || enabled === null) {
+      return true
+    }
+    return false
+
   }
 
 }

@@ -1,18 +1,16 @@
 import Source from '../source'
 import {getDomainFromUrl} from './../utils'
-
+import webData from "./../web-data"
 export default () => {
-
   return new Source('performance', (action) => {
     window.onload = function () {
+      webData.getAppConfig();
       setTimeout(() => {
         let timing = null;
         const newResourceTimings = [];
-
         if (!window.performance) {
           return false;
         }
-
         timing = performance.timing;
         if (window.performance.getEntries) {
           const resourceTimings = window.performance.getEntries();
