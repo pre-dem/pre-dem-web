@@ -1,6 +1,6 @@
-import { CollectionStore } from './store'
-import { ISourceMessage } from './source'
-import { Dem } from './dem'
+import {CollectionStore} from './store'
+import {ISourceMessage} from './source'
+import {Dem} from './dem'
 import logger from './logger'
 import webData from "./web-data"
 
@@ -11,7 +11,7 @@ export interface IMessage {
   sent: boolean
 }
 
-const breadcrumbCategories = [ 'console', 'history', 'ui.events', 'network' ]
+const breadcrumbCategories = ['console', 'history', 'ui.events', 'network']
 const isBreadcrumb = (category: string) => {
   return breadcrumbCategories.indexOf(category) >= 0
 }
@@ -22,7 +22,8 @@ export class MessagesStore {
 
   parent: Dem
   store = new CollectionStore<IMessage>('messages')
-  messageArray = []
+  networkMessageArray = []
+  consoleMessageArray = []
   messageThreshold = 10;
   maxTime = 3 * 60 * 60 * 1000
 
@@ -49,19 +50,29 @@ export class MessagesStore {
       sent: false
     }
 
-    if (message.data.category !== 'network') {
-      this.store.push(message);
-      this.parent.transfers.forEach((transfer) => transfer.send(message))
-    } else {
-      this.messageArray.push(message)
-      const subTime = new Date().getTime() - this.messageArray[0].timestamp
-      if (this.messageArray.length >= this.messageThreshold || subTime > this.maxTime) {
-        this.messageArray.map((message) => {
+    if (message.data.category === 'network') {
+      this.networkMessageArray.push(message);
+      const subTime = new Date().getTime() - this.networkMessageArray[0].timestamp;
+      if (this.networkMessageArray.length >= this.messageThreshold || subTime > this.maxTime) {
+        this.networkMessageArray.map((message) => {
           this.store.push(message)
-        })
-        this.parent.transfers.forEach((transfer) => transfer.sendArray(this.messageArray))
-        this.messageArray = []
+        });
+        this.parent.transfers.forEach((transfer) => transfer.sendArray(this.networkMessageArray))
+        this.networkMessageArray = []
       }
+    } else if (message.data.category === 'console') {
+      this.consoleMessageArray.push(message);
+      const subTime = new Date().getTime() - this.consoleMessageArray[0].timestamp;
+      if (this.consoleMessageArray.length >= this.messageThreshold || subTime > this.maxTime) {
+        this.consoleMessageArray.map((message) => {
+          this.store.push(message)
+        });
+        this.parent.transfers.forEach((transfer) => transfer.sendArray(this.consoleMessageArray))
+        this.consoleMessageArray = []
+      }
+    } else {
+      this.store.push(message);
+      this.parent.transfers.forEach((transfer) => transfer.sendArray([message]))
     }
 
     if (isBreadcrumb(data.category)) {

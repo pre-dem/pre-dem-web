@@ -22,6 +22,7 @@ export declare class WebData {
     initPerformance(message: any, tag: string): any;
     initNetworkData(message: any, tag: string): any;
     initErrorData(message: any, tag: string): any;
+    initConsoleData(message: any, tag: string): any;
     initAppConfigData(tag: string): any;
     changeStringToBoolean(enabled: string): boolean;
 }

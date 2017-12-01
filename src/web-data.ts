@@ -191,29 +191,29 @@ export class WebData {
   }
 
   push(datas: any): any {
-    let type = datas.category;
-    if (datas instanceof Array) {
-      type = 'network'
-    }
-    const url = this.postDataUrl(this.domain, type, this.appId);
-    let result: any;
-    if (type === "performance") {
-      result = this.initPerformance(datas, this.tag);
-    } else if (type === "error") {
-      result = this.initErrorData(datas, this.tag);
-    } else {
-      if (datas instanceof Array) {
-        result = ""
+    let result = "";
+    if (datas instanceof Array && datas.length > 0) {
+      const type = datas[0].category;
+      const url = this.postDataUrl(this.domain, type, this.appId);
+      if (type === "performance") {
+        result = JSON.stringify(this.initPerformance(datas[0], this.tag));
+      } else if (type === "error") {
+        result = JSON.stringify(this.initErrorData(datas[0], this.tag));
+      } else if (type === "network") {
         datas.map((data) => {
-           if (getDomainFromUrl(data.payload.url).Domain !== this.domain) {
-             result = result + JSON.stringify(this.initNetworkData(data, this.tag)) + "\n";
-           }
+          if (getDomainFromUrl(data.payload.url).Domain !== this.domain) {
+            result = result + JSON.stringify(this.initNetworkData(data, this.tag)) + "\n";
+          }
         });
-
-        return this.getRequestFun(url, type, result)
+      } else if (type === "console") {
+        datas.map((data) => {
+          result = result + JSON.stringify(this.initConsoleData(data, this.tag)) + "\n";
+        });
       }
+      return this.getRequestFun(url, type, result)
+
+
     }
-    return this.getRequestFun(url, type, JSON.stringify(result))
 
   }
 
@@ -243,6 +243,9 @@ export class WebData {
       }
       case 'event': {
         return domain + '/v2/' + appId + '/custom-events';
+      }
+      case 'console': {
+        return domain + '/v2/' + appId + '/log-capture';
       }
     }
     return "";
@@ -338,6 +341,21 @@ export class WebData {
         crash_time: message.timestamp,
         mode: message.payload.mode,
         message: message.payload.message,
+      })
+    }
+  }
+
+  initConsoleData(message: any, tag: string): any {
+    return {
+      time: Date.now(),
+      type: "auto_captured",
+      name: "log",
+      sdk_version: VERSION,
+      sdk_id: this.uuid,
+      tag: tag,
+      content: JSON.stringify({
+        level: message.payload.level,
+        message: message.payload.msg,
       })
     }
   }
