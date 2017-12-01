@@ -40,10 +40,11 @@
     }
 
     function sendCustomEventData() {
-        var testData = {"key": "testkey array"};
-        var event = {eventName: "test name", eventData: testData}
-      predem.sendCustomEventData(event);
-      predem.sendCustomEventDatas([event, event]);
+      var testData = {"key": "testkey array"};
+      predem.sendCustomEventData("test name", testData);
+
+      var event = {eventName: "test name", eventData: testData};
+      predem.batchSendCustomEventData([event, event]);
 	}
 
     function throwError() {
