@@ -181,7 +181,6 @@ export class WebData {
   sendEventData(eventsData: any[]): any {
     const url = this.postDataUrl(this.domain, "event", this.appId);
     let data = "";
-    console.log("eventsData", eventsData);
     eventsData.map((event: any) => {
       const eventData = JSON.stringify(event.eventData)
       const eventstr = this.initCustomEvent(this.tag, event.eventName, eventData);

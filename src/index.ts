@@ -16,10 +16,10 @@ require('isomorphic-fetch');
     this.sendCustomEventData = function (eventName: string, eventData: string) {
       return predem.batchSendCustomEventData([{eventName: eventName, eventData: eventData}]);
     };
-    
-    this.batchSendCustomEventData = function (eventDatas: any[]) {
-      return predem.batchSendCustomEventData(eventDatas);
-      
+
+    this.batchSendCustomEventData = function (batchData: any[]) {
+      return predem.batchSendCustomEventData(batchData);
+
     };
 
     this.captureException = function (error: any) {
@@ -105,28 +105,26 @@ class Predem {
     dem.captureException(err);
   }
 
-  batchSendCustomEventData(eventDatas: any[]): any {
-    if (eventDatas.length === 0) {
+  batchSendCustomEventData(batchData: any[]): any {
+    if (!(batchData instanceof Array)) {
+      console.log("Custom data need type Array");
+      return
+    }
+    
+    if (batchData.length === 0) {
       console.error("Custom data can not be empty");
       return
     }
-    const event = eventDatas[0];
-
+    const event = batchData[0];
     if (event.eventName === "undefine" || event.eventData === "undefine") {
       console.error("Custom data must have eventName and eventData");
       return;
     }
 
-    return webData.sendEventData(eventDatas);
+    return webData.sendEventData(batchData);
 
   }
 
-  // sendCustomEventData(eventName: string, eventData: any): any {
-  //   if (!(eventData instanceof Array) && (eventData instanceof Object)) {
-  //     return webData.sendEventData(eventName, JSON.stringify(eventData));
-  //   }
-  //   console.error("Custom data must key value,For exampe: {name: \"predem\"}");
-  // }
 
   initTransfer() {
     const testTransfer = new Transfer(webData.tag, (datas) => {
