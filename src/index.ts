@@ -13,7 +13,7 @@ require('isomorphic-fetch');
       predem.setTag(tag);
     };
 
-    this.sendCustomEventData = function (eventName: string, eventData: string) {
+    this.sendEvent = function (eventName: string, eventData: string) {
       return predem.sendEvents([{eventName: eventName, eventData: eventData}]);
     };
 
