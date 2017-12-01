@@ -110,7 +110,7 @@ class Predem {
       console.log("Custom data need type Array");
       return
     }
-    
+
     if (batchData.length === 0) {
       console.error("Custom data can not be empty");
       return
