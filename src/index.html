@@ -44,7 +44,7 @@
       predem.sendCustomEventData("test name", testData);
 
       var event = {eventName: "test name", eventData: testData};
-      predem.batchSendCustomEventData([event, event]);
+      predem.sendEvents([event, event]);
 	}
 
     function throwError() {
