@@ -214,29 +214,6 @@ export class WebData {
 
 
     }
-    // let type = datas.category;
-    // if (datas instanceof Array) {
-    //   type = 'network'
-    // }
-    // const url = this.postDataUrl(this.domain, type, this.appId);
-    // let result: any;
-    // if (type === "performance") {
-    //   result = this.initPerformance(datas, this.tag);
-    // } else if (type === "error") {
-    //   result = this.initErrorData(datas, this.tag);
-    // } else {
-    //   if (datas instanceof Array) {
-    //     result = ""
-    //     datas.map((data) => {
-    //        if (getDomainFromUrl(data.payload.url).Domain !== this.domain) {
-    //          result = result + JSON.stringify(this.initNetworkData(data, this.tag)) + "\n";
-    //        }
-    //     });
-    //
-    //     return this.getRequestFun(url, type, result)
-    //   }
-    // }
-    // return this.getRequestFun(url, type, JSON.stringify(result))
 
   }
 
