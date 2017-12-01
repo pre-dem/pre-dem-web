@@ -24,7 +24,6 @@ require('isomorphic-fetch');
 
     this.captureException = function (error: any) {
       return predem.captureException(error)
-
     };
 
     this.setPerformanceFilter = function (filterFunc: any) {
