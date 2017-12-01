@@ -10,6 +10,7 @@ import {getDomainFromUrl, getCookier, setCookier, generateUUID
 const packageJson = require('../package.json');
 const VERSION = packageJson.version;
 
+
 export class WebData {
   appId: string;
   domain: string;
@@ -177,15 +178,22 @@ export class WebData {
     };
   }
 
-  sendEventData(name: string, data): any {
+  sendEventData(eventsData: any[]): any {
     const url = this.postDataUrl(this.domain, "event", this.appId);
-    const eventData = this.initCustomEvent(this.tag, name, data);
+    let data = "";
+    console.log("eventsData", eventsData);
+    eventsData.map((event: any) => {
+      const eventData = JSON.stringify(event.eventData)
+      const eventstr = this.initCustomEvent(this.tag, event.eventName, eventData);
+      data += JSON.stringify(eventstr) + "\n"
+    });
+    console.log("data");
     return _window._origin_fetch(url, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify(eventData),
+      body: data,
     })
 
   }
@@ -211,8 +219,6 @@ export class WebData {
         });
       }
       return this.getRequestFun(url, type, result)
-
-
     }
 
   }
@@ -355,7 +361,7 @@ export class WebData {
       tag: tag,
       content: JSON.stringify({
         level: message.payload.level,
-        message: message.payload.msg,
+        message: message.payload.message,
       })
     }
   }
