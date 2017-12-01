@@ -15,8 +15,7 @@
         data-performance-enable="${true | false}"></script>
 
 <script type="text/javascript">
-
-    // 添加性能数据的 filter, 如果不过滤，可以忽略。
+   // 添加性能数据的 filter, 如果不过滤，可以忽略。
     function perfFilter(performanceData) {
         var newData = [];
         if(performanceData) {
@@ -29,7 +28,7 @@
         return newData;
     }
 
-    predem.setPerformanceFilter(perfFilter);
+   predem.setPerformanceFilter(perfFilter);
 
 
     function funcNotFoundError() {
@@ -137,6 +136,12 @@
         }
 
     }
+    
+    function testConsole() {
+      console.log("test console");
+      console.error("test console  error");
+      console.warn("test console warn");
+    }
 
 </script>
 <h4>Web SDK 测试</h4>
@@ -159,6 +164,7 @@
 <div style="height: 30px"></div>
 <div>
 	<button onclick="sendCustomEventData()" style="height: 35px">自定义打点</button>
+    <button onclick="testConsole()" style="height: 35px">console</button>
 </div>
 </body>
 </html>
