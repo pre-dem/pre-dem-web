@@ -14,11 +14,11 @@ require('isomorphic-fetch');
     };
 
     this.sendCustomEventData = function (eventName: string, eventData: string) {
-      return predem.batchSendCustomEventData([{eventName: eventName, eventData: eventData}]);
+      return predem.sendEvents([{eventName: eventName, eventData: eventData}]);
     };
 
-    this.batchSendCustomEventData = function (batchData: any[]) {
-      return predem.batchSendCustomEventData(batchData);
+    this.sendEvents = function (events: any[]) {
+      return predem.sendEvents(events);
 
     };
 
@@ -105,23 +105,23 @@ class Predem {
     dem.captureException(err);
   }
 
-  batchSendCustomEventData(batchData: any[]): any {
-    if (!(batchData instanceof Array)) {
+  sendEvents(events: any[]): any {
+    if (!(events instanceof Array)) {
       console.log("Custom data need type Array");
       return
     }
 
-    if (batchData.length === 0) {
+    if (events.length === 0) {
       console.error("Custom data can not be empty");
       return
     }
-    const event = batchData[0];
+    const event = events[0];
     if (event.eventName === "undefine" || event.eventData === "undefine") {
       console.error("Custom data must have eventName and eventData");
       return;
     }
 
-    return webData.sendEventData(batchData);
+    return webData.sendEventData(events);
 
   }
 
