@@ -7,7 +7,7 @@
 <body>
 <script src="http://code.jquery.com/jquery-1.4.1.min.js"></script>
 <script type="text/javascript"
-        src="./../dist/pre-dem-web-v1.1.0.js"
+        src="./../dist/pre-dem-web-v1.0.11.js"
         data-app-key="${AppKey}"
         data-domain="${Domain}"
         data-ajax-enabled="${true | false}"
@@ -40,8 +40,10 @@
     }
 
     function sendCustomEventData() {
-        var testData = {"key": "testkey"};
-        predem.sendCustomEventData("test name", testData)
+        var testData = {"key": "testkey array"};
+        var event = {eventName: "test name", eventData: testData}
+      predem.sendCustomEventData(event);
+      predem.sendCustomEventDatas([event, event]);
 	}
 
     function throwError() {
