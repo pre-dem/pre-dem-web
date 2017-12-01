@@ -18,8 +18,6 @@ export interface DemOption {
     autoBreadcrumbs?: boolean | {
         xhr?: boolean;
         console?: boolean;
-        dom?: boolean;
-        history?: boolean;
         performance?: boolean;
     };
     transfer?: Transfer;

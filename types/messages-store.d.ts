@@ -10,7 +10,8 @@ export declare class MessagesStore {
     counter: number;
     parent: Dem;
     store: CollectionStore<IMessage>;
-    messageArray: any[];
+    networkMessageArray: any[];
+    consoleMessageArray: any[];
     messageThreshold: number;
     maxTime: number;
     constructor(parent: Dem);

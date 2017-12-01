@@ -22,6 +22,7 @@ import Source from './source'
 import XHRSource from './sources/xhr'
 import ExpectionSource from './sources/exception'
 import PerformanceSource from './sources/performance'
+import ConsoleSource from './sources/console'
 
 // Logger
 import logger, { ILogger } from './logger'
@@ -47,8 +48,6 @@ export interface DemOption {
   autoBreadcrumbs?: boolean | {
     xhr?: boolean
     console?: boolean
-    dom?: boolean
-    history?: boolean
     performance?: boolean
   }
 
@@ -67,9 +66,7 @@ const DEFAULT_DEM_OPTION: DemOption = {
   },
   autoBreadcrumbs: {
     xhr: true,
-    console: false,
-    dom: false,
-    history: false,
+    console: true,
     performance: true
   }
 }
@@ -479,6 +476,11 @@ export class Dem {
     if (this.option.autoBreadcrumbs['performance'] || this.option.autoBreadcrumbs === true) {
       this.addSource(PerformanceSource())
     }
+
+    if (this.option.autoBreadcrumbs['console'] || this.option.autoBreadcrumbs === true) {
+      this.addSource(ConsoleSource())
+    }
+
   }
 
   _restoreBuiltIns() {
