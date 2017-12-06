@@ -20,7 +20,6 @@ const isBreadcrumb = (category: string) => {
 export class MessagesStore {
 
     counter = 0
-
     parent: Dem
     store = new CollectionStore<IMessage>('messages')
     messageThreshold = 5
@@ -35,11 +34,11 @@ export class MessagesStore {
         // 判断是否 add 数据
         const appConfig = webData.getSendDataConfig();
         if (appConfig !== null) {
-            if (data.category === "performance" && !appConfig.webPerf) {
+            if (data.category === "performance" && !appConfig.webPerfEnabled) {
                 return
-            } else if (data.category === "error" && !appConfig.crash) {
+            } else if (data.category === "error" && !appConfig.crashEnabled) {
                 return
-            } else if (data.category === "network" && !appConfig.ajax) {
+            } else if (data.category === "network" && !appConfig.ajaxEnabled) {
                 return
             }
         }
