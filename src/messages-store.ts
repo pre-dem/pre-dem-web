@@ -19,7 +19,35 @@ const isBreadcrumb = (category: string) => {
 
 export class MessagesStore {
 
+<<<<<<< HEAD
     counter = 0
+=======
+  counter = 0
+
+  parent: Dem
+  store = new CollectionStore<IMessage>('messages')
+  networkMessageArray = []
+  consoleMessageArray = []
+  messageThreshold = 10;
+  maxTime = 3 * 60 * 60 * 1000
+
+  constructor(parent: Dem) {
+    this.parent = parent
+  }
+
+  add(data: ISourceMessage) {
+    // 判断是否 add 数据
+    const appConfig = webData.getSendDataConfig();
+    if (appConfig !== null) {
+      if (data.category === "performance" && !appConfig.webPerfEnabled) {
+        return
+      } else if (data.category === "error" && !appConfig.crashEnabled) {
+        return
+      } else if (data.category === "network" && !appConfig.ajaxEnabled) {
+        return
+      }
+    }
+>>>>>>> 211dff6... update ie bug
 
     parent: Dem
     store = new CollectionStore<IMessage>('messages')
