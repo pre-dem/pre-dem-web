@@ -84,7 +84,7 @@ export class WebData {
       _window._origin_fetch(url, {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json',
+          'Content-Type': 'text/plain',
         },
         body: JSON.stringify(data),
       }).then((response: any) => {
@@ -102,7 +102,7 @@ export class WebData {
         _window._origin_fetch(url, {
           method: 'POST',
           headers: {
-            'Content-Type': 'application/json',
+            'Content-Type': 'text/plain',
           },
           body: JSON.stringify(data),
         }).then((response: any) => {
@@ -123,9 +123,9 @@ export class WebData {
     const web_performance_enabled = newAppConfig.web_performance_enabled === true ? 1 : 0;
 
     const storageConfig = {
-      ajax: http_monitor_enabled,
-      crash: crash_report_enabled,
-      webPerf: web_performance_enabled,
+      ajaxEnabled: http_monitor_enabled,
+      crashEnabled: crash_report_enabled,
+      webPerfEnabled: web_performance_enabled,
       time: new Date().getTime(),
     };
 
@@ -138,20 +138,20 @@ export class WebData {
 
   getSendDataConfig(): any {
     let config = {
-      ajax: this.ajaxEnabled,
-      crash: this.crashEnabled,
-      webPerf: this.webPerfEnabled,
+      ajaxEnabled: this.ajaxEnabled,
+      crashEnabled: this.crashEnabled,
+      webPerfEnabled: this.webPerfEnabled,
     };
 
     let storageConfigStr = "";
 
     if (localStorageIsSupported()) {
-      storageConfigStr =  window.localStorage["appConfig"];
+      storageConfigStr = window.localStorage["appConfig"];
     } else {
       storageConfigStr = getCookier("appConfig");
     }
 
-    if (storageConfigStr === "" || storageConfigStr === undefined) {
+    if (storageConfigStr === null || storageConfigStr === "" || storageConfigStr === undefined) {
       return config;
     }
     const storageConfig = JSON.parse(storageConfigStr);
@@ -160,21 +160,21 @@ export class WebData {
     let crashEnabled = 1;
     let webPerfEnabled = 1;
 
-    if (!storageConfig.ajax || !this.ajaxEnabled) {
+    if (!storageConfig.ajaxEnabled || !this.ajaxEnabled) {
       ajaxEnabled = 0;
     }
-    if (!storageConfig.crash || !this.crashEnabled) {
+    if (!storageConfig.crashEnabled || !this.crashEnabled) {
       crashEnabled = 0;
     }
 
-    if (!storageConfig.webPerf || !this.webPerfEnabled) {
+    if (!storageConfig.webPerfEnabled || !this.webPerfEnabled) {
       webPerfEnabled = 0;
     }
 
     return {
-      ajax: ajaxEnabled,
-      crash: crashEnabled,
-      webPerf: webPerfEnabled,
+      ajaxEnabled: ajaxEnabled,
+      crashEnabled: crashEnabled,
+      webPerfEnabled: webPerfEnabled,
     };
   }
 
@@ -189,7 +189,7 @@ export class WebData {
     return _window._origin_fetch(url, {
       method: 'POST',
       headers: {
-        'Content-Type': 'application/json',
+        'Content-Type': 'text/plain',
       },
       body: data,
     })
@@ -225,7 +225,7 @@ export class WebData {
     return _window._origin_fetch(url, {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json',
+          'Content-Type': 'text/plain',
         },
         body: result,
       });
