@@ -84,7 +84,7 @@ export class WebData {
       _window._origin_fetch(url, {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json',
+          'Content-Type': 'text/plain',
         },
         body: JSON.stringify(data),
       }).then((response: any) => {
@@ -102,7 +102,7 @@ export class WebData {
         _window._origin_fetch(url, {
           method: 'POST',
           headers: {
-            'Content-Type': 'application/json',
+            'Content-Type': 'text/plain',
           },
           body: JSON.stringify(data),
         }).then((response: any) => {
@@ -189,7 +189,7 @@ export class WebData {
     return _window._origin_fetch(url, {
       method: 'POST',
       headers: {
-        'Content-Type': 'application/json',
+        'Content-Type': 'text/plain',
       },
       body: data,
     })
@@ -225,7 +225,7 @@ export class WebData {
     return _window._origin_fetch(url, {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json',
+          'Content-Type': 'text/plain',
         },
         body: result,
       });
