@@ -240,7 +240,7 @@ export class WebData {
         return domain + '/v2/' + appId + '/crashes';
       }
       case 'performance': {
-        return domain + '/v2/' + appId + '/web/performances';
+        return domain + '/v2/' + appId + '/performances';
       }
       case 'network': {
         return domain + '/v2/' + appId + '/http-monitors';
