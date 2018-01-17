@@ -1,6 +1,6 @@
 {
   "name": "pre-dem-web",
-  "version": "1.0.15",
+  "version": "1.0.16",
   "license": "MIT",
   "main": "dist/pre-dem-web.js",
   "scripts": {

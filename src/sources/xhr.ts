@@ -1,8 +1,9 @@
-import { Dem } from '../dem'
+import {Dem} from '../dem'
 
-import Source, { ISourceMessage } from '../source'
-import { isString, isFunction, fill } from '../utils'
-import { _window } from '../detection'
+import Source, {ISourceMessage} from '../source'
+import {isString, isFunction, fill} from '../utils'
+import {_window} from '../detection'
+
 require('isomorphic-fetch');
 
 export interface IXHRMessage extends ISourceMessage {
@@ -40,7 +41,7 @@ export default (dem: Dem) => {
       const xhrproto = XMLHttpRequest.prototype
 
       fill(xhrproto, 'open', (originFunc) => {
-        return function(method, url) { // preserve arity
+        return function (method, url) { // preserve arity
           this.__dem_xhr = genXHRMessage('open', method, url)
 
           return originFunc.apply(this, arguments)
@@ -48,7 +49,7 @@ export default (dem: Dem) => {
       }, dem.__wrappedBuiltins)
 
       fill(xhrproto, 'send', (originFunc) => {
-        return function(data) { // preserve arity
+        return function (data) { // preserve arity
           const xhr = this
           const startAt = Date.now()
           const timeChecker = setTimeout(() => action({
@@ -58,7 +59,7 @@ export default (dem: Dem) => {
 
           function onreadystatechangeHandler() {
             if (xhr.__dem_xhr && (xhr.readyState === 2)) {
-                xhr.__dem_xhr.responseTimestamp = Date.now()
+              xhr.__dem_xhr.responseTimestamp = Date.now()
             }
             if (xhr.__dem_xhr && (xhr.readyState === 1 || xhr.readyState === 4)) {
               if (timeChecker) {
@@ -73,15 +74,25 @@ export default (dem: Dem) => {
                 xhr.__dem_xhr.responseText = xhr.responseText
                 const contentLength = xhr.responseText ? xhr.responseText.length : 0;
                 xhr.__dem_xhr.contentLength = contentLength;
-              } catch (e) { /* do nothing */ }
+              } catch (e) { /* do nothing */
+              }
+              let xmlHttpRequestTiming = null;
+              if (window.performance.getEntries) {
+                for (const obj of window.performance.getEntries()) {
+                  if (obj.initiatorType === "xmlhttprequest" && obj.name.indexOf(xhr.__dem_xhr.url) > 0) {
+                    xmlHttpRequestTiming = obj;
+                    break
+                  }
+                }
+              }
               action({
                 category: 'network',
-                payload: xhr.__dem_xhr
+                payload: {...xhr.__dem_xhr, xmlHttpRequestTiming}
               })
             }
           }
 
-          const props = [ 'onload', 'onerror', 'onprogress' ]
+          const props = ['onload', 'onerror', 'onprogress']
           for (const prop of props) {
             wrapProp(prop, xhr)
           }
@@ -135,6 +146,7 @@ export default (dem: Dem) => {
             fetchData.status_code = resp.status
             fetchData.responseTimestamp = Date.now()
             fetchData.duration = Date.now() - startAt
+            console.log("----origFetch", window.performance.getEntries())
             action({
               category: 'network',
               payload: fetchData
