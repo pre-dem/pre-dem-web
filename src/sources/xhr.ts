@@ -16,12 +16,13 @@ export interface IXHRMessage extends ISourceMessage {
     responseText?: string
     responseTimestamp?: number
     contentLength?: number
+    xmlHttpRequestTiming?: any
   }
 }
 
 function genXHRMessage(action: string, method: string, url: string, status_code: string = null) {
   return {
-    action, method, url, status_code, duration: 0
+    action, method, url, status_code, duration: 0, xmlHttpRequestTiming: null,
   }
 }
 
@@ -76,18 +77,17 @@ export default (dem: Dem) => {
                 xhr.__dem_xhr.contentLength = contentLength;
               } catch (e) { /* do nothing */
               }
-              let xmlHttpRequestTiming = null;
               if (window.performance.getEntries) {
                 for (const obj of window.performance.getEntries()) {
                   if (obj.initiatorType === "xmlhttprequest" && obj.name.indexOf(xhr.__dem_xhr.url) > 0) {
-                    xmlHttpRequestTiming = obj;
+                    xhr.__dem_xhr.xmlHttpRequestTiming = obj;
                     break
                   }
                 }
               }
               action({
                 category: 'network',
-                payload: {...xhr.__dem_xhr, xmlHttpRequestTiming}
+                payload: xhr.__dem_xhr,
               })
             }
           }
@@ -131,7 +131,7 @@ export default (dem: Dem) => {
           }
 
           const fetchData = {
-            method, url, status_code: null, duration: 0, responseTimestamp: 0,
+            method, url, status_code: null, duration: 0, responseTimestamp: 0, xmlHttpRequestTiming: null
           }
           const startAt = Date.now()
           const timeChecker = setTimeout(() => action({
@@ -146,11 +146,18 @@ export default (dem: Dem) => {
             fetchData.status_code = resp.status
             fetchData.responseTimestamp = Date.now()
             fetchData.duration = Date.now() - startAt
-            console.log("----origFetch", window.performance.getEntries())
+            if (window.performance.getEntries) {
+              for (const obj of window.performance.getEntries()) {
+                if (obj.initiatorType === "xmlhttprequest" && obj.name.indexOf(fetchData.url) > 0) {
+                  fetchData.xmlHttpRequestTiming = obj;
+                  break
+                }
+              }
+            }
             action({
               category: 'network',
-              payload: fetchData
-            })
+              payload: fetchData,
+            });
 
             return resp
           })
