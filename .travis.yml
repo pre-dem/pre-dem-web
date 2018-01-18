@@ -1,13 +1,14 @@
 language: node_js
 node_js:
 - 6.3.0
+before_script:
+  - npm install
+  - wget -O qshell https://dn-devtools.qbox.me/2.1.5/qshell-linux-x64
+  - chmod a+x qshell
+  - ./qshell account $ak $sk
 script:
-- wget -O qshell https://dn-devtools.qbox.me/2.1.5/qshell-linux-x64
-- chmod a+x qshell
-- ./qshell account $ak $sk
-- npm install
-- npm run build
-- ./qshell rput misc $(ls dist) dist/$(ls dist)
+  - npm run build
+  - ./qshell rput misc $(ls dist) dist/$(ls dist)
 env:
   global:
   - secure: KLrSdLpIEshwfXhsWX50XzcWfc/WlfPfHHTkffoottJd0bmNKHeMn3fXGSK+RGW98qu8vAli6DstFURKaAyP+X0H/LeNqti5m8XqHuy+sx3zdu1XPbeptZw/U7lpoE30bU6A84oVu+2PAFTk6lpytpVFF1GriU4OLjMAS7APj4y1o3uCo5kZK8t+i7bxVbMhfLOOoFKdSfG0VCsiJxQAnGI8pJOLXTvVn7LD3t+OHih95EBaI8nyZO23rqnC9nSTDRBXjmQs/OoF90Ioqgzu7WxqXe/TYRJ/uEV86o+V5SU6ag62jUtdwH36u61auWOBE/U/m3YSmLk1XPFJC3uQE95rRUUp5yqiAkGoHx6VE6X5i/Nsc2e2k/8TK8hJXqJynvTxuqjf9UosJgWd5slbk0t2sCJp0oLgNhfhoCN2y5SmyZcTkBPG2Wt/N99/+Zxq1vt5uGxnsUSfKPPCas9vBqSqwLB8CoCo21SGpg0PM8Vwxe+U3yPSumXAcTdQdbTPCjjFzWYKw+Q/0pkU6+jyqxVx1naui5bbX+AVaW2M8/1I2GqOME17E2YT4SB3sxA7uVBUXNpSuOpPgsAsilkB8he2FIw+zlQNrR0hSECkUB4pqgbcTEUIyCoqmQdDK79/9oojRVJx2oCIgxrBd4XcBPJzddl3Yv4C8LOuWZHBLIg=
