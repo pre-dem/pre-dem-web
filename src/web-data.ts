@@ -302,11 +302,17 @@ export class WebData {
   };
 
   initNetworkData(message: any, tag: string): any {
-    const networkErrorCode = message.payload.status_code !== 200 ? message.payload.status_code : 0;
-    const networkErrorMsg = message.payload.status_code !== 200 ? message.payload.responseText : "";
-    const dataLength = message.payload.contentLength ? message.payload.contentLength : 0;
-    const responseTimeStamp = message.payload.ResponseTimeStamp ? message.payload.ResponseTimeStamp : 0;
     const domainAndPath = getDomainFromUrl(message.payload.url);
+    const xmlHttpRequestTiming = message.payload.xmlHttpRequestTiming;
+    let dataLength = xmlHttpRequestTiming ? xmlHttpRequestTiming.decodedBodySize : 0;
+    if (dataLength === 0 ) {
+      dataLength = message.payload.contentLength ? message.payload.contentLength : 0;
+    }
+    let duration = xmlHttpRequestTiming ? xmlHttpRequestTiming.duration : 0;
+    if (duration === 0 ) {
+      duration = message.payload.duration;
+    }
+
     return {
       time: Date.now(),
       type: "auto_captured",
@@ -318,15 +324,28 @@ export class WebData {
         domain: domainAndPath.domain,
         path: domainAndPath.path,
         method: message.payload.method,
-        host_ip: "",
         status_code: message.payload.status_code,
-        start_timestamp: message.timestamp,
-        response_time_stamp: responseTimeStamp,
-        end_timestamp: message.timestamp + message.payload.duration,
-        dns_time: 0,
-        data_length: dataLength,
-        network_error_code: networkErrorCode,
-        network_error_msg: networkErrorMsg,
+        connectEnd: xmlHttpRequestTiming ? xmlHttpRequestTiming.connectEnd : 0,
+        connectStart: xmlHttpRequestTiming ? xmlHttpRequestTiming.connectStart : 0,
+        decodedBodySize: dataLength,
+        domainLookupEnd: xmlHttpRequestTiming ? xmlHttpRequestTiming.domainLookupEnd : 0,
+        domainLookupStart: xmlHttpRequestTiming ? xmlHttpRequestTiming.domainLookupStart : 0,
+        duration: duration,
+        encodedBodySize: xmlHttpRequestTiming ? xmlHttpRequestTiming.encodedBodySize : 0,
+        entryType: xmlHttpRequestTiming ? xmlHttpRequestTiming.entryType : "",
+        fetchStart: xmlHttpRequestTiming ? xmlHttpRequestTiming.fetchStart : 0,
+        initiatorType: xmlHttpRequestTiming ? xmlHttpRequestTiming.initiatorType : "xmlhttprequest",
+        name: xmlHttpRequestTiming ? xmlHttpRequestTiming.name : "",
+        nextHopProtocol: xmlHttpRequestTiming ? xmlHttpRequestTiming.nextHopProtocol : "",
+        redirectEnd: xmlHttpRequestTiming ? xmlHttpRequestTiming.redirectEnd : 0,
+        redirectStart: xmlHttpRequestTiming ? xmlHttpRequestTiming.redirectStart : 0,
+        requestStart: xmlHttpRequestTiming ? xmlHttpRequestTiming.requestStart : 0,
+        responseEnd: xmlHttpRequestTiming ? xmlHttpRequestTiming.responseEnd : 0,
+        responseStart: xmlHttpRequestTiming ? xmlHttpRequestTiming.responseStart : 0,
+        secureConnectionStart: xmlHttpRequestTiming ? xmlHttpRequestTiming.secureConnectionStart : 0,
+        startTime: xmlHttpRequestTiming ? xmlHttpRequestTiming.startTime : 0,
+        transferSize: xmlHttpRequestTiming ? xmlHttpRequestTiming.transferSize : 0,
+        workerStart: xmlHttpRequestTiming ? xmlHttpRequestTiming.workerStart : 0,
       })
     };
   }
