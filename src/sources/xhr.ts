@@ -61,7 +61,7 @@ export default (dem: Dem) => {
                 xhr.__dem_xhr.responseTimestamp = Date.now()
             }
             if (xhr.__dem_xhr && (xhr.readyState === 1 || xhr.readyState === 4)) {
-              if (timeChecker) {
+                if (timeChecker) {
                 clearTimeout(timeChecker)
               }
 
@@ -130,7 +130,7 @@ export default (dem: Dem) => {
 
           return origFetch.apply(_window, args).then((resp) => {
             if (timeChecker) {
-              clearTimeout(timeChecker)
+                clearTimeout(timeChecker)
             }
             fetchData.status_code = resp.status
             fetchData.responseTimestamp = Date.now()

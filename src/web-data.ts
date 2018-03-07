@@ -30,6 +30,8 @@ export class WebData {
     this.webPerfEnabled = true;
     this.performanceFilter = null;
 
+
+
     let predemUuid = "";
 
     if (localStorageIsSupported()) {
@@ -64,7 +66,6 @@ export class WebData {
   setTag(tag: string): void {
     this.tag = tag;
   }
-
 
   setPerformanceFilter(filter: any): void {
     this.performanceFilter = filter;
@@ -332,6 +333,7 @@ export class WebData {
   }
 
   initErrorData(message: any, tag: string): any {
+      console.log("crash message", message);
     const crash_log_key = JSON.stringify(message.payload.stack);
     return {
       time: Date.now(),

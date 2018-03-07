@@ -65,7 +65,6 @@ export default class Transfer {
         .then(() => {
           messages.map((message: IMessage) => {
             message.sent = true
-
           });
         })
         .then(resolve)
