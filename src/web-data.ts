@@ -333,7 +333,6 @@ export class WebData {
   }
 
   initErrorData(message: any, tag: string): any {
-      console.log("crash message", message);
     const crash_log_key = JSON.stringify(message.payload.stack);
     return {
       time: Date.now(),
