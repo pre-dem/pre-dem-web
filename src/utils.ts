@@ -324,3 +324,12 @@ export function localStorageIsSupported (): boolean {
   }
 };
 
+
+export function stringIsNumber(str: string): boolean {
+    const n = Number(str);
+    if (!isNaN(n)) {
+        return true
+    }
+    return false
+}
+

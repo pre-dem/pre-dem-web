@@ -2,7 +2,7 @@ import dem from "./dem"
 import Transfer from "./transfer"
 import webData from './web-data'
 
-import {getCurrentScript} from "./utils"
+import {getCurrentScript, stringIsNumber} from "./utils"
 require('isomorphic-fetch');
 
 (function (win) {
@@ -65,6 +65,16 @@ class Predem {
     const ajaxEnabled = currentScript.getAttribute("data-ajax-enabled");
     const crashEnabled = currentScript.getAttribute("data-crash-enabled");
     const webPerfEnabled = currentScript.getAttribute("data-performance-enable");
+
+    const sendBuffeCapacity = currentScript.getAttribute( "send-buffer-capacity");
+    if(sendBuffeCapacity && sendBuffeCapacity.length > 0) {
+      if (stringIsNumber(sendBuffeCapacity)) {
+          dem.messages.messageThreshold = parseInt(sendBuffeCapacity);
+      } else {
+          console.error("ajax-store-length must a number string");
+          return
+      }
+    }
 
     this.checkAttributeValue(ajaxEnabled);
     this.checkAttributeValue(crashEnabled);
