@@ -18,7 +18,6 @@ const isBreadcrumb = (category: string) => {
 }
 
 export class MessagesStore {
-
     counter = 0
     parent: Dem
     store = new CollectionStore<IMessage>('messages')
