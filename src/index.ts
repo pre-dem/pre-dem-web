@@ -66,12 +66,12 @@ class Predem {
     const crashEnabled = currentScript.getAttribute("data-crash-enabled");
     const webPerfEnabled = currentScript.getAttribute("data-performance-enable");
 
-    const ajaxStoreLength = currentScript.getAttribute( "ajax-store-length");
-    if (ajaxStoreLength && ajaxStoreLength.length > 0 && !stringIsNumber(ajaxStoreLength)) {
+    const sendBuffeCapacity = currentScript.getAttribute( "send_buffer_capacity");
+    if (sendBuffeCapacity && sendBuffeCapacity.length > 0 && !stringIsNumber(sendBuffeCapacity)) {
         console.error("ajax-store-length must a number string");
         return
-    } else if (ajaxStoreLength && ajaxStoreLength.length > 0 && stringIsNumber(ajaxStoreLength)) {
-        dem.messages.messageThreshold = parseInt(ajaxStoreLength);
+    } else if (sendBuffeCapacity && sendBuffeCapacity.length > 0 && stringIsNumber(sendBuffeCapacity)) {
+        dem.messages.messageThreshold = parseInt(sendBuffeCapacity);
     }
 
     this.checkAttributeValue(ajaxEnabled);
