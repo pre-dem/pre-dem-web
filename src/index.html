@@ -123,33 +123,17 @@
         }
     }
 
-    var urls  = ["https://httpbin.org/get?show_env=1", "https://httpbin.org/post"];
-
     function sendAjaxAndResponseData() {
-        for (var index in urls) {
-            $.ajax({
-                url: "https://bhk5aaghth5n.predem.qiniuapi.com/v2/A_07WC7m/app-config",
-                type: 'post',
-                data: {test: "333333"},
-                success: function(){
-                    console.log("success")
-                },
-                error: function(){
-                    console.log("error")
-                }
-            })
-        }
-
-    }
-
-    function test() {
         $.ajax({
-            url: "http://pay.100bt.com/direct/aobiquery.action",
-            type: "POST",
-            dataType: "json",
+            url: "https://httpbin.org/post",
+            type: 'post',
             data: {test: "333333"},
-        }).done(function (response) {
-            console.log("response", response)
+            success: function(){
+                console.log("success")
+            },
+            error: function(){
+                console.log("error")
+            }
         })
     }
     
@@ -175,8 +159,7 @@
     <button onclick="sendAjax1()" style="height: 35px">发送 4xx code 请求</button>
     <button onclick="sendAjax2()" style="height: 35px">发送 5xx code 请求</button>
     <button onclick="sendAjax3()" style="height: 35px">发送 2xx code 请求</button>
-    <button onclick="sendAjaxAndResponseData()" style="height: 35px">发送请求</button>
-    <button onclick="test()" style="height: 35px">发送请求</button>
+    <button onclick="sendAjaxAndResponseData()" style="height: 35px">发送请求 post Data</button>
 </div>
 <div style="height: 30px"></div>
 <div>

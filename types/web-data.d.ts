@@ -12,6 +12,7 @@ export declare class WebData {
     setTag(tag: string): void;
     setPerformanceFilter(filter: any): void;
     getAppConfig(): void;
+    fetchAppConfig(url: string, data: any): any;
     setAppConfig(newAppConfig: any): void;
     getSendDataConfig(): any;
     sendEventData(batchData: any[]): any;

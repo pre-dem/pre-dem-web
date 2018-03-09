@@ -50,7 +50,7 @@ export class MessagesStore {
         }
 
         if (localStorageIsSupported) {
-            if (message.data.category === 'network') {
+            if (message.data.category === 'network' && this.messageThreshold > 1) {
                 // 合并发送
 
                 let networkMessageArray = [];
@@ -75,7 +75,7 @@ export class MessagesStore {
                     window.localStorage["networkMessageArray"] = JSON.stringify(networkMessageArray);
                 }
 
-            } else if (message.data.category === 'console') {
+            } else if (message.data.category === 'console' && this.messageThreshold > 1) {
                 // 合并发送
                 let consoleMessageArray = [];
 
