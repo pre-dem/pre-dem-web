@@ -66,7 +66,7 @@ const DEFAULT_DEM_OPTION: DemOption = {
   },
   autoBreadcrumbs: {
     xhr: true,
-    console: false,
+    console: true,
     performance: true
   }
 }
