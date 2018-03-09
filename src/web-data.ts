@@ -82,17 +82,7 @@ export class WebData {
     }
     if (oldAppConfig === null || oldAppConfig === undefined) {
       // 获取 config
-      _window._origin_fetch(url, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'text/plain',
-        },
-        body: JSON.stringify(data),
-      }).then((response: any) => {
-        response.text().then((result) => {
-          this.setAppConfig(JSON.parse(result));
-        })
-      })
+        this.fetchAppConfig(url, data);
     } else {
       const oldTimestamp = JSON.parse(oldAppConfig).time;
       const oldDateStr = convertDateToDateStr(new Date(oldTimestamp), false, "-");
@@ -100,22 +90,40 @@ export class WebData {
       const nowDateStr = convertDateToDateStr(nowDate, false, "-");
       if (oldDateStr !== nowDateStr) {
         // 获取 config
-        _window._origin_fetch(url, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'text/plain',
-          },
-          body: JSON.stringify(data),
-        }).then((response: any) => {
-          response.text().then((result) => {
-            this.setAppConfig(JSON.parse(result));
-
-          })
-        })
+          this.fetchAppConfig(url, data);
       }
 
     }
 
+  }
+
+  fetchAppConfig(url: string, data: any): any {
+      _window._origin_fetch(url, {
+          method: 'POST',
+          headers: {
+              'Content-Type': 'text/plain',
+          },
+          body: JSON.stringify(data),
+      }).then((response: any) => {
+          response.text().then((result) => {
+              this.setAppConfig(JSON.parse(result));
+
+          })
+      }).catch((e: any) => {
+        console.log("get app config error", e);
+          const storageConfig = {
+              ajaxEnabled: this.ajaxEnabled,
+              crashEnabled: this.crashEnabled,
+              webPerfEnabled: this.webPerfEnabled,
+              time: new Date().getTime(),
+          };
+
+          if (localStorageIsSupported()) {
+              window.localStorage["appConfig"] = JSON.stringify(storageConfig);
+          } else {
+              setCookier("appConfig", JSON.stringify(storageConfig));
+          }
+      })
   }
 
   setAppConfig(newAppConfig: any): void {
