@@ -49,6 +49,7 @@ export default (dem: Dem) => {
 
       fill(xhrproto, 'send', (originFunc) => {
         return function(data) { // preserve arity
+            console.log("this=", this);
           const xhr = this
           const startAt = Date.now()
           const timeChecker = setTimeout(() => action({
@@ -57,6 +58,7 @@ export default (dem: Dem) => {
           }), 30 * 1000 /* 30 sec */)
 
           function onreadystatechangeHandler() {
+            console.log("function onreadystatechangeHandler", xhr.readyState)
             if (xhr.__dem_xhr && (xhr.readyState === 2)) {
                 xhr.__dem_xhr.responseTimestamp = Date.now()
             }
@@ -87,9 +89,11 @@ export default (dem: Dem) => {
           }
 
           if ('onreadystatechange' in xhr && isFunction(xhr.onreadystatechange)) {
+            console.log("onreadystatechange in xhr", xhr)
             fill(xhr, 'onreadystatechange', (orig) => dem.wrap(orig, undefined, onreadystatechangeHandler))
           } else {
-            xhr.onreadystatechange = onreadystatechangeHandler
+              console.log("xhr.onreadystatechange  == onreadystatechangeHandler")
+              xhr.onreadystatechange = onreadystatechangeHandler
           }
 
           return originFunc.apply(this, arguments)
