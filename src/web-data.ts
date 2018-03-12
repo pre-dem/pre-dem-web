@@ -311,10 +311,12 @@ export class WebData {
   };
 
   initNetworkData(message: any, tag: string): any {
+    const startTimestamp = message.payload.start_timestamp ? message.payload.start_timestamp : 0;
+    const responseTimeStamp = message.payload.response_timestamp ? message.payload.response_timestamp : 0;
+    const endTimeStamp = message.payload.end_timestamp ? message.payload.end_timestamp : 0;
     const networkErrorCode = message.payload.status_code !== 200 ? message.payload.status_code : 0;
     const networkErrorMsg = message.payload.status_code !== 200 ? message.payload.responseText : "";
-    const dataLength = message.payload.contentLength ? message.payload.contentLength : 0;
-    const responseTimeStamp = message.payload.ResponseTimeStamp ? message.payload.ResponseTimeStamp : 0;
+    const dataLength = message.payload.content_length ? message.payload.content_length : 0;
     const domainAndPath = getDomainFromUrl(message.payload.url);
     return {
       time: Date.now(),
@@ -329,9 +331,9 @@ export class WebData {
         method: message.payload.method,
         host_ip: "",
         status_code: message.payload.status_code,
-        start_timestamp: message.timestamp,
+        start_timestamp: startTimestamp,
         response_time_stamp: responseTimeStamp,
-        end_timestamp: message.timestamp + message.payload.duration,
+        end_timestamp: endTimeStamp,
         dns_time: 0,
         data_length: dataLength,
         network_error_code: networkErrorCode,

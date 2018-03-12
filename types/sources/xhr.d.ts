@@ -7,9 +7,10 @@ export interface IXHRMessage extends ISourceMessage {
         url: string;
         status_code?: string;
         duration?: number;
-        responseText?: string;
-        responseTimestamp?: number;
-        contentLength?: number;
+        response_text?: string;
+        start_timestamp?: number;
+        response_timestamp?: number;
+        content_length?: number;
     };
 }
 declare const _default: (dem: Dem) => Source<IXHRMessage>;
