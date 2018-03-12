@@ -107,7 +107,8 @@ export default (dem: Dem) => {
           const jqueryVersion = window["$"] ? window["$"].prototype.jquery : ""
           if (jqueryVersion !== "") {
             const firstVersion = jqueryVersion.substring(0, 1);
-              if (parseInt(firstVersion) < 2) { // 低版本 使用 onload
+            const secondVersion = jqueryVersion.substring(1, 1)
+              if (parseInt(firstVersion) < 2 && parseInt(secondVersion) <= 5) { // 低版本 使用 onload, 不兼容 1.5 以下包含1.5
 
                 if ('onloadstart' in xhr && isFunction(xhr.onloadstart)) {
                     fill(xhr, 'onloadstart', (orig) => dem.wrap(orig, undefined, onloadstart))
@@ -121,13 +122,15 @@ export default (dem: Dem) => {
                     xhr.onload = onload
                 }
 
-            } else { // 高版本 使用 onreadystatechange
+            } else if (parseInt(firstVersion) >= 2){ // 高版本 使用 onreadystatechange
                 if ('onreadystatechange' in xhr && isFunction(xhr.onreadystatechange)) {
                     fill(xhr, 'onreadystatechange', (orig) => dem.wrap(orig, undefined, onreadystatechangeHandler))
                 } else {
                     xhr.onreadystatechange = onreadystatechangeHandler
                 }
-            }
+            } else {
+                  console.error("jquert 版本过低,不兼容")
+              }
 
           } else {
             console.error("jquert not exist")
