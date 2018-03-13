@@ -12,9 +12,10 @@ export interface IXHRMessage extends ISourceMessage {
     url: string
     status_code?: string
     duration?: number // 0 for timeout
-    responseText?: string
-    responseTimestamp?: number
-    contentLength?: number
+    response_text?: string
+    start_timestamp?: number
+    response_timestamp?: number
+    content_length?: number
   }
 }
 
@@ -50,7 +51,7 @@ export default (dem: Dem) => {
       fill(xhrproto, 'send', (originFunc) => {
         return function(data) { // preserve arity
           const xhr = this
-          const startAt = Date.now()
+          xhr.__dem_xhr.start_timestamp = Date.now();
           const timeChecker = setTimeout(() => action({
             category: 'network',
             payload: xhr.__dem_xhr
@@ -58,7 +59,7 @@ export default (dem: Dem) => {
 
           function onreadystatechangeHandler() {
             if (xhr.__dem_xhr && (xhr.readyState === 2)) {
-                xhr.__dem_xhr.responseTimestamp = Date.now()
+                xhr.__dem_xhr.response_timestamp = Date.now()
             }
             if (xhr.__dem_xhr && (xhr.readyState === 1 || xhr.readyState === 4)) {
                 if (timeChecker) {
@@ -68,11 +69,12 @@ export default (dem: Dem) => {
               try {
                 // touching statusCode in some platforms throws
                 // an exception
+                xhr.__dem_xhr.end_imestamp = Date.now()
                 xhr.__dem_xhr.status_code = xhr.status
-                xhr.__dem_xhr.duration = Date.now() - startAt
-                xhr.__dem_xhr.responseText = xhr.responseText
-                const contentLength = xhr.responseText ? xhr.responseText.length : 0;
-                xhr.__dem_xhr.contentLength = contentLength;
+                xhr.__dem_xhr.duration = xhr.__dem_xhr.end_timestamp - xhr.__dem_xhr.start_timestamp
+                xhr.__dem_xhr.response_text = xhr.responseText
+                const contentLength = xhr.responseText ? xhr.responseText.length : 0
+                xhr.__dem_xhr.content_length = contentLength
               } catch (e) { /* do nothing */ }
               action({
                 category: 'network',
@@ -81,15 +83,58 @@ export default (dem: Dem) => {
             }
           }
 
+          function onloadstart(e) {
+             xhr.__dem_xhr.response_timestamp = Date.now()
+          }
+
+          function onload(e) {
+            xhr.__dem_xhr.status_code = e.target.status
+            xhr.__dem_xhr.response_text = e.target.responseText
+            xhr.__dem_xhr.content_length = e.total
+            xhr.__dem_xhr.end_timestamp = Date.now()
+            xhr.__dem_xhr.duration = xhr.__dem_xhr.end_timestamp - xhr.__dem_xhr.start_timestamp
+            action({
+              category: 'network',
+              payload: xhr.__dem_xhr
+            })
+          }
+
           const props = [ 'onload', 'onerror', 'onprogress' ]
           for (const prop of props) {
             wrapProp(prop, xhr)
           }
 
-          if ('onreadystatechange' in xhr && isFunction(xhr.onreadystatechange)) {
-            fill(xhr, 'onreadystatechange', (orig) => dem.wrap(orig, undefined, onreadystatechangeHandler))
+          const jqueryVersion = window["$"] ? window["$"].prototype.jquery : ""
+          if (jqueryVersion !== "") {
+            const array = jqueryVersion.split(".")
+            const firstVersion = array[0]
+            const secondVersion = array[1]
+              if (parseInt(firstVersion) < 2 && parseInt(secondVersion) >= 6) { // 低版本 使用 onload, 不兼容 1.5 以下包含1.5
+
+                if ('onloadstart' in xhr && isFunction(xhr.onloadstart)) {
+                    fill(xhr, 'onloadstart', (orig) => dem.wrap(orig, undefined, onloadstart))
+                } else {
+                    xhr.onloadstart = onloadstart
+                }
+
+                if ('onload' in xhr && isFunction(xhr.onload)) {
+                    fill(xhr, 'onload', (orig) => dem.wrap(orig, undefined, onload))
+                } else {
+                    xhr.onload = onload
+                }
+
+            } else if (parseInt(firstVersion) >= 2){ // 高版本 使用 onreadystatechange
+                if ('onreadystatechange' in xhr && isFunction(xhr.onreadystatechange)) {
+                    fill(xhr, 'onreadystatechange', (orig) => dem.wrap(orig, undefined, onreadystatechangeHandler))
+                } else {
+                    xhr.onreadystatechange = onreadystatechangeHandler
+                }
+            } else {
+                  console.error("jquert 版本过低,不兼容")
+              }
+
           } else {
-            xhr.onreadystatechange = onreadystatechangeHandler
+            console.error("jquert not exist")
           }
 
           return originFunc.apply(this, arguments)
