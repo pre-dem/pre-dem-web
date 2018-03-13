@@ -328,6 +328,7 @@ export class WebData {
       content: JSON.stringify({
         domain: domainAndPath.domain,
         path: domainAndPath.path,
+        url: message.payload.url,
         method: message.payload.method,
         host_ip: "",
         status_code: message.payload.status_code,
