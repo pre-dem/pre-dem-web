@@ -73,8 +73,8 @@ export default (dem: Dem) => {
                 xhr.__dem_xhr.status_code = xhr.status
                 xhr.__dem_xhr.duration = xhr.__dem_xhr.end_timestamp - xhr.__dem_xhr.start_timestamp
                 xhr.__dem_xhr.response_text = xhr.responseText
-                const contentLength = xhr.responseText ? xhr.responseText.length : 0;
-                xhr.__dem_xhr.content_length = contentLength;
+                const contentLength = xhr.responseText ? xhr.responseText.length : 0
+                xhr.__dem_xhr.content_length = contentLength
               } catch (e) { /* do nothing */ }
               action({
                 category: 'network',
@@ -88,10 +88,10 @@ export default (dem: Dem) => {
           }
 
           function onload(e) {
-            xhr.__dem_xhr.status_code = e.target.status;
-            xhr.__dem_xhr.response_text = e.target.responseText;
-            xhr.__dem_xhr.content_length = e.total;
-            xhr.__dem_xhr.end_timestamp = Date.now();
+            xhr.__dem_xhr.status_code = e.target.status
+            xhr.__dem_xhr.response_text = e.target.responseText
+            xhr.__dem_xhr.content_length = e.total
+            xhr.__dem_xhr.end_timestamp = Date.now()
             xhr.__dem_xhr.duration = xhr.__dem_xhr.end_timestamp - xhr.__dem_xhr.start_timestamp
             action({
               category: 'network',
@@ -106,9 +106,10 @@ export default (dem: Dem) => {
 
           const jqueryVersion = window["$"] ? window["$"].prototype.jquery : ""
           if (jqueryVersion !== "") {
-            const firstVersion = jqueryVersion.substring(0, 1);
-            const secondVersion = jqueryVersion.substring(1, 1)
-              if (parseInt(firstVersion) < 2 && parseInt(secondVersion) <= 5) { // 低版本 使用 onload, 不兼容 1.5 以下包含1.5
+            const array = jqueryVersion.split(".")
+            const firstVersion = array[0]
+            const secondVersion = array[1]
+              if (parseInt(firstVersion) < 2 && parseInt(secondVersion) >= 6) { // 低版本 使用 onload, 不兼容 1.5 以下包含1.5
 
                 if ('onloadstart' in xhr && isFunction(xhr.onloadstart)) {
                     fill(xhr, 'onloadstart', (orig) => dem.wrap(orig, undefined, onloadstart))
