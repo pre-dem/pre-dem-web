@@ -209,7 +209,6 @@ export function convertDateToDateStr(oldDate: Date, hasHour: boolean, separator:
 }
 
 export function getDomainFromUrl(urlStr: string): any {
-
   if (!urlStr || urlStr.length === 0) {
     return {domain: "", path: ""}
   }
@@ -219,20 +218,21 @@ export function getDomainFromUrl(urlStr: string): any {
   }
 
   const browserType = getBrowserInfo().type;
-  if (browserType === "IE") {
+    if (browserType === "IE") {
     let domain = "";
     let path = "";
-    if (urlStr.indexOf("?") !== -1) {
       const array = urlStr.split("//");
-      if (array.length === 2) {
-        const hostAndPathArray = array[1].split("/");
-        if (hostAndPathArray.length === 2) {
-            domain = hostAndPathArray[0]
-            path = hostAndPathArray[1]
-            return {domain: domain, path: path}
-        }
-      }
-
+        if (array.length === 2) {
+          let domainAndPath = array[1];
+          const hostAndPathArray = domainAndPath.split("/");
+            if (hostAndPathArray.length === 1) {
+              return {domain: hostAndPathArray[0], path: ""}
+            } else {
+              domain = hostAndPathArray[0];
+              hostAndPathArray.splice(0, 1);
+              path = hostAndPathArray.join("/");
+              return {domain: domain, path: "/" + path}
+            }
     }
 
     return {domain: "", path: ""}

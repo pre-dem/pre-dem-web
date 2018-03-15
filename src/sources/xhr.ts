@@ -69,17 +69,21 @@ export default (dem: Dem) => {
               try {
                 // touching statusCode in some platforms throws
                 // an exception
-                xhr.__dem_xhr.end_imestamp = Date.now()
+                xhr.__dem_xhr.end_timestamp = Date.now()
                 xhr.__dem_xhr.status_code = xhr.status
                 xhr.__dem_xhr.duration = xhr.__dem_xhr.end_timestamp - xhr.__dem_xhr.start_timestamp
                 xhr.__dem_xhr.response_text = xhr.responseText
                 const contentLength = xhr.responseText ? xhr.responseText.length : 0
                 xhr.__dem_xhr.content_length = contentLength
               } catch (e) { /* do nothing */ }
-              action({
-                category: 'network',
-                payload: xhr.__dem_xhr
-              })
+
+                if (this.__dem_xhr.url.indexOf(dem.messages.apiDomain) === -1) {
+                    action({
+                        category: 'network',
+                        payload: xhr.__dem_xhr
+                    })
+                }
+
             }
           }
 
@@ -168,6 +172,7 @@ export default (dem: Dem) => {
             method, url, status_code: null, duration: 0, responseTimestamp: 0,
           }
           const startAt = Date.now()
+            console.log("fetch create timeChecker")
           const timeChecker = setTimeout(() => action({
             category: 'network',
             payload: fetchData
@@ -175,12 +180,14 @@ export default (dem: Dem) => {
 
           return origFetch.apply(_window, args).then((resp) => {
             if (timeChecker) {
+                console.log("fetch clear timeChecker")
                 clearTimeout(timeChecker)
             }
             fetchData.status_code = resp.status
             fetchData.responseTimestamp = Date.now()
             fetchData.duration = Date.now() - startAt
-            action({
+              console.log("fetch action")
+              action({
               category: 'network',
               payload: fetchData
             })
