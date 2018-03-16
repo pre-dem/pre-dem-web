@@ -76,13 +76,17 @@ export default (dem: Dem) => {
                 const contentLength = xhr.responseText ? xhr.responseText.length : 0
                 xhr.__dem_xhr.content_length = contentLength
               } catch (e) { /* do nothing */ }
+               action({
+                    category: 'network',
+                    payload: xhr.__dem_xhr
+                })
 
-                if (this.__dem_xhr.url.indexOf(dem.messages.apiDomain) === -1) {
-                    action({
-                        category: 'network',
-                        payload: xhr.__dem_xhr
-                    })
-                }
+                // if (this.__dem_xhr.url.indexOf(dem.messages.apiDomain) === -1) {
+                //     action({
+                //         category: 'network',
+                //         payload: xhr.__dem_xhr
+                //     })
+                // }
 
             }
           }
@@ -172,7 +176,6 @@ export default (dem: Dem) => {
             method, url, status_code: null, duration: 0, responseTimestamp: 0,
           }
           const startAt = Date.now()
-            console.log("fetch create timeChecker")
           const timeChecker = setTimeout(() => action({
             category: 'network',
             payload: fetchData
@@ -180,13 +183,11 @@ export default (dem: Dem) => {
 
           return origFetch.apply(_window, args).then((resp) => {
             if (timeChecker) {
-                console.log("fetch clear timeChecker")
                 clearTimeout(timeChecker)
             }
             fetchData.status_code = resp.status
             fetchData.responseTimestamp = Date.now()
             fetchData.duration = Date.now() - startAt
-              console.log("fetch action")
               action({
               category: 'network',
               payload: fetchData

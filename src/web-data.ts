@@ -230,6 +230,7 @@ export class WebData {
   }
 
   getRequestFun(url: string, type: string, result: string): any {
+    console.log("getRequestFun", url , type)
     return _window._origin_fetch(url, {
         method: 'POST',
         headers: {

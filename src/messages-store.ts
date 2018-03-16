@@ -30,7 +30,6 @@ export class MessagesStore {
     }
 
     add(data: ISourceMessage) {
-        console.log("add message", data)
         // 判断是否 add 数据
         const appConfig = webData.getSendDataConfig();
         if (appConfig !== null) {
@@ -51,7 +50,6 @@ export class MessagesStore {
 
         // 过滤 数据上报的请求
         if (message.data.category === 'network' && this.apiDomain != "") {
-            console.log("message.data", message.data.payload.url, this.apiDomain)
             if (message.data.payload.url.indexOf(this.apiDomain) !== -1) {
                 return;
             }

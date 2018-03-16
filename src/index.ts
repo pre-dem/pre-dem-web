@@ -3,7 +3,7 @@ import Transfer from "./transfer"
 import webData from './web-data'
 
 import {getCurrentScript, stringIsNumber} from "./utils"
-require('isomorphic-fetch');
+// require('isomorphic-fetch');
 
 (function (win) {
 
