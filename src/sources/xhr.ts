@@ -81,13 +81,6 @@ export default (dem: Dem) => {
                     payload: xhr.__dem_xhr
                 })
 
-                // if (this.__dem_xhr.url.indexOf(dem.messages.apiDomain) === -1) {
-                //     action({
-                //         category: 'network',
-                //         payload: xhr.__dem_xhr
-                //     })
-                // }
-
             }
           }
 
@@ -188,7 +181,7 @@ export default (dem: Dem) => {
             fetchData.status_code = resp.status
             fetchData.responseTimestamp = Date.now()
             fetchData.duration = Date.now() - startAt
-              action({
+            action({
               category: 'network',
               payload: fetchData
             })
