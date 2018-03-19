@@ -3,7 +3,6 @@ import Transfer from "./transfer"
 import webData from './web-data'
 
 import {getCurrentScript, stringIsNumber} from "./utils"
-require('isomorphic-fetch');
 
 (function (win) {
 
@@ -58,6 +57,8 @@ class Predem {
     if (domain.length == 0) {
       console.error("domain can not be null");
       return
+    } else {
+        dem.messages.apiDomain = domain;
     }
     const tag = currentScript.getAttribute("data-tag");
     const appId = appKey.substring(0, APP_ID_LENGTH);

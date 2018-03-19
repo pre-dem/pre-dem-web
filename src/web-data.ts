@@ -216,15 +216,14 @@ export class WebData {
         result = JSON.stringify(this.initErrorData(datas[0], this.tag));
       } else if (type === "network") {
         datas.map((data) => {
-          if (getDomainFromUrl(data.payload.url).Domain !== this.domain) {
             result = result + JSON.stringify(this.initNetworkData(data, this.tag)) + "\n";
-          }
         });
       } else if (type === "console") {
         datas.map((data) => {
           result = result + JSON.stringify(this.initConsoleData(data, this.tag)) + "\n";
         });
       }
+
       return this.getRequestFun(url, type, result)
     }
 
@@ -314,8 +313,9 @@ export class WebData {
     const startTimestamp = message.payload.start_timestamp ? message.payload.start_timestamp : 0;
     const responseTimeStamp = message.payload.response_timestamp ? message.payload.response_timestamp : 0;
     const endTimeStamp = message.payload.end_timestamp ? message.payload.end_timestamp : 0;
-    const networkErrorCode = message.payload.status_code !== 200 ? message.payload.status_code : 0;
-    const networkErrorMsg = message.payload.status_code !== 200 ? message.payload.responseText : "";
+    const networkErrorCode = message.payload.duration === 0 ? -1 : 0;
+    const statusCode = networkErrorCode === -1 ? 0 : message.payload.status_code;
+    const networkErrorMsg = message.payload.duration === 0 ? message.payload.responseText : "";
     const dataLength = message.payload.content_length ? message.payload.content_length : 0;
     const domainAndPath = getDomainFromUrl(message.payload.url);
     return {
@@ -331,7 +331,7 @@ export class WebData {
         url: message.payload.url,
         method: message.payload.method,
         host_ip: "",
-        status_code: message.payload.status_code,
+        status_code: statusCode,
         start_timestamp: startTimestamp,
         response_time_stamp: responseTimeStamp,
         end_timestamp: endTimeStamp,

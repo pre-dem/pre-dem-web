@@ -69,17 +69,18 @@ export default (dem: Dem) => {
               try {
                 // touching statusCode in some platforms throws
                 // an exception
-                xhr.__dem_xhr.end_imestamp = Date.now()
+                xhr.__dem_xhr.end_timestamp = Date.now()
                 xhr.__dem_xhr.status_code = xhr.status
                 xhr.__dem_xhr.duration = xhr.__dem_xhr.end_timestamp - xhr.__dem_xhr.start_timestamp
                 xhr.__dem_xhr.response_text = xhr.responseText
                 const contentLength = xhr.responseText ? xhr.responseText.length : 0
                 xhr.__dem_xhr.content_length = contentLength
               } catch (e) { /* do nothing */ }
-              action({
-                category: 'network',
-                payload: xhr.__dem_xhr
-              })
+               action({
+                    category: 'network',
+                    payload: xhr.__dem_xhr
+                })
+
             }
           }
 

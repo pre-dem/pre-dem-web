@@ -3,7 +3,7 @@ import {ISourceMessage} from './source'
 import {Dem} from './dem'
 import logger from './logger'
 import webData from "./web-data"
-import {localStorageIsSupported} from "./utils";
+import {getDomainFromUrl, localStorageIsSupported} from "./utils";
 
 
 export interface IMessage {
@@ -22,6 +22,7 @@ export class MessagesStore {
     parent: Dem
     store = new CollectionStore<IMessage>('messages')
     messageThreshold = 5
+    apiDomain = "";
     maxTime = 5 * 60 * 1000
 
     constructor(parent: Dem) {
@@ -29,7 +30,6 @@ export class MessagesStore {
     }
 
     add(data: ISourceMessage) {
-
         // 判断是否 add 数据
         const appConfig = webData.getSendDataConfig();
         if (appConfig !== null) {
@@ -42,11 +42,17 @@ export class MessagesStore {
             }
         }
 
-
         const message: IMessage = {
             id: ++this.counter,
             data,
             sent: false
+        }
+
+        // 过滤 数据上报的请求
+        if (message.data.category === 'network' && this.apiDomain != "") {
+            if (message.data.payload.url.indexOf(this.apiDomain) !== -1) {
+                return;
+            }
         }
 
         if (localStorageIsSupported) {

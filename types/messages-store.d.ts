@@ -11,6 +11,7 @@ export declare class MessagesStore {
     parent: Dem;
     store: CollectionStore<IMessage>;
     messageThreshold: number;
+    apiDomain: string;
     maxTime: number;
     constructor(parent: Dem);
     add(data: ISourceMessage): void;
