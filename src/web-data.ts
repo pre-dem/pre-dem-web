@@ -20,6 +20,7 @@ export class WebData {
   webPerfEnabled: boolean;
   uuid: string;
   performanceFilter: any;
+  appVersion: string;
 
   constructor() {
     this.appId = "";
@@ -29,6 +30,7 @@ export class WebData {
     this.crashEnabled = true;
     this.webPerfEnabled = true;
     this.performanceFilter = null;
+    this.appVersion = "1.0.0";
 
 
 
@@ -65,6 +67,10 @@ export class WebData {
 
   setTag(tag: string): void {
     this.tag = tag;
+  }
+
+  setVersion(version: string): void {
+    this.appVersion = version;
   }
 
   setPerformanceFilter(filter: any): void {
@@ -269,6 +275,7 @@ export class WebData {
       time: Date.now(),
       type: "custom",
       name: name,
+      app_version: this.appVersion,
       sdk_version: VERSION,
       sdk_id: this.uuid,
       tag: tag,
@@ -299,6 +306,7 @@ export class WebData {
       time: Date.now(),
       type: "auto_captured",
       name: "performance",
+      app_version: this.appVersion,
       sdk_version: VERSION,
       sdk_id: this.uuid,
       tag: tag,
@@ -322,6 +330,7 @@ export class WebData {
       time: Date.now(),
       type: "auto_captured",
       name: "monitor",
+      app_version: this.appVersion,
       sdk_version: VERSION,
       sdk_id: this.uuid,
       tag: tag,
@@ -349,6 +358,7 @@ export class WebData {
       time: Date.now(),
       type: "auto_captured",
       name: "crash",
+      app_version: this.appVersion,
       sdk_version: VERSION,
       sdk_id: this.uuid,
       tag: tag,
@@ -366,6 +376,7 @@ export class WebData {
       time: Date.now(),
       type: "auto_captured",
       name: "log",
+      app_version: this.appVersion,
       sdk_version: VERSION,
       sdk_id: this.uuid,
       tag: tag,
