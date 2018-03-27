@@ -30,8 +30,8 @@ import {getCurrentScript, stringIsNumber} from "./utils"
 
     };
 
-    this.setVersion = function (version: string) {
-        predem.setVersion(version);
+    this.setAppVersion = function (version: string) {
+        predem.setAppVersion(version);
     }
   }
 
@@ -102,7 +102,7 @@ class Predem {
     webData.setTag(tag);
   }
 
-  setVersion(version: string): void {
+   setAppVersion(version: string): void {
       webData.setVersion(version);
   }
 

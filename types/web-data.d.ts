@@ -7,9 +7,11 @@ export declare class WebData {
     webPerfEnabled: boolean;
     uuid: string;
     performanceFilter: any;
+    appVersion: string;
     constructor();
     init(appId: string, domain: string, ajaxEnabled: string, crashEnabled: string, webPerfEnabled: string): void;
     setTag(tag: string): void;
+    setVersion(version: string): void;
     setPerformanceFilter(filter: any): void;
     getAppConfig(): void;
     fetchAppConfig(url: string, data: any): any;
