@@ -1,5 +1,5 @@
 import Source from '../source'
-import {getDomainFromUrl} from './../utils'
+import {getDomainAndPathInfoFromUrl} from './../utils'
 import webData from "./../web-data"
 export default () => {
   return new Source('performance', (action) => {
@@ -19,10 +19,15 @@ export default () => {
               if (resourceTiming.entryType === "resource" && resourceTiming.connectStart !== 0
                 && resourceTiming.duration !== 0 && resourceTiming.requestStart !== 0
                 && resourceTiming.domainLookupStart !== 0) {
-                var cleanObject = JSON.parse(JSON.stringify(resourceTiming))
-                const domainAndPath = getDomainFromUrl(cleanObject.name);
-                cleanObject.domain = domainAndPath.domain
-                cleanObject.path = domainAndPath.path
+                var cleanObject = JSON.parse(JSON.stringify(resourceTiming));
+                const domainAndPath = getDomainAndPathInfoFromUrl(cleanObject.name);
+                cleanObject.domain = domainAndPath.domain;
+                cleanObject.path = domainAndPath.path;
+                cleanObject.path1 = domainAndPath.path1;
+                cleanObject.path2 = domainAndPath.path2;
+                cleanObject.path3 = domainAndPath.path3;
+                cleanObject.path4 = domainAndPath.path4;
+                cleanObject.query = domainAndPath.query;
                 newResourceTimings.push(cleanObject);
               }
 

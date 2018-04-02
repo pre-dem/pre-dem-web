@@ -3,8 +3,8 @@
  */
 
 import {_window} from './detection'
-import {getDomainFromUrl, getCookier, setCookier, generateUUID
-  , localStorageIsSupported, convertDateToDateStr } from './utils'
+import {getCookier, setCookier, generateUUID
+  , localStorageIsSupported, convertDateToDateStr, getDomainAndPathInfoFromUrl } from './utils'
 
 
 const packageJson = require('../package.json');
@@ -31,8 +31,6 @@ export class WebData {
     this.webPerfEnabled = true;
     this.performanceFilter = null;
     this.appVersion = "1.0.0";
-
-
 
     let predemUuid = "";
 
@@ -325,7 +323,7 @@ export class WebData {
     const statusCode = networkErrorCode === -1 ? 0 : message.payload.status_code;
     const networkErrorMsg = message.payload.duration === 0 ? message.payload.responseText : "";
     const dataLength = message.payload.content_length ? message.payload.content_length : 0;
-    const domainAndPath = getDomainFromUrl(message.payload.url);
+    const domainAndPath = getDomainAndPathInfoFromUrl(message.payload.url);
     return {
       time: Date.now(),
       type: "auto_captured",
@@ -337,6 +335,11 @@ export class WebData {
       content: JSON.stringify({
         domain: domainAndPath.domain,
         path: domainAndPath.path,
+        path1: domainAndPath.path1,
+        path2: domainAndPath.path2,
+        path3: domainAndPath.path3,
+        path4: domainAndPath.path4,
+        query: domainAndPath.query,
         url: message.payload.url,
         method: message.payload.method,
         host_ip: "",
@@ -392,7 +395,7 @@ export class WebData {
       time: Date.now(),
       type: "auto_captured",
       name: "app",
-      sdk_version: VERSION,
+      sdk_version: this.appVersion,
       sdk_id: this.uuid,
       tag: tag,
     }

@@ -23,7 +23,6 @@ export declare function isArray(raw: any): number;
 export declare function clone(raw: any): any;
 export declare function timestampToUTCStr(timestamp: number): any;
 export declare function convertDateToDateStr(oldDate: Date, hasHour: boolean, separator: string): string;
-export declare function getDomainFromUrl(urlStr: string): any;
 export declare function getCookier(name: string): any;
 export declare function setCookier(name: string, value: string): void;
 export declare function getBrowserInfo(): any;
@@ -31,3 +30,19 @@ export declare function getCurrentScript(): any;
 export declare function generateUUID(): string;
 export declare function localStorageIsSupported(): boolean;
 export declare function stringIsNumber(str: string): boolean;
+/** 判断是否为空 **/
+export declare function isEmpty(_value: any): boolean;
+export declare function parseURL(url: any): {
+    source: any;
+    protocol: string;
+    host: string;
+    port: string;
+    query: string;
+    params: {};
+    file: string;
+    hash: string;
+    path: string;
+    relative: string;
+    segments: string[];
+};
+export declare function getDomainAndPathInfoFromUrl(urlStr: string): any;
