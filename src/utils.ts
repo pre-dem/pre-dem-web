@@ -332,10 +332,10 @@ export function parseURL(url) {
                     continue;
                 }
                 if(seg[i].indexOf('=') === -1) {
-                    ret[seg[i]] = escape(seg[i]) ;
+                    ret[escape(seg[i])] = escape(seg[i]) ;
                 } else {
                     s = seg[i].split('=');
-                    ret[s[0]] = escape(s[1]);
+                    ret[escape(s[0])] = escape(s[1]);
                 }
             }
             return ret;
