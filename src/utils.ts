@@ -331,8 +331,12 @@ export function parseURL(url) {
                 if (!seg[i]) {
                     continue;
                 }
-                s = seg[i].split('=');
-                ret[s[0]] = s[1];
+                if(seg[i].indexOf('=') === -1) {
+                    ret[seg[i]] = escape(seg[i]) ;
+                } else {
+                    s = seg[i].split('=');
+                    ret[s[0]] = escape(s[1]);
+                }
             }
             return ret;
         })(),
@@ -365,7 +369,7 @@ export function getDomainAndPathInfoFromUrl(urlStr: string): any {
     const segments = parseObj.segments;
 
     domain = parseObj.host;
-    path = parseObj.path;
+    path = parseObj.path === "/" ? "" : parseObj.path;
 
     if (segments && segments.length >= 1) {
         path1 = segments[0];
@@ -386,13 +390,6 @@ export function getDomainAndPathInfoFromUrl(urlStr: string): any {
 
     const params = parseObj.params;
 
-    for (const key in params) {
-        if (params[key] === undefined) {
-            params[key] = key;
-        } else if (params[key].length > 0) {
-            params[key] = escape(params[key]);
-        }
-    }
     query = JSON.stringify(params);
     return {domain, path, path1, path2, path3, path4, query};
 }
