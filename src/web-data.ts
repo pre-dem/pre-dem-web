@@ -395,7 +395,8 @@ export class WebData {
       time: Date.now(),
       type: "auto_captured",
       name: "app",
-      sdk_version: this.appVersion,
+      app_version: this.appVersion,
+      sdk_version: VERSION,
       sdk_id: this.uuid,
       tag: tag,
     }
