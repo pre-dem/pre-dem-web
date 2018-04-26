@@ -3,7 +3,7 @@ import {ISourceMessage} from './source'
 import {Dem} from './dem'
 import logger from './logger'
 import webData from "./web-data"
-import {getDomainFromUrl, localStorageIsSupported} from "./utils";
+import {localStorageIsSupported} from "./utils";
 
 
 export interface IMessage {
@@ -46,7 +46,7 @@ export class MessagesStore {
             id: ++this.counter,
             data,
             sent: false
-        }
+        };
 
         // 过滤 数据上报的请求
         if (message.data.category === 'network' && this.apiDomain != "") {

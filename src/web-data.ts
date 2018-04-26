@@ -3,8 +3,8 @@
  */
 
 import {_window} from './detection'
-import {getDomainFromUrl, getCookier, setCookier, generateUUID
-  , localStorageIsSupported, convertDateToDateStr } from './utils'
+import {getCookier, setCookier, generateUUID
+  , localStorageIsSupported, convertDateToDateStr, getDomainAndPathInfoFromUrl } from './utils'
 
 
 const packageJson = require('../package.json');
@@ -20,6 +20,7 @@ export class WebData {
   webPerfEnabled: boolean;
   uuid: string;
   performanceFilter: any;
+  appVersion: string;
 
   constructor() {
     this.appId = "";
@@ -29,8 +30,7 @@ export class WebData {
     this.crashEnabled = true;
     this.webPerfEnabled = true;
     this.performanceFilter = null;
-
-
+    this.appVersion = "1.0.0";
 
     let predemUuid = "";
 
@@ -65,6 +65,10 @@ export class WebData {
 
   setTag(tag: string): void {
     this.tag = tag;
+  }
+
+  setVersion(version: string): void {
+    this.appVersion = version;
   }
 
   setPerformanceFilter(filter: any): void {
@@ -269,6 +273,7 @@ export class WebData {
       time: Date.now(),
       type: "custom",
       name: name,
+      app_version: this.appVersion,
       sdk_version: VERSION,
       sdk_id: this.uuid,
       tag: tag,
@@ -299,6 +304,7 @@ export class WebData {
       time: Date.now(),
       type: "auto_captured",
       name: "performance",
+      app_version: this.appVersion,
       sdk_version: VERSION,
       sdk_id: this.uuid,
       tag: tag,
@@ -312,22 +318,28 @@ export class WebData {
   initNetworkData(message: any, tag: string): any {
     const startTimestamp = message.payload.start_timestamp ? message.payload.start_timestamp : 0;
     const responseTimeStamp = message.payload.response_timestamp ? message.payload.response_timestamp : 0;
-    const endTimeStamp = message.payload.end_timestamp ? message.payload.end_timestamp : 0;
+    const endTimeStamp = message.payload.end_timestamp ? message.payload.response_timestamp  : 0;
     const networkErrorCode = message.payload.duration === 0 ? -1 : 0;
     const statusCode = networkErrorCode === -1 ? 0 : message.payload.status_code;
     const networkErrorMsg = message.payload.duration === 0 ? message.payload.responseText : "";
     const dataLength = message.payload.content_length ? message.payload.content_length : 0;
-    const domainAndPath = getDomainFromUrl(message.payload.url);
+    const domainAndPath = getDomainAndPathInfoFromUrl(message.payload.url);
     return {
       time: Date.now(),
       type: "auto_captured",
       name: "monitor",
+      app_version: this.appVersion,
       sdk_version: VERSION,
       sdk_id: this.uuid,
       tag: tag,
       content: JSON.stringify({
         domain: domainAndPath.domain,
         path: domainAndPath.path,
+        path1: domainAndPath.path1,
+        path2: domainAndPath.path2,
+        path3: domainAndPath.path3,
+        path4: domainAndPath.path4,
+        query: domainAndPath.query,
         url: message.payload.url,
         method: message.payload.method,
         host_ip: "",
@@ -349,6 +361,7 @@ export class WebData {
       time: Date.now(),
       type: "auto_captured",
       name: "crash",
+      app_version: this.appVersion,
       sdk_version: VERSION,
       sdk_id: this.uuid,
       tag: tag,
@@ -366,6 +379,7 @@ export class WebData {
       time: Date.now(),
       type: "auto_captured",
       name: "log",
+      app_version: this.appVersion,
       sdk_version: VERSION,
       sdk_id: this.uuid,
       tag: tag,
@@ -381,6 +395,7 @@ export class WebData {
       time: Date.now(),
       type: "auto_captured",
       name: "app",
+      app_version: this.appVersion,
       sdk_version: VERSION,
       sdk_id: this.uuid,
       tag: tag,

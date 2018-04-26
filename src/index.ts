@@ -29,6 +29,10 @@ import {getCurrentScript, stringIsNumber} from "./utils"
       return predem.setPerformanceFilter(filterFunc);
 
     };
+
+    this.setAppVersion = function (version: string) {
+        predem.setAppVersion(version);
+    }
   }
 
   win["predem"] = new PredemWebSdk();
@@ -96,6 +100,10 @@ class Predem {
 
   setTag(tag: string): void {
     webData.setTag(tag);
+  }
+
+   setAppVersion(version: string): void {
+      webData.setVersion(version);
   }
 
   setPerformanceFilter(filterFunc): void {
