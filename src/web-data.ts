@@ -318,7 +318,7 @@ export class WebData {
   initNetworkData(message: any, tag: string): any {
     const startTimestamp = message.payload.start_timestamp ? message.payload.start_timestamp : 0;
     const responseTimeStamp = message.payload.response_timestamp ? message.payload.response_timestamp : 0;
-    const endTimeStamp = message.payload.end_timestamp ? message.payload.end_timestamp : 0;
+    const endTimeStamp = message.payload.end_timestamp ? message.payload.response_timestamp  : 0;
     const networkErrorCode = message.payload.duration === 0 ? -1 : 0;
     const statusCode = networkErrorCode === -1 ? 0 : message.payload.status_code;
     const networkErrorMsg = message.payload.duration === 0 ? message.payload.responseText : "";
