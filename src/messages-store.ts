@@ -78,7 +78,13 @@ export class MessagesStore {
                     window.localStorage.setItem("networkMessageArray", "[]");
 
                 } else {
-                    window.localStorage["networkMessageArray"] = JSON.stringify(networkMessageArray);
+                    try {
+                        window.localStorage.setItem("networkMessageArray", JSON.stringify(networkMessageArray));
+                    } catch (e) {
+                        this.store.push(message);
+                        this.parent.transfers.forEach((transfer) => transfer.sendArray(networkMessageArray));
+                        window.localStorage.setItem("networkMessageArray", "[]");
+                    }
                 }
 
             } else if (message.data.category === 'console' && this.messageThreshold > 1) {
@@ -102,8 +108,13 @@ export class MessagesStore {
                     window.localStorage.setItem("consoleMessageArray", "[]");
 
                 } else {
-                    window.localStorage["consoleMessageArray"] = JSON.stringify(consoleMessageArray);
-
+                    try {
+                        window.localStorage.setItem("consoleMessageArray", JSON.stringify(consoleMessageArray));
+                    } catch (e) {
+                        this.store.push(message);
+                        this.parent.transfers.forEach((transfer) => transfer.sendArray(consoleMessageArray));
+                        window.localStorage.setItem("consoleMessageArray", "[]");
+                    }
                 }
 
             } else {
