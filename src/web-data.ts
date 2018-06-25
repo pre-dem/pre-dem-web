@@ -409,7 +409,7 @@ export class WebData {
         return {
             time: Date.now(),
             type: "custom",
-            name: "transaction",
+            name: "auto_captured_transaction",
             app_version: this.appVersion,
             sdk_version: VERSION,
             sdk_id: this.uuid,
