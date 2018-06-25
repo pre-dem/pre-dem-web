@@ -1,6 +1,6 @@
 const stringify = JSON.stringify
 
-export type ValidKeyType = string | symbol
+export type ValidKeyType = string
 export type ValidValueType = string | number | symbol | boolean | any[] | any
 
 export class Storage {

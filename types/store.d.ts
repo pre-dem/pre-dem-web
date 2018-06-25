@@ -1,4 +1,4 @@
-export declare type ValidKeyType = string | symbol;
+export declare type ValidKeyType = string;
 export declare type ValidValueType = string | number | symbol | boolean | any[] | any;
 export declare class Storage {
     data: {

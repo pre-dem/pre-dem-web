@@ -14,6 +14,7 @@
         data-crash-enabled="${true | false}"
         data-performance-enable="${true | false}"
         send-buffer-capacity="${Int}"></script>
+
 <script type="text/javascript">
 
     // 设置 应用版本号
@@ -145,6 +146,33 @@
       console.warn("test console warn");
     }
 
+    function testTransaction() {
+        const transaction = predem.transactionStart("test transaction");
+        let i = 0;
+        while(i < 1000) {
+            i++;
+        }
+        transaction.complete();
+    }
+
+    function testTransactionCancel() {
+        const transaction = predem.transactionStart("test transaction cancel");
+        let i = 0;
+        while(i < 2000) {
+            i++;
+        }
+        transaction.cancelWithReason("cancel transaction");
+    }
+
+    function testTransactionError() {
+        const transaction = predem.transactionStart("test transaction fail");
+        let i = 0;
+        while(i < 3000) {
+            i++;
+        }
+        transaction.failWithReason("transaction fail");
+    }
+
 </script>
 <h4>Web SDK 测试</h4>
 <div style="background-color: black; width: 400px">
@@ -167,6 +195,10 @@
 <div>
 	<button onclick="sendCustomEventData()" style="height: 35px">自定义打点</button>
     <button onclick="testConsole()" style="height: 35px">console</button>
+    <button onclick="testTransaction()" style="height: 35px">transaction</button>
+    <button onclick="testTransactionCancel()" style="height: 35px">transaction error</button>
+    <button onclick="testTransactionError()" style="height: 35px">transaction fail</button>
+
 </div>
 </body>
 </html>

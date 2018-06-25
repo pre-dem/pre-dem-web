@@ -1,3 +1,6 @@
+/**
+ * Created by sunfei on 2017/9/8.
+ */
 export declare class WebData {
     appId: string;
     domain: string;
@@ -27,6 +30,7 @@ export declare class WebData {
     initErrorData(message: any, tag: string): any;
     initConsoleData(message: any, tag: string): any;
     initAppConfigData(tag: string): any;
+    initTransactionsData(): any;
     changeStringToBoolean(enabled: string): boolean;
 }
 declare const webData: WebData;
