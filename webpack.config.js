@@ -6,7 +6,7 @@ const version = packageJson.version
 
 module.exports = {
   entry: {
-    "pre-dem-web": ["babel-polyfill", './src/index.ts'],
+    "pre-dem-web": ['./src/index.ts'],
 },
   output: {
     filename: '[name]-v'+ version +'.js',
@@ -39,4 +39,8 @@ module.exports = {
       }
     }),
   ],
+    devServer: {
+    port: "9000",
+    historyApiFallback: true,
+},
 }

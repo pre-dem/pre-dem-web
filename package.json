@@ -12,14 +12,12 @@
   "devDependencies": {
     "tracekit": "^0.4.5",
     "@types/node": "^8.0.24",
-    "babel-polyfill": "^6.26.0",
     "awesome-typescript-loader": "^3.2.3",
     "rimraf": "^2.5.3",
     "source-map-loader": "^0.2.1",
     "typescript": "^2.4.2",
     "ava": "^0.20.0",
-    "webpack": "^3.5.5",
-    "isomorphic-fetch": "^2.2.1"
+    "webpack": "^3.5.5"
   },
   "keywords": [
     "exceptions",

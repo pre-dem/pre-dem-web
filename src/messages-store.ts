@@ -30,6 +30,7 @@ export class MessagesStore {
     }
 
     add(data: ISourceMessage) {
+        console.log("message data", data)
         // 判断是否 add 数据
         const appConfig = webData.getSendDataConfig();
         if (appConfig !== null) {
@@ -124,7 +125,7 @@ export class MessagesStore {
 
         } else { // 立即发送
             this.store.push(message);
-            this.parent.transfers.forEach((transfer) => transfer.sendArray([message]))
+            this.parent.transfers.forEach((transfer) => transfer.send(message))
         }
 
 

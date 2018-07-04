@@ -3,7 +3,6 @@ import { Dem } from '../dem'
 import Source, { ISourceMessage } from '../source'
 import { isString, isFunction, fill } from '../utils'
 import { _window } from '../detection'
-require('isomorphic-fetch');
 
 export interface IXHRMessage extends ISourceMessage {
   payload: {
@@ -134,8 +133,12 @@ export default (dem: Dem) => {
                   console.error("jquert 版本过低,不兼容")
               }
 
-          } else {
-            console.error("jquert not exist")
+          } else { // jquery 不存在
+              if ('onreadystatechange' in xhr && isFunction(xhr.onreadystatechange)) {
+                  fill(xhr, 'onreadystatechange', (orig) => dem.wrap(orig, undefined, onreadystatechangeHandler))
+              } else {
+                  xhr.onreadystatechange = onreadystatechangeHandler
+              }
           }
 
           return originFunc.apply(this, arguments)

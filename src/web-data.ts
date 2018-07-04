@@ -237,13 +237,31 @@ export class WebData {
     }
 
     getRequestFun(url: string, type: string, result: string): any {
-        return _window._origin_fetch(url, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: result,
-        });
+        if (_window._origin_fetch) {
+            return _window._origin_fetch(url, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: result,
+            });
+        } else {
+           let xmlhttp = null;
+           if (_window.XMLHttpRequest) {
+               xmlhttp = new XMLHttpRequest();
+
+           } else if (_window.ActiveXObject) {
+               xmlhttp = new _window.ActiveXObject("Microsoft.XMLHTTP");
+           }
+
+            if (xmlhttp!=null) {
+                xmlhttp.open("POST",url,true);
+                xmlhttp.send(result);
+            } else {
+                alert("Your browser does not support XMLHTTP.");
+            }
+        }
+
     }
 
     postDataUrl(domain: string, category: string, appId: string): string {
