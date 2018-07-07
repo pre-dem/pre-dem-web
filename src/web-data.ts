@@ -3,6 +3,8 @@
  */
 
 import {_window} from './detection'
+import * as reqwest from "reqwest";
+
 import {
     getCookier, setCookier, generateUUID
     , localStorageIsSupported, convertDateToDateStr, getDomainAndPathInfoFromUrl
@@ -105,13 +107,8 @@ export class WebData {
     }
 
     fetchAppConfig(url: string, data: any): any {
-        _window._origin_fetch(url, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'text/plain',
-            },
-            body: JSON.stringify(data),
-        }).then((response: any) => {
+        this.request(url, 'POST', 'text/plain', JSON.stringify(data))
+            .then((response: any) => {
             response.text().then((result) => {
                 this.setAppConfig(JSON.parse(result));
 
@@ -202,17 +199,10 @@ export class WebData {
             const eventstr = this.initCustomEvent(this.tag, event.eventName, eventData);
             data += JSON.stringify(eventstr) + "\n"
         });
-        return _window._origin_fetch(url, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'text/plain',
-            },
-            body: data,
-        })
-
+        return this.request(url, 'POST', 'text/plain', data);
     }
 
-    push(datas: any): any {
+    push(datas: any): void {
         let result = "";
         if (datas instanceof Array && datas.length > 0) {
             const type = datas[0].category;
@@ -231,37 +221,35 @@ export class WebData {
                 });
             }
 
-            return this.getRequestFun(url, type, result)
+            this.getRequestFun(url, type, result)
         }
 
     }
 
-    getRequestFun(url: string, type: string, result: string): any {
+
+    request(url: string, method: string, ContentType: string, data: any): any {
         if (_window._origin_fetch) {
             return _window._origin_fetch(url, {
-                method: 'POST',
+                method: method,
                 headers: {
-                    'Content-Type': 'application/json',
+                    'Content-Type': ContentType,
                 },
-                body: result,
+                body: data,
             });
         } else {
-           let xmlhttp = null;
-           if (_window.XMLHttpRequest) {
-               xmlhttp = new XMLHttpRequest();
-
-           } else if (_window.ActiveXObject) {
-               xmlhttp = new _window.ActiveXObject("Microsoft.XMLHTTP");
-           }
-
-            if (xmlhttp!=null) {
-                xmlhttp.open("POST",url,true);
-                xmlhttp.send(result);
-            } else {
-                alert("Your browser does not support XMLHTTP.");
-            }
+            return reqwest({
+                url: url,
+                method: method,
+                headers: {
+                    'Content-Type': ContentType,
+                },
+                body: data,
+            })
         }
+    }
 
+    getRequestFun(url: string, type: string, result: string): any {
+        this.request(url, 'POST', 'application/json', result);
     }
 
     postDataUrl(domain: string, category: string, appId: string): string {

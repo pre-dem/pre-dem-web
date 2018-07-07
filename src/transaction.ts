@@ -57,19 +57,8 @@ export class Transaction {
     postTransation(): any {
         const url = `${webData.domain}/v2/${webData.appId}/transactions`;
         const result = JSON.stringify(this.initTransactionData());
-        return _window._origin_fetch(url, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: result,
-        });
+        webData.request(url, 'POST', 'application/json', result);
     }
-
-
-
-
-
 
 }
 

@@ -58,16 +58,13 @@ export default class Transfer {
   }
 
   sendArray(messages: IMessage[]) {
-    console.log("send sendArray", messages)
     const dataArray = []
     messages.map((message: IMessage) => {
       dataArray.push(message.data)
     });
 
     this.queue.push((callback: Callback) => {
-        console.log("this.transfer.call111", this.transfer)
         this.transfer.call(this, this.extendMessages(dataArray), (err: Error) => {
-          console.log("this.transfer.call22222")
           if (err) {
               return  callback(err);
           }
@@ -79,7 +76,6 @@ export default class Transfer {
 
         })
     });
-      console.log("this.running", this.running, this.queue)
     if (!this.running) {
       this.run()
     }

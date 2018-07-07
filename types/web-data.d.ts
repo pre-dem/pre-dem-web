@@ -21,7 +21,8 @@ export declare class WebData {
     setAppConfig(newAppConfig: any): void;
     getSendDataConfig(): any;
     sendEventData(batchData: any[]): any;
-    push(datas: any): any;
+    push(datas: any): void;
+    request(url: string, method: string, ContentType: string, data: any): any;
     getRequestFun(url: string, type: string, result: string): any;
     postDataUrl(domain: string, category: string, appId: string): string;
     initCustomEvent(tag: string, name: string, content: string): any;
