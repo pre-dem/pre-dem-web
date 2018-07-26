@@ -5,7 +5,7 @@
     <title> PRE-DEM-WEB </title>
 </head>
 <body>
-<script src="http://code.jquery.com/jquery-2.2.4.min.js"/>
+<script src="http://code.jquery.com/jquery-2.2.4.min.js"></script>
 <script type="text/javascript"
         src="./../dist/pre-dem-web-v1.1.0.js"
         data-app-key="${AppKey}"
@@ -147,7 +147,7 @@
     }
 
     function testTransaction() {
-        const transaction = predem.transactionStart("test transaction");
+        var transaction = predem.transactionStart("test transaction");
         let i = 0;
         while(i < 1000) {
             i++;
@@ -156,7 +156,7 @@
     }
 
     function testTransactionCancel() {
-        const transaction = predem.transactionStart("test transaction cancel");
+        var transaction = predem.transactionStart("test transaction cancel");
         let i = 0;
         while(i < 2000) {
             i++;
