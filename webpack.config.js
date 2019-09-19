@@ -10,7 +10,7 @@ module.exports = {
     },
     output: {
         filename: '[name]-v' + version + '.js',
-        path: __dirname + '/dist',
+        path: __dirname + '/build',
         libraryTarget: 'umd'
     },
 

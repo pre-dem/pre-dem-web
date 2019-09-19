@@ -60,7 +60,7 @@ typings/
 # ide
 .idea/
 dist/
-package-lock.json
+build
 *.iml
 
 
