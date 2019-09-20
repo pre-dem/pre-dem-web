@@ -92,16 +92,16 @@ export class Predem {
         this.sendEvents([event])
     }
 
-    initTransfer() {
+    transactionStart(name: string) {
+        return new Transaction(name)
+    }
+
+    private initTransfer() {
         const testTransfer = new Transfer(webData.tag, (datas, callback) => {
             webData.push(datas)
             callback()
         })
         dem.addTransfer(testTransfer)
-    }
-
-    transactionStart(name: string) {
-        return new Transaction(name)
     }
 }
 
