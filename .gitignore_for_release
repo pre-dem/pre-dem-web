@@ -1,0 +1,24 @@
+# Typescript compile result
+# *.d.ts
+# *.js
+# *.js.map
+
+# Mocks for test
+# !__mocks__/**/*.js
+
+# Work around file for jest config
+!jest.config.js
+
+!types/*.d.ts
+!types/**/*.d.ts
+
+build
+
+# Node.js relative files
+node_modules
+npm-debug.log
+
+# Test Relative Folders
+__mocks__
+__coverage__
+__test__

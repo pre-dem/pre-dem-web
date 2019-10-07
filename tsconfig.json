@@ -6,10 +6,8 @@
     "experimentalDecorators": true,
     "sourceMap": true,
     "strictNullChecks": false,
-    "baseUrl": "./",
+    "baseUrl": "./src",
     "lib": ["es2015", "dom"],
-    "declaration": true,
-    "declarationDir": "./types",
     "typeRoots": [
       "./node_modules/@types"
     ]
